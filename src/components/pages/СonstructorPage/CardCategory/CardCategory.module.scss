@@ -1,0 +1,29 @@
+.cardCategory{
+  color:#fff;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  &_img{
+    width: 100%;
+    aspect-ratio: 4 / 3; // Фиксированное соотношение сторон (например, 4:3)
+    object-fit: cover;
+    object-position: center;
+  }
+  &:hover &_img{
+    filter: brightness(50%);
+    transition: filter .4s;
+  }
+  &_title{
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    opacity: 0;
+    font-size: 24px;
+  }
+  &:hover &_title{
+    opacity: 1;
+    transition: opacity .4s;
+  }
+}

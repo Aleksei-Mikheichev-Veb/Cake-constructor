@@ -1,0 +1,32 @@
+import React from 'react';
+import {categories} from "../../../data/categories";
+import CardCategory from "./CardCategory/CardCategory";
+import {useNavigate} from "react-router-dom";
+import globalStyles from './../../../styles/global.module.scss'
+
+
+const ConstructorPage = () => {
+    const navigate = useNavigate();
+
+    const handleClickCategory = (id:string) => {
+        navigate(`/constructor/${id}`)
+    }
+    return (
+        <div className={globalStyles.container}>
+            <h1>Конструктор десертов</h1>
+            <main className={globalStyles.categoriesList}>
+                {categories.map(elem => (
+                    <CardCategory
+                        handleClickCategory={handleClickCategory}
+                        title={elem.name}
+                        image={elem.image}
+                        id={elem.id}
+                        description={elem.description}
+                        key={elem.name}/>
+                ))}
+            </main>
+        </div>
+    );
+};
+
+export default ConstructorPage;

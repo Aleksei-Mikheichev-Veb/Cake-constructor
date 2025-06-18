@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import img from "../../assets/images/table2.webp";
+import img from "../../../assets/images/table2.webp";
 
 const HomeScreen = styled.section`
   background:  rgba(0, 0, 0, 0.3) url(${img}) no-repeat center 0px/cover;

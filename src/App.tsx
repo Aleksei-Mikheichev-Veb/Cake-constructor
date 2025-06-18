@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router";
 import './App.css';
-import Home from "./components/Home/Home";
+import Home from "./components/pages/Home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ConstructorPage from "./components/СonstructorPage/СonstructorPage";
+import ConstructorPage from "./components/pages/СonstructorPage/СonstructorPage";
+import CakesType from "./components/pages/СonstructorPage/CakesType/CakesType";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
             <Routes>
                 <Route index path='/*' element={<Home/>}/>
                 <Route path='/constructor' element={<ConstructorPage/>}/>
+                <Route path='/constructor' element={<ConstructorPage/>}/>
+                <Route path='/constructor/cakes' element={<CakesType/>}/>
             </Routes>
             <Footer/>
         </BrowserRouter>

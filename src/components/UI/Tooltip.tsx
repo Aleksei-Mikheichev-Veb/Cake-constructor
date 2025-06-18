@@ -26,6 +26,7 @@ const TooltipContent = styled.div<{ isVisible: boolean }>`
   color: #fff;
   border-radius: 5px;
   padding: 8px 12px;
+  z-index: 100;
 
   .description {
     color: white;

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
-import Button from "../UI/Button";
-import Tooltip from "../UI/Tooltip";
+import Button from "../../UI/Button";
+import Tooltip from "../../UI/Tooltip";
 
 const numberOfServing = [
     {
@@ -52,9 +52,8 @@ const ButtonControls = () => {
     return (
         <ButtonControlsStyle>
             {numberOfServing.map((elem) => (
-                <Tooltip content={{weight: elem.weight, height: elem.height, diameter: elem.diameter}}>
+                <Tooltip content={{weight: elem.weight, height: elem.height, diameter: elem.diameter}} key={elem.id}>
                     <Button
-                        key={elem.id}
                         quantity={elem.quantity}
                         activeId={ActiveButtonId}
                         id={elem.id}

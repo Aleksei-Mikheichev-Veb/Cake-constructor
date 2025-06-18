@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import Chef from '../../assets/images/chef.jpg'
+import Chef from '../../../assets/images/chef.jpg'
 
 const AboutChefSection = styled.section`
 

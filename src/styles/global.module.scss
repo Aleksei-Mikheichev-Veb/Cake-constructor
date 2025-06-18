@@ -1,0 +1,14 @@
+.container{
+  width: 1200px;
+  margin: 0 auto;
+  padding-top: 100px;
+}
+.title{
+
+}
+.categoriesList{
+  padding-top: 100px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
