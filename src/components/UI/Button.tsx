@@ -12,12 +12,11 @@ const ButtonStyle = styled.button<{isActive: boolean}>`
   background: ${({isActive}) => isActive ? '#fff' : '#333439'};
   padding: 15px;
   color: ${({isActive}) => isActive ? '#333439' : '#fff'};
-  cursor: pointer;
-  //font-weight: 500;
+  font-weight: 500;
   font-size: 16px;
   border-radius: 5px;
-  border: none;
-
+  border:  ${({isActive}) => isActive ? '1px solid #333439' : 'none'};
+  cursor: pointer;
   &:hover {
     background: ${({isActive}) => isActive ? '#fff' : '#575860'};
     color:${({isActive}) => isActive ? '#575860' : '#fff'};

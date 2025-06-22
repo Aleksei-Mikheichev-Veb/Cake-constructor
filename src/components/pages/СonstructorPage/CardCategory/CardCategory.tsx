@@ -5,13 +5,13 @@ import Tooltip from "../../../UI/Tooltip";
 type CardCategoriesProps = {
     title: string;
     image: string;
-    description: string;
+    tooltip: string;
     id:string;
     handleClickCategory: (id:string) => void;
 }
-const CardCategory: FC<CardCategoriesProps> = ({title, image, description, id, handleClickCategory}) => {
+const CardCategory: FC<CardCategoriesProps> = ({title, image, tooltip, id, handleClickCategory}) => {
     return (
-        <Tooltip content={description}>
+        <Tooltip content={tooltip}>
             <article className={styles.cardCategory} onClick={() => handleClickCategory(id)}>
                 <img
                     src={require(`../../../../assets/images/categories/${image}`)}

@@ -1,0 +1,14 @@
+.buttonsControls{
+
+  margin-bottom: 30px;
+  &_title{
+    margin-bottom: 20px;
+  }
+  &_row{
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+  }
+}
+
+

@@ -6,6 +6,7 @@ type ButtonDescription = {
     height: number;
     diameter: number;
 }
+
 type TooltipProps = {
     content: ButtonDescription | string;
     children: ReactNode;
@@ -14,19 +15,33 @@ type TooltipProps = {
 const TooltipWrapper = styled.div`
   position: relative;
 `
+
 const TooltipContent = styled.div<{ isVisible: boolean }>`
   position: absolute;
   top: calc(100% + 8px);
   left: 50%;
   transform: translate(-50%, 0);
+
+  /* Адаптивная ширина - используем min-width для расширения */
+  //min-width: fit-content;
   width: max-content;
+  max-width: 300px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+
   opacity: ${({isVisible}) => isVisible ? '1' : '0'};
+  display: ${({isVisible}) => isVisible ? 'block' : 'none'};
   transition: opacity .4s;
   background: #333439;
   color: #fff;
   border-radius: 5px;
   padding: 8px 12px;
   z-index: 100;
+
+  .text {
+
+  }
 
   .description {
     color: white;
@@ -44,6 +59,7 @@ const TooltipContent = styled.div<{ isVisible: boolean }>`
     }
   }
 `
+
 const Tooltip: FC<TooltipProps> = ({children, content}) => {
     const [isVisible, setIsVisible] = useState(false)
 
@@ -59,23 +75,24 @@ const Tooltip: FC<TooltipProps> = ({children, content}) => {
             {children}
             <TooltipContent isVisible={isVisible}>
                 {typeof content === 'string' ? (
-                        <div>{content}</div>
-                    ) : (
-                        <div className='description'>
-                            <h4 className='description_title'>Вес: {content.weight} кг</h4>
-                            <div className='description_row'>
-                                <div>Высота</div>
-                                <div>{content.height} см</div>
-                            </div>
-                            <div className='description_row'>
-                                <div>Диаметр</div>
-                                <div>{content.diameter} см</div>
-                            </div>
+                    <div className='text'>{content}</div>
+                ) : (
+                    <div className='description'>
+                        <h4 className='description_title'>Вес: {content.weight} кг</h4>
+                        <div className='description_row'>
+                            <div>Высота</div>
+                            <div>{content.height} см</div>
                         </div>
-                    )}
+                        <div className='description_row'>
+                            <div>Диаметр</div>
+                            <div>{content.diameter} см</div>
+                        </div>
+                    </div>
+                )}
             </TooltipContent>
         </TooltipWrapper>
     );
 };
 
 export default Tooltip;
+

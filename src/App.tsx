@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ConstructorPage from "./components/pages/СonstructorPage/СonstructorPage";
 import CakesType from "./components/pages/СonstructorPage/CakesType/CakesType";
+import ProductPage from "./components/pages/ProductPage/ProductPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path='/constructor' element={<ConstructorPage/>}/>
                 <Route path='/constructor' element={<ConstructorPage/>}/>
                 <Route path='/constructor/cakes' element={<CakesType/>}/>
+                <Route path='/constructor/cakes/:type' element={<ProductPage/>}/>
             </Routes>
             <Footer/>
         </BrowserRouter>

@@ -21,7 +21,7 @@ const ConstructorPage = () => {
                         title={elem.name}
                         image={elem.image}
                         id={elem.id}
-                        description={elem.description}
+                        tooltip={elem.tooltip}
                         key={elem.name}/>
                 ))}
             </main>
