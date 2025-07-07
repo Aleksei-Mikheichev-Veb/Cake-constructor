@@ -43,7 +43,7 @@ const FillingControls: FC<FillingControlsProps> = ({title, activeFillingId, setS
                 <Swiper
                     modules={[Navigation]} // Подключаем модули
                     spaceBetween={10} // Отступ между слайдами
-                    slidesPerView={3.2} // Количество видимых слайдов
+                    slidesPerView={6} // Количество видимых слайдов
                     navigation={{
                         prevEl: prevRef.current,
                         nextEl: nextRef.current,

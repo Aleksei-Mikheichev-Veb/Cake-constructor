@@ -1,0 +1,12 @@
+.decorationControls{
+  margin-bottom: 30px;
+  &_title{
+    margin-bottom: 20px;
+  }
+
+  &_decorations{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap:15px;
+  }
+}

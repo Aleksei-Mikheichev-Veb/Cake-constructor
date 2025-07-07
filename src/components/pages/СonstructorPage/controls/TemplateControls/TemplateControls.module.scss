@@ -1,0 +1,12 @@
+.templateControls{
+  margin-bottom: 30px;
+  &_title{
+    margin-bottom: 20px;
+  }
+
+  &_templates{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap:15px;
+  }
+}

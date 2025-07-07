@@ -1,8 +1,13 @@
 .productPage{
-  display: flex;
-  justify-content: space-between;
-  gap: 50px;
+  //display: flex;
+  //justify-content: space-between;
+  //gap: 50px;
 
+  &_top{
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+  }
   &_leftColumn{
     flex:0 0 40%;
   }
@@ -16,7 +21,7 @@
 }
 
 .gallery{
-
+  padding: 0;
   &_image{
     max-width: 100%;
     object-fit: cover;
