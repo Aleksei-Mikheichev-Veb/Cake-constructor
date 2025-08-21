@@ -1,26 +1,26 @@
 import React, {FC} from 'react';
 import Tooltip from "../../../../../UI/Tooltip";
-import {templates, TemplateType} from "../../../../../../data/templates";
+import {ItemType} from "../../../../../../data/templates";
 import styles from './Template.module.scss'
 
 type TemplateProps = {
-    template: TemplateType;
-    setSelectedTemplate: (template: TemplateType) => void;
-    activeTemplateId: string | null;
+    item: ItemType;
+    setSelectedItem: (item: ItemType) => void;
+    activeItemId: string | null;
 }
 
-const Template: FC<TemplateProps> = ({template, setSelectedTemplate, activeTemplateId}) => {
-    const isActive = activeTemplateId === template.id
+const Template: FC<TemplateProps> = ({item, setSelectedItem, activeItemId}) => {
+    const isActive = activeItemId === item.id
     return (
-        <Tooltip content={template.description}>
+        <Tooltip content={item.description}>
             <div
                 className={`${styles.slide} ${isActive ? styles.slide_active : ''}`}
                 role="button"
-                aria-label={`Выбрать вариант оформления ${template.name}`}
-                onClick={() => setSelectedTemplate(template)}>
+                aria-label={`Выбрать вариант оформления ${item.name}`}
+                onClick={() => setSelectedItem(item)}>
 
                 <div className={styles.imageContainer}>
-                    <img className={styles.image} src={template.image} alt={template.name}/>
+                    <img className={styles.image} src={item.image} alt={item.name}/>
                     <div className={styles.overlay}>
                         <div className={styles.checkmark}>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -33,7 +33,7 @@ const Template: FC<TemplateProps> = ({template, setSelectedTemplate, activeTempl
                 </div>
                 <div className={styles.content}>
                     <h3 className={styles.name}>
-                        {template.name}
+                        {item.name}
                     </h3>
                 </div>
             </div>

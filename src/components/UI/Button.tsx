@@ -24,8 +24,8 @@ const ButtonStyle = styled.button<{isActive: boolean}>`
 `
 
 const Button: FC<ButtonProps> = ({quantity, activeId, id, handleButtonClick}) => {
-    console.log(activeId)
-    console.log(id)
+    // console.log(activeId)
+    // console.log(id)
     return (
         <ButtonStyle isActive={activeId === id} onClick={() => handleButtonClick(id)}>
             {quantity} порций

@@ -1,11 +1,11 @@
-export type TemplateType = {
+export type ItemType = {
     id: string;
     name:string;
     description:string;
     image:string;
 }
 
-export const templates: TemplateType[] = [
+export const templates: ItemType[] = [
     {
         id: 'empty',
         name: 'Без шаблона',
