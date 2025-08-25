@@ -16,6 +16,7 @@ import {decorationsAdditional} from "../../../data/decorationsAdditional";
 import SelectionControls from "../СonstructorPage/controls/TemplateControls/SelectionControls";
 import {colors} from "../../../data/colors";
 import {smudges} from "../../../data/smudges";
+import AddImage from "../СonstructorPage/controls/AddImage/AddImage";
 
 
 const ProductPage = () => {
@@ -77,6 +78,8 @@ const ProductPage = () => {
                         items={smudges}
                         title={'Выберите оформление подтеками'}
                     />
+
+                    <AddImage/>
                     <DecorationControls
                         title={'Основные украшения'}
                         decorations={'main'}
@@ -89,7 +92,6 @@ const ProductPage = () => {
                         // setSelectedTemplate={}
                         // activeTemplateId={}
                     />
-                    <input type="color" value="<цвет>" name="<имя>"/>
                 </section>
             </main>
         </div>

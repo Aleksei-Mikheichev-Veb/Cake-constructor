@@ -2,16 +2,16 @@ import {ItemType} from "./templates";
 
 export const smudges: ItemType[] = [
     {
-        id: 'full',
-        name: 'Полная',
-        description: 'Верхняя часть торта залита глазурью, по всему кругу присутствуют подтеки.',
-        image: require('../assets/images/smudges/fullSmudges.jpg'),
+        id: 'empty',
+        name: 'Без подтеков и заливки',
+        description: 'Без подтеков и заливки',
+        image: require('../assets/images/smudges/empty.webp'),
     },
     {
-        id: 'halfFullSmudges',
-        name: 'Полузалитая с подтеками',
-        description: 'Верхняя часть торта залита глазурью наполовину, подтеки присутствуют на половине круга.',
-        image: require('../assets/images/smudges/halfFullSmudges.png'),
+        id: 'half_drips_only',
+        name: 'Подтеки на половину',
+        description: 'Верхняя часть торта не залита глазурью, подтеки присутствуют на половине круга.',
+        image: require('../assets/images/smudges/halfCircleSmudges.jpeg'),
     },
     {
         id: 'drips_only',
@@ -20,9 +20,15 @@ export const smudges: ItemType[] = [
         image: require('../assets/images/smudges/circleSmudges.jpg'),
     },
     {
-        id: 'half_drips_only',
-        name: 'Подтеки на половину',
-        description: 'Верхняя часть торта не залита глазурью, подтеки присутствуют на половине круга.',
-        image: require('../assets/images/smudges/halfCircleSmudges.jpeg'),
+        id: 'halfFullSmudges',
+        name: 'Полузалитая с подтеками',
+        description: 'Верхняя часть торта залита глазурью наполовину, подтеки присутствуют на половине круга.',
+        image: require('../assets/images/smudges/halfFullSmudges.png'),
+    },
+    {
+        id: 'full',
+        name: 'Полная',
+        description: 'Верхняя часть торта залита глазурью, по всему кругу присутствуют подтеки.',
+        image: require('../assets/images/smudges/fullSmudges.jpg'),
     },
 ];
