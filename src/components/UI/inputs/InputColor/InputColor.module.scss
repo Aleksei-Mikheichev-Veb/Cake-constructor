@@ -1,0 +1,62 @@
+.inputColor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &_label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  &_input {
+    width: 70px;
+    height: 70px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    border-radius: 12px;
+    animation: pulse 2s infinite ease-in-out;
+
+    &:hover {
+      animation: none;
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px var(--pulse-color-alpha);
+    }
+
+    &::-webkit-color-swatch {
+      border: none;
+      border-radius: inherit;
+    }
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+      border: none;
+    }
+
+    &::-moz-color-swatch {
+      border: none;
+      border-radius: inherit;
+    }
+  }
+
+  &_value {
+    font-size: 0.95rem;
+    color: #4a4a4a;
+    font-family: monospace;
+    margin-top: 0.5rem;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--pulse-color-alpha);
+  }
+  50% {
+    box-shadow: 0 0 0 10px var(--pulse-color-alpha-0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 var(--pulse-color-alpha-0);
+  }
+}

@@ -1,6 +1,6 @@
 .addImage{
   margin-bottom: 30px;
-  
+
   &_title{
     margin-bottom: 20px;
   }
@@ -13,6 +13,10 @@
   }
   &_icon{
     cursor: pointer;
+    transition: .3s;
+  }
+  &_icon:hover{
+    transform: scale(1.1);
   }
   &_preview{
     border-radius: 50%;

@@ -2,15 +2,16 @@ import React, {FC, useEffect, useState} from 'react';
 import styles from './SelectionControls.module.scss'
 import {ItemType} from "../../../../../data/templates";
 import Template from "../TemplateControls/Template/Template";
+import InputColor from "../../../../UI/inputs/InputColor/InputColor";
 
 type SelectionControlsProps = {
-    title:string;
-    items:ItemType[];
-    setSelectedItem:(item:ItemType) => void;
-    activeItemId:string | null;
-    isColorSelected?:boolean;
-    selectedColors?:string[];
-    setSelectedColors?:(colors:string[]) => void;
+    title:string; // Название блока
+    items:ItemType[]; // Закинутые варианты выбора
+    setSelectedItem:(item:ItemType) => void; // Функция для установки выбора варианта
+    activeItemId:string | null; // Выбранный вариант
+    isColorSelected?:boolean; // Надстройка для блока с выбором цвета торта.Подключает дополнительный функционал.
+    selectedColors?:string[]; // Массив из выбранных цветов
+    setSelectedColors?:(colors:string[]) => void; // Функция для установки цветов
 }
 
 const SelectionControls: FC<SelectionControlsProps> = ({
@@ -47,13 +48,15 @@ const SelectionControls: FC<SelectionControlsProps> = ({
         }
     },[activeItemId])
 
-
+    //
     const handleSelectedColor = (color:string, index: number) => {
         if(!setSelectedColors) return;
         const newColors = [...selectedColors];
         newColors[index] = color;
         setSelectedColors(newColors)
     }
+
+    // Установить количество цветов торта
     const handleColorCountChange = (count: number) => {
         if (!setSelectedColors) return;
         setCountColorsSelected(count);
@@ -100,11 +103,15 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                     )}
                     <div className={styles.colorInputs}>
                         {Array.from({ length: countColorsSelected }).map((_, index) => (
-                            <input
-                                key={index}
-                                type="color"
-                                value={selectedColors[index] || '#000000'}
-                                onChange={(e) => handleSelectedColor(e.target.value, index)}
+                            // <input
+                            //     key={index}
+                            //     type="color"
+                            //     value={selectedColors[index] || '#000000'}
+                            //     onChange={(e) => handleSelectedColor(e.target.value, index)}
+                            // />
+                            <InputColor key={index}
+                                        selectedColor={selectedColors[index] || '#000000'}
+                                        setSelectedColor={(color:string) => handleSelectedColor(color, index)}
                             />
                         ))}
                     </div>
