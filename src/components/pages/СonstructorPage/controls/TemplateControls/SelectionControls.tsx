@@ -3,6 +3,9 @@ import styles from './SelectionControls.module.scss'
 import {ItemType} from "../../../../../data/templates";
 import Template from "../TemplateControls/Template/Template";
 import InputColor from "../../../../UI/inputs/InputColor/InputColor";
+import {useDispatch, useSelector } from 'react-redux';
+import {RootState} from "../../../../../redux/store";
+import {setColors} from "../../../../../redux/cakeConstructorSlice";
 
 type SelectionControlsProps = {
     title:string; // Название блока
@@ -10,8 +13,6 @@ type SelectionControlsProps = {
     setSelectedItem:(item:ItemType) => void; // Функция для установки выбора варианта
     activeItemId:string | null; // Выбранный вариант
     isColorSelected?:boolean; // Надстройка для блока с выбором цвета торта.Подключает дополнительный функционал.
-    selectedColors?:string[]; // Массив из выбранных цветов
-    setSelectedColors?:(colors:string[]) => void; // Функция для установки цветов
 }
 
 const SelectionControls: FC<SelectionControlsProps> = ({
@@ -20,10 +21,10 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                                                            setSelectedItem,
                                                            activeItemId,
                                                            isColorSelected= false,
-                                                           selectedColors = [],
-                                                           setSelectedColors,
                                                        }) => {
     const [countColorsSelected, setCountColorsSelected] = useState(0);
+    const colors = useSelector((state: RootState) => state.cakeConstructor.colors)
+    const dispatch = useDispatch()
     useEffect(() => {
         if(activeItemId){
             switch(activeItemId){
@@ -31,7 +32,7 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                     setCountColorsSelected(1);
                     break;
                 case 'color2':
-                    setCountColorsSelected(selectedColors.length || 2);
+                    setCountColorsSelected(colors.length || 2);
                     break;
                 case 'color3':
                     setCountColorsSelected(0);
@@ -48,18 +49,12 @@ const SelectionControls: FC<SelectionControlsProps> = ({
         }
     },[activeItemId])
 
-    //
-    const handleSelectedColor = (color:string, index: number) => {
-        if(!setSelectedColors) return;
-        const newColors = [...selectedColors];
-        newColors[index] = color;
-        setSelectedColors(newColors)
-    }
 
     // Установить количество цветов торта
     const handleColorCountChange = (count: number) => {
-        if (!setSelectedColors) return;
+        // if (!setSelectedColors) return;
         setCountColorsSelected(count);
+
     };
 
 
@@ -79,7 +74,7 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                 <div className={styles.colorPicker}>
                     <label>Выберите цвет(а):</label>
                     {activeItemId === 'color2' && (
-                        <div className={styles.colorCountSelector}>
+                        <div className={styles.colorPicker_colorCountSelector}>
                             <label>
                                 <input
                                     type="radio"
@@ -101,17 +96,11 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                             </label>
                         </div>
                     )}
-                    <div className={styles.colorInputs}>
+                    <div className={styles.colorPicker_colorInputs}>
                         {Array.from({ length: countColorsSelected }).map((_, index) => (
-                            // <input
-                            //     key={index}
-                            //     type="color"
-                            //     value={selectedColors[index] || '#000000'}
-                            //     onChange={(e) => handleSelectedColor(e.target.value, index)}
-                            // />
                             <InputColor key={index}
-                                        selectedColor={selectedColors[index] || '#000000'}
-                                        setSelectedColor={(color:string) => handleSelectedColor(color, index)}
+                                        selectedColor={colors && colors[index] || '#000000'}
+                                        setSelectedColor={(color:string) => dispatch(setColors({color, index}))}
                             />
                         ))}
                     </div>

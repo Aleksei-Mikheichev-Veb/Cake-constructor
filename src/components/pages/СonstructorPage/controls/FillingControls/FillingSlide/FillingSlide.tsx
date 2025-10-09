@@ -3,13 +3,13 @@ import styles from "./FillingSlide.module.scss";
 import Modal from "../../../../../UI/Modal/Modal";
 import {FillingType} from "../../../../../../data/fillings";
 
-type FillingSlideprops = {
+type FillingSlideProps = {
     handleFillingClick: (filling:FillingType) => void;
     filling:FillingType;
     activeFillingId:string | null;
 }
 
-const FillingSlide: FC<FillingSlideprops> = ({filling,activeFillingId, handleFillingClick}) => {
+const FillingSlide: FC<FillingSlideProps> = ({filling,activeFillingId, handleFillingClick}) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     const handleModalClose = () => {

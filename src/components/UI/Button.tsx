@@ -1,11 +1,13 @@
 import React, {FC} from 'react';
 import styled from "styled-components";
+import {NumberOfServingType} from "../../data/numberOfServing";
 
 type ButtonProps = {
+    elem:NumberOfServingType;
     quantity: string;
-    activeId: number;
+    activeId: number | null;
     id:number;
-    handleButtonClick: (id:number) => void;
+    handleButtonClick: () => void;
 }
 
 const ButtonStyle = styled.button<{isActive: boolean}>`
@@ -23,11 +25,11 @@ const ButtonStyle = styled.button<{isActive: boolean}>`
   }
 `
 
-const Button: FC<ButtonProps> = ({quantity, activeId, id, handleButtonClick}) => {
+const Button: FC<ButtonProps> = ({elem, quantity, activeId, id, handleButtonClick}) => {
     // console.log(activeId)
     // console.log(id)
     return (
-        <ButtonStyle isActive={activeId === id} onClick={() => handleButtonClick(id)}>
+        <ButtonStyle isActive={activeId === id} onClick={() => handleButtonClick()}>
             {quantity} порций
         </ButtonStyle>
     );

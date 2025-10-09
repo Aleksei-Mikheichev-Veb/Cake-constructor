@@ -4,6 +4,7 @@ import styles from './AddInscriptions.module.scss';
 import InputColor from "../../../../UI/inputs/InputColor/InputColor";
 
 const AddInscriptions = () => {
+    const [creamText, setCreamText] = useState('')
     const [creamColor, setCreamColor] = useState('#000000')
     return (
         <div className={styles.addText}>
@@ -15,13 +16,16 @@ const AddInscriptions = () => {
                     placeholder="Что будем писать?"
                     name="text"
                     id="text"
+                    value={creamText}
+                    onChange={(e) => setCreamText(e.target.value)}
                 />
                 <label htmlFor="text" className={styles.form__label}>Что будем писать?</label>
             </div>
-            <InputColor title={'Выберите цвет крема'}
-                        selectedColor={creamColor}
-                        setSelectedColor={setCreamColor}
-            />
+            {creamText && <InputColor title={'Выберите цвет крема'}
+                                      selectedColor={creamColor}
+                                      setSelectedColor={setCreamColor}
+            />}
+
         </div>
     );
 };

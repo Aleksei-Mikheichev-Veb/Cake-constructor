@@ -5,9 +5,6 @@ import img from './../../../assets/images/optionFromCategory/biscuit/1.jpg'
 import {useParams} from "react-router-dom";
 import {cakeTypes} from "../../../data/cakeTypes";
 import FillingControls from "../СonstructorPage/controls/FillingControls/FillingControls";
-import {fillings, FillingType} from "../../../data/fillings";
-import ButtonsControls from "../СonstructorPage/controls/ButtonsControls/ButtonControls";
-import {numberOfServing} from "../../../data/numberOfServing";
 import TemplateControls from "../СonstructorPage/controls/TemplateControls/SelectionControls";
 import {ItemType, templates} from "../../../data/templates";
 import DecorationControls from "../СonstructorPage/controls/DecorationControls/DecorationControls";
@@ -18,11 +15,18 @@ import {colors} from "../../../data/colors";
 import {smudges} from "../../../data/smudges";
 import AddImage from "../СonstructorPage/controls/AddImage/AddImage";
 import AddInscriptions from "../СonstructorPage/controls/AddInscriptions/AddInscriptions";
+import WeightControls from "../СonstructorPage/controls/WeightControls/WeightControls";
+import {useDispatch, useSelector } from 'react-redux';
+import {RootState} from "../../../redux/store";
+import {setColorsTemplate, setSmudges, setTemplate} from "../../../redux/cakeConstructorSlice";
 
 
 const ProductPage = () => {
-    const [selectedFilling, setSelectedFilling] = useState<FillingType | null>(null);
-    const [selectedTemplate, setSelectedTemplate] = useState<ItemType | null>(null)
+    const dispatch = useDispatch()
+    const template = useSelector((state: RootState) => state.cakeConstructor.template)
+    const colorsTemplate = useSelector((state:RootState) => state.cakeConstructor.colorsTemplate)
+    const smudgesTemplate = useSelector((state:RootState) => state.cakeConstructor.smudges)
+    // const [selectedTemplate, setSelectedTemplate] = useState<ItemType | null>(null)
     const [selectedColorType, setSelectedColorType] = useState<ItemType | null>(null)
     const [selectedColors, setSelectedColors] = useState<string[]>([])
     const [selectedSmudges, setSelectedSmudges] = useState<ItemType | null>(null)
@@ -53,29 +57,24 @@ const ProductPage = () => {
 
                 <section className={styles.constructorSection}>
                     <h2 className={globalStyles.visually_hidden}>Собери свой торт</h2>
-                    <ButtonsControls title={'Выберите колличество порций'} data={numberOfServing}/>
-                    <FillingControls
-                        title={'Выберите начинку'}
-                        activeFillingId={selectedFilling ? selectedFilling.id : null}
-                        setSelectedFilling={setSelectedFilling}/>
+                    <WeightControls title={'Выберите колличество порций'}/>
+                    <FillingControls title={'Выберите начинку'}/>
                     <SelectionControls
-                        activeItemId={selectedTemplate ? selectedTemplate.id : null}
-                        setSelectedItem={setSelectedTemplate}
+                        activeItemId={template ? template.id : null}
+                        setSelectedItem={(template) => dispatch(setTemplate(template))}
                         items={templates}
                         title={'Выберите шаблон оформления'}
                     />
                     <SelectionControls
-                        activeItemId={selectedColorType ? selectedColorType.id : null}
-                        setSelectedItem={setSelectedColorType}
+                        activeItemId={colorsTemplate ? colorsTemplate.id : null}
+                        setSelectedItem={(colorTemplate:ItemType) => dispatch(setColorsTemplate(colorTemplate))}
                         items={colors}
-                        selectedColors={selectedColors}
-                        setSelectedColors={setSelectedColors}
                         isColorSelected={true}
                         title={'Выберите цвет торта'}
                     />
                     <SelectionControls
-                        activeItemId={selectedSmudges ? selectedSmudges.id : null}
-                        setSelectedItem={setSelectedSmudges}
+                        activeItemId={smudgesTemplate ? smudgesTemplate.id : null}
+                        setSelectedItem={(smudges) => dispatch(setSmudges(smudges))}
                         items={smudges}
                         title={'Выберите оформление подтеками'}
                     />

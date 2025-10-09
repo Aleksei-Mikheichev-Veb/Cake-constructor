@@ -6,17 +6,19 @@ import styles from './FillingControls.module.scss'
 import 'swiper/css/navigation';
 import {fillings, FillingType} from "../../../../../data/fillings";
 import ArrowIcon from "../../../../UI/icons/ArrowIcon";
-import Tooltip from "../../../../UI/Tooltip";
-import Modal from "../../../../UI/Modal/Modal";
 import FillingSlide from "./FillingSlide/FillingSlide";
+import {useDispatch, useSelector } from 'react-redux';
+import {RootState} from "../../../../../redux/store";
+import {setFilling} from "../../../../../redux/cakeConstructorSlice";
 
 type FillingControlsProps = {
     title: string;
-    activeFillingId: string | null;
-    setSelectedFilling: (filling: FillingType) => void;
 }
 
-const FillingControls: FC<FillingControlsProps> = ({title, activeFillingId, setSelectedFilling}) => {
+const FillingControls: FC<FillingControlsProps> = ({title}) => {
+
+    const dispatch = useDispatch();
+    const activeFillingId = useSelector((state:RootState) => state.cakeConstructor.filling)
 
     const prevRef = useRef<HTMLButtonElement | null>(null)
     const nextRef = useRef<HTMLButtonElement | null>(null)
@@ -26,7 +28,7 @@ const FillingControls: FC<FillingControlsProps> = ({title, activeFillingId, setS
 
 
     const handleFillingClick = (filling: FillingType) => {
-        setSelectedFilling(filling)
+        dispatch(setFilling(filling))
     }
 
     return (
@@ -71,7 +73,7 @@ const FillingControls: FC<FillingControlsProps> = ({title, activeFillingId, setS
                         <SwiperSlide key={filling.id} className={styles.swiper_slide}>
                             <FillingSlide
                                 filling={filling}
-                                activeFillingId={activeFillingId}
+                                activeFillingId={activeFillingId && activeFillingId.id}
                                 handleFillingClick={handleFillingClick}/>
                         </SwiperSlide>
                     ))}
