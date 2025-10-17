@@ -8,8 +8,8 @@ import {decorationsAll} from "../../../../../data/decorationsAll";
 type DecorationControlsProps = {
     title:string;
     decorations:'all' | 'main' | 'additional';
-    // setSelectedTemplate:(template:TemplateType) => void;
-    // activeTemplateId: string | null;
+    setSelectedTemplate:(template:DecorationType) => void;
+    activeTemplateId: string | null;
 }
 
 const DecorationControls: FC<DecorationControlsProps> = ({title,decorations}) => {

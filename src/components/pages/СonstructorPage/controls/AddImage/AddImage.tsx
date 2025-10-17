@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './AddImage.module.scss';
+import {RootState} from "../../../../../redux/store";
+import {setImagePreview} from "../../../../../redux/cakeConstructorSlice";
 
 const AddImage = () => {
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const dispatch = useDispatch();
+    const imagePreview = useSelector((state: RootState) => state.cakeConstructor.imagePreview);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImagePreview(reader.result as string | null);
+                dispatch(setImagePreview(reader.result as string)); // Отправляем в Redux
             };
             reader.readAsDataURL(file);
         } else {
-            setImagePreview(null);
+            dispatch(setImagePreview(null)); // Сбрасываем в Redux
         }
     };
 
     const handleDeleteImage = () => {
-        setImagePreview(null)
-    }
+        dispatch(setImagePreview(null)); // Сбрасываем в Redux
+    };
 
     return (
         <div className={styles.addImage}>
@@ -60,7 +64,9 @@ const AddImage = () => {
                             alt="Превью изображения"
                             className={styles.addImage_preview}
                         />
-                        <div className={styles.addImage_delete} onClick={() => handleDeleteImage()}>х</div>
+                        <div className={styles.addImage_delete} onClick={handleDeleteImage}>
+                            х
+                        </div>
                     </div>
                 )}
             </div>

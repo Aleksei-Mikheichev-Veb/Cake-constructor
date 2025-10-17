@@ -10,6 +10,9 @@ type initialStateType = {
     colorsTemplate: ItemType | null;
     colors: Array<string>;
     smudges: ItemType | null;
+    creamText:string;
+    creamTextColor: string | null;
+    imagePreview: string | null;
 }
 
 const initialState:initialStateType = {
@@ -18,7 +21,10 @@ const initialState:initialStateType = {
     template: null,
     colorsTemplate: null,
     colors: [],
-    smudges: null
+    smudges: null,
+    creamText: '',
+    creamTextColor: null,
+    imagePreview: null
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -42,9 +48,18 @@ export const cakeConstructorSlice = createSlice({
         },
         setSmudges: (state, action: PayloadAction<ItemType>) => {
             state.smudges = action.payload
+        },
+        setImagePreview: (state, action: PayloadAction<string | null>) => {
+            state.imagePreview = action.payload
+        },
+        setCreamText: (state, action: PayloadAction<string>) => {
+            state.creamText = action.payload
+        },
+        setCreamTextColor: (state, action: PayloadAction<string>) => {
+            state.creamTextColor = action.payload
         }
     }
 })
 
-export const {setWeight, setFilling, setTemplate, setColorsTemplate, setColors, setSmudges} = cakeConstructorSlice.actions
+export const {setWeight, setFilling, setTemplate, setColorsTemplate, setColors, setSmudges,setImagePreview,setCreamText, setCreamTextColor } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer
