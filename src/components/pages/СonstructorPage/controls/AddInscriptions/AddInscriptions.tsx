@@ -1,15 +1,11 @@
-
 import React, {useState} from 'react';
 import styles from './AddInscriptions.module.scss';
 import InputColor from "../../../../UI/inputs/InputColor/InputColor";
-
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../../redux/store";
 import {setCreamText, setCreamTextColor} from "../../../../../redux/cakeConstructorSlice";
 
 const AddInscriptions = () => {
-    // const [creamText, setCreamText] = useState('')
-    // const [creamColor, setCreamColor] = useState('#000000')
     const dispatch = useDispatch()
     const creamText = useSelector((state: RootState) => state.cakeConstructor.creamText)
     const creamTextColor = useSelector((state: RootState) => state.cakeConstructor.creamTextColor)

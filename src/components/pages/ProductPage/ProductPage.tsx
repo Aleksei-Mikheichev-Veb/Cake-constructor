@@ -18,7 +18,14 @@ import AddInscriptions from "../СonstructorPage/controls/AddInscriptions/AddIns
 import WeightControls from "../СonstructorPage/controls/WeightControls/WeightControls";
 import {useDispatch, useSelector } from 'react-redux';
 import {RootState} from "../../../redux/store";
-import {setColorsTemplate, setSmudges, setTemplate} from "../../../redux/cakeConstructorSlice";
+import {
+    removeAdditionalDecoration, removeMainDecorations,
+    setAdditionalDecorations,
+    setColorsTemplate,
+    setMainDecorations,
+    setSmudges,
+    setTemplate
+} from "../../../redux/cakeConstructorSlice";
 
 
 const ProductPage = () => {
@@ -26,10 +33,8 @@ const ProductPage = () => {
     const template = useSelector((state: RootState) => state.cakeConstructor.template)
     const colorsTemplate = useSelector((state:RootState) => state.cakeConstructor.colorsTemplate)
     const smudgesTemplate = useSelector((state:RootState) => state.cakeConstructor.smudges)
-    const [selectedTemplate, setSelectedTemplate] = useState<ItemType | null>(null)
-    const [selectedColorType, setSelectedColorType] = useState<ItemType | null>(null)
-    const [selectedColors, setSelectedColors] = useState<string[]>([])
-    const [selectedSmudges, setSelectedSmudges] = useState<ItemType | null>(null)
+    const mainDecorations = useSelector((state:RootState) => state.cakeConstructor.mainDecorations)
+    const additionalDecorations = useSelector((state:RootState) => state.cakeConstructor.additionalDecorations)
     const params = useParams()
     const product = cakeTypes.find((product) => (product.id === params.type))
 
@@ -82,15 +87,17 @@ const ProductPage = () => {
                     <DecorationControls
                         title={'Основные украшения'}
                         decorations={'main'}
-                        setSelectedTemplate={setSelectedTemplate}
-                        activeTemplateId={selectedTemplate && selectedTemplate.id}
+                        setActiveDecoration={(decoration) => dispatch(setMainDecorations(decoration))}
+                        removeDecoration={decorationId => dispatch(removeMainDecorations(decorationId))}
+                        activeDecoration={mainDecorations}
                     />
-                    {/*<DecorationControls*/}
-                    {/*    title={'Дополнительные украшения'}*/}
-                    {/*    decorations={'additional'}*/}
-                    {/*    // setSelectedTemplate={}*/}
-                    {/*    // activeTemplateId={}*/}
-                    {/*/>*/}
+                    <DecorationControls
+                        title={'Дополнительные украшения'}
+                        decorations={'additional'}
+                        setActiveDecoration={(decoration => dispatch(setAdditionalDecorations(decoration)))}
+                        removeDecoration={decorationId => dispatch(removeAdditionalDecoration(decorationId))}
+                        activeDecoration={additionalDecorations}
+                    />
                     <AddImage/>
                     <AddInscriptions/>
                 </section>

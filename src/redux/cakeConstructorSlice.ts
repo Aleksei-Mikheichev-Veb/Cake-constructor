@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {FillingType} from "../data/fillings";
 import {NumberOfServingType} from "../data/numberOfServing";
 import {ItemType} from "../data/templates";
+import {DecorationType} from "../data/decorationsMain";
 
 type initialStateType = {
     numberOfServing: NumberOfServingType | null;
@@ -13,6 +14,8 @@ type initialStateType = {
     creamText:string;
     creamTextColor: string | null;
     imagePreview: string | null;
+    mainDecorations: DecorationType | null;
+    additionalDecorations: Array<DecorationType>;
 }
 
 const initialState:initialStateType = {
@@ -24,7 +27,9 @@ const initialState:initialStateType = {
     smudges: null,
     creamText: '',
     creamTextColor: null,
-    imagePreview: null
+    imagePreview: null,
+    mainDecorations: null,
+    additionalDecorations: [] ,
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -57,9 +62,23 @@ export const cakeConstructorSlice = createSlice({
         },
         setCreamTextColor: (state, action: PayloadAction<string>) => {
             state.creamTextColor = action.payload
+        },
+        setMainDecorations: (state, action: PayloadAction<DecorationType>) => {
+            state.mainDecorations = action.payload
+        },
+        removeMainDecorations: (state, action: PayloadAction<string>) => {
+            state.mainDecorations = null
+        },
+        setAdditionalDecorations:(state, action: PayloadAction<DecorationType>) => {
+            state.additionalDecorations.push(action.payload)
+        },
+        removeAdditionalDecoration:(state, action: PayloadAction<string>) => {
+            state.additionalDecorations = state.additionalDecorations.filter(decoration => decoration.id != action.payload)
         }
     }
 })
 
-export const {setWeight, setFilling, setTemplate, setColorsTemplate, setColors, setSmudges,setImagePreview,setCreamText, setCreamTextColor } = cakeConstructorSlice.actions
+export const {setWeight, setFilling, setTemplate, setColorsTemplate, setColors, setSmudges,setImagePreview,setCreamText, setCreamTextColor, setMainDecorations, setAdditionalDecorations, removeAdditionalDecoration, removeMainDecorations } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer
+
+как назвать коммит если я добавил в slice добавление и удаление основных и дополнительных декораций, поменял стили декораций, и добавил к компоненту с инпутом компоненту с выбором текста
