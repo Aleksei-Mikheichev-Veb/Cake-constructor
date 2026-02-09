@@ -1,15 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import globalStyles from './../../../styles/global.module.scss'
 import styles from './ProductPage.module.scss';
 import img from './../../../assets/images/optionFromCategory/biscuit/1.jpg'
 import {useParams} from "react-router-dom";
 import {cakeTypes} from "../../../data/cakeTypes";
 import FillingControls from "../СonstructorPage/controls/FillingControls/FillingControls";
-import TemplateControls from "../СonstructorPage/controls/TemplateControls/SelectionControls";
 import {ItemType, templates} from "../../../data/templates";
 import DecorationControls from "../СonstructorPage/controls/DecorationControls/DecorationControls";
-import {decorationsMain} from "../../../data/decorationsMain";
-import {decorationsAdditional} from "../../../data/decorationsAdditional";
 import SelectionControls from "../СonstructorPage/controls/TemplateControls/SelectionControls";
 import {colors} from "../../../data/colors";
 import {smudges} from "../../../data/smudges";
@@ -26,6 +23,7 @@ import {
     setSmudges,
     setTemplate
 } from "../../../redux/cakeConstructorSlice";
+import TotalPrice from "../../UI/TotalPrice/TotalPrice";
 
 
 const ProductPage = () => {
@@ -100,6 +98,7 @@ const ProductPage = () => {
                     />
                     <AddImage/>
                     <AddInscriptions/>
+                    <TotalPrice/>
                 </section>
             </main>
         </div>

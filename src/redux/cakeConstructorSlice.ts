@@ -80,5 +80,3 @@ export const cakeConstructorSlice = createSlice({
 
 export const {setWeight, setFilling, setTemplate, setColorsTemplate, setColors, setSmudges,setImagePreview,setCreamText, setCreamTextColor, setMainDecorations, setAdditionalDecorations, removeAdditionalDecoration, removeMainDecorations } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer
-
-как назвать коммит если я добавил в slice добавление и удаление основных и дополнительных декораций, поменял стили декораций, и добавил к компоненту с инпутом компоненту с выбором текста
