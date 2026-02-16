@@ -16,12 +16,14 @@ import WeightControls from "../СonstructorPage/controls/WeightControls/WeightCo
 import {useDispatch, useSelector } from 'react-redux';
 import {RootState} from "../../../redux/store";
 import {
-    removeAdditionalDecoration, removeMainDecorations,
-    setAdditionalDecorations,
     setColorsTemplate,
-    setMainDecorations,
     setSmudges,
-    setTemplate
+    setTemplate,
+    addMainDecoration,
+    removeMainDecoration,
+    incrementMainDecoration,
+    decrementMainDecoration,
+    addAdditionalDecoration, removeAdditionalDecoration, incrementAdditionalDecoration, decrementAdditionalDecoration
 } from "../../../redux/cakeConstructorSlice";
 import TotalPrice from "../../UI/TotalPrice/TotalPrice";
 
@@ -85,15 +87,19 @@ const ProductPage = () => {
                     <DecorationControls
                         title={'Основные украшения'}
                         decorations={'main'}
-                        setActiveDecoration={(decoration) => dispatch(setMainDecorations(decoration))}
-                        removeDecoration={decorationId => dispatch(removeMainDecorations(decorationId))}
+                        setActiveDecoration={(decoration) => dispatch(addMainDecoration(decoration))}
+                        removeDecoration={decorationId => dispatch(removeMainDecoration(decorationId))}
+                        increment={decorationId => dispatch(incrementMainDecoration(decorationId))}
+                        decrement={decorationId => dispatch(decrementMainDecoration(decorationId))}
                         activeDecoration={mainDecorations}
                     />
                     <DecorationControls
                         title={'Дополнительные украшения'}
                         decorations={'additional'}
-                        setActiveDecoration={(decoration => dispatch(setAdditionalDecorations(decoration)))}
+                        setActiveDecoration={(decoration => dispatch(addAdditionalDecoration(decoration)))}
                         removeDecoration={decorationId => dispatch(removeAdditionalDecoration(decorationId))}
+                        increment={decorationId => dispatch(incrementAdditionalDecoration(decorationId))}
+                        decrement={decorationId => dispatch(decrementAdditionalDecoration(decorationId))}
                         activeDecoration={additionalDecorations}
                     />
                     <AddImage/>

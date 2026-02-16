@@ -7,7 +7,7 @@ export type DecorationType = {
     minCount?:number;
     byThePiece?:boolean;
 };
-
+export type SelectedDecoration = DecorationType & {count: number};
 export const decorationsMain: DecorationType[] = [
     {
         id: 'strawberry',

@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import styles from './CardCategory.module.scss';
-import Tooltip from "../../../UI/Tooltip";
+import Tooltip from "../../../UI/Tooltip/Tooltip";
 
 type CardCategoriesProps = {
     title: string;

@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import Tooltip from "../../../../../UI/Tooltip";
+import Tooltip from "../../../../../UI/Tooltip/Tooltip";
 import {ItemType} from "../../../../../../data/templates";
 import styles from './Template.module.scss'
 

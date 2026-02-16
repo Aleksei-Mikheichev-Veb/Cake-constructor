@@ -1,16 +1,19 @@
 import React, {FC, useState} from 'react';
 import styles from './DecorationControls.module.scss'
 import Decoration from "./Decoration/Decoration";
-import {decorationsMain, DecorationType} from "../../../../../data/decorationsMain";
+import {decorationsMain, DecorationType, SelectedDecoration} from "../../../../../data/decorationsMain";
 import {decorationsAdditional} from "../../../../../data/decorationsAdditional";
 import {decorationsAll} from "../../../../../data/decorationsAll";
+import {EntityState} from "@reduxjs/toolkit";
 
 type DecorationControlsProps = {
     title:string;
     decorations:'all' | 'main' | 'additional';
     setActiveDecoration:(decoration:DecorationType) => void;
     removeDecoration:(decorationId: string) => void;
-    activeDecoration: DecorationType | Array<DecorationType> | null;
+    increment: (decorationId: string) => void;
+    decrement: (decorationId: string) => void;
+    activeDecoration:  EntityState<SelectedDecoration, string>;
 }
 
 const DecorationControls: FC<DecorationControlsProps> = ({
@@ -19,6 +22,8 @@ const DecorationControls: FC<DecorationControlsProps> = ({
                                                              setActiveDecoration,
                                                              removeDecoration,
                                                              activeDecoration,
+                                                             increment,
+                                                             decrement,
                                                          }) => {
     let currentDecorations: DecorationType[] = [];
 
@@ -44,14 +49,13 @@ const DecorationControls: FC<DecorationControlsProps> = ({
                 {currentDecorations.map(decoration => (
                     <Decoration
                         key={decoration.id}
-                        isSelected={
-                            Array.isArray(activeDecoration)
-                                ? activeDecoration.some(d => d.id === decoration.id)
-                                : activeDecoration?.id === decoration.id
-                        }
+                        isSelected={ !!activeDecoration.entities[decoration.id] }
+                        count={activeDecoration.entities[decoration.id]?.count }
                         addDecoration={() => setActiveDecoration(decoration)}
                         removeDecoration={() => removeDecoration(decoration.id)}
                         decoration={decoration}
+                        increment={() => increment(decoration.id)}
+                        decrement={() => decrement(decoration.id)}
                     />
                 ))}
             </div>

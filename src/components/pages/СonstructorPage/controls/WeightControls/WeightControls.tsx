@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import Tooltip from "../../../../UI/Tooltip";
+import Tooltip from "../../../../UI/Tooltip/Tooltip";
 import Button from "../../../../UI/Button";
 import styles from './WeightControls.module.scss'
 import {numberOfServing, NumberOfServingType} from "../../../../../data/numberOfServing";

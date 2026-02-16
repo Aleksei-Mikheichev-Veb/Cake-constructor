@@ -1,3 +1,7 @@
+.decorationWrapper{
+  display: flex;
+  flex-direction: column;
+}
 .decoration {
   position: relative;
   display: flex;
@@ -197,7 +201,12 @@
   pointer-events: none;
   z-index: 3;
 }
-
+.decoration_counter_wrapper {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
 // Адаптивность
 @media (max-width: 768px) {
   .decoration {

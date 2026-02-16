@@ -1,8 +1,16 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {createEntityAdapter, createSlice, EntityState, PayloadAction} from "@reduxjs/toolkit";
 import {FillingType} from "../data/fillings";
 import {NumberOfServingType} from "../data/numberOfServing";
 import {ItemType} from "../data/templates";
-import {DecorationType} from "../data/decorationsMain";
+import {DecorationType, SelectedDecoration} from "../data/decorationsMain";
+
+export const mainDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
+    selectId: (deco) => deco.id
+})
+
+export const additionalDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
+    selectId: (deco) => deco.id
+});
 
 type initialStateType = {
     numberOfServing: NumberOfServingType | null;
@@ -14,8 +22,10 @@ type initialStateType = {
     creamText:string;
     creamTextColor: string | null;
     imagePreview: string | null;
-    mainDecorations: DecorationType | null;
-    additionalDecorations: Array<DecorationType>;
+    // mainDecorations: Array<DecorationType>;
+    // additionalDecorations: Array<DecorationType>;
+    mainDecorations: EntityState<SelectedDecoration, string>;
+    additionalDecorations: EntityState<SelectedDecoration, string>;
 }
 
 const initialState:initialStateType = {
@@ -28,8 +38,10 @@ const initialState:initialStateType = {
     creamText: '',
     creamTextColor: null,
     imagePreview: null,
-    mainDecorations: null,
-    additionalDecorations: [] ,
+    // mainDecorations: [],
+    // additionalDecorations: [] ,
+    mainDecorations: mainDecorAdapter.getInitialState(),
+    additionalDecorations: additionalDecorAdapter.getInitialState() ,
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -63,20 +75,103 @@ export const cakeConstructorSlice = createSlice({
         setCreamTextColor: (state, action: PayloadAction<string>) => {
             state.creamTextColor = action.payload
         },
-        setMainDecorations: (state, action: PayloadAction<DecorationType>) => {
-            state.mainDecorations = action.payload
+        addMainDecoration: (state, action: PayloadAction<DecorationType>) => {
+            const deco = action.payload;
+            if(state.mainDecorations.ids.length == 3){
+                return
+            }
+            const count = deco.byThePiece ? (deco.minCount || 1) : 1;
+            mainDecorAdapter.addOne(state.mainDecorations, {...deco, count})
         },
-        removeMainDecorations: (state, action: PayloadAction<string>) => {
-            state.mainDecorations = null
+        removeMainDecoration: (state, action: PayloadAction<string>) => {
+            mainDecorAdapter.removeOne(state.mainDecorations, action.payload)
+
         },
-        setAdditionalDecorations:(state, action: PayloadAction<DecorationType>) => {
-            state.additionalDecorations.push(action.payload)
+        incrementMainDecoration: (state, action: PayloadAction<string>) => {
+            const id = action.payload;
+            const existing = state.mainDecorations.entities[id];
+            mainDecorAdapter.updateOne(state.mainDecorations, {
+                id,
+                changes: {count: existing.count + 1}
+            })
         },
-        removeAdditionalDecoration:(state, action: PayloadAction<string>) => {
-            state.additionalDecorations = state.additionalDecorations.filter(decoration => decoration.id != action.payload)
+        decrementMainDecoration: (state, action:PayloadAction<string>) => {
+            const id = action.payload;
+            const existing = state.mainDecorations.entities[id];
+            if(existing.count == (existing.minCount || 1)){
+                mainDecorAdapter.removeOne(state.mainDecorations, id)
+            }else{
+                mainDecorAdapter.updateOne(state.mainDecorations, {
+                    id,
+                    changes: {count: existing.count - 1}
+                })
+            }
+        },
+        addAdditionalDecoration: (state, action:PayloadAction<DecorationType>) => {
+            const deco = action.payload;
+            const count = deco.minCount ? deco.minCount : 1;
+            additionalDecorAdapter.addOne(state.additionalDecorations, {...deco, count})
+        },
+        removeAdditionalDecoration: (state, action:PayloadAction<string>) => {
+            additionalDecorAdapter.removeOne(state.additionalDecorations, action.payload)
+        },
+        incrementAdditionalDecoration: (state, action:PayloadAction<string>) => {
+            const id = action.payload;
+            const existing = state.additionalDecorations.entities[id]
+            additionalDecorAdapter.updateOne(state.additionalDecorations, {
+                id,
+                changes: {count: existing.count + 1}
+            })
+        },
+        decrementAdditionalDecoration: (state, action:PayloadAction<string>) => {
+            const id = action.payload;
+            const existing = state.additionalDecorations.entities[id];
+            if(existing.count == 1){
+                additionalDecorAdapter.removeOne(state.additionalDecorations, id)
+            }else {
+                additionalDecorAdapter.updateOne(state.additionalDecorations, {
+                    id,
+                    changes: {count: existing.count - 1}
+                })
+            }
         }
+        // setMainDecorations: (state, action: PayloadAction<DecorationType>) => {
+        //     state.mainDecorations = action.payload
+        // },
+        // removeMainDecorations: (state, action: PayloadAction<string>) => {
+        //     state.mainDecorations = null
+        // },
+        // setMainDecorations: (state, action: PayloadAction<DecorationType>) => {
+        //     state.mainDecorations.push(action.payload)
+        // },
+        // removeMainDecorations: (state, action: PayloadAction<string>) => {
+        //     state.mainDecorations = state.mainDecorations.filter(decoration => decoration.id != action.payload)
+        // },
+        // setAdditionalDecorations:(state, action: PayloadAction<DecorationType>) => {
+        //     state.additionalDecorations.push(action.payload)
+        // },
+        // removeAdditionalDecoration:(state, action: PayloadAction<string>) => {
+        //     state.additionalDecorations = state.additionalDecorations.filter(decoration => decoration.id != action.payload)
+        // }
     }
 })
 
-export const {setWeight, setFilling, setTemplate, setColorsTemplate, setColors, setSmudges,setImagePreview,setCreamText, setCreamTextColor, setMainDecorations, setAdditionalDecorations, removeAdditionalDecoration, removeMainDecorations } = cakeConstructorSlice.actions
+export const {setWeight,
+    setFilling,
+    setTemplate,
+    setColorsTemplate,
+    setColors,
+    setSmudges,
+    setImagePreview,
+    setCreamText,
+    setCreamTextColor,
+    addMainDecoration,
+    removeMainDecoration,
+    incrementMainDecoration,
+    decrementMainDecoration,
+    addAdditionalDecoration,
+    removeAdditionalDecoration,
+    incrementAdditionalDecoration,
+    decrementAdditionalDecoration
+} = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer
