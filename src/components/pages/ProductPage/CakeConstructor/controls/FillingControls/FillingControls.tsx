@@ -4,12 +4,12 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
 import styles from './FillingControls.module.scss'
 import 'swiper/css/navigation';
-import {fillings, FillingType} from "../../../../../data/fillings";
-import ArrowIcon from "../../../../UI/icons/ArrowIcon";
 import FillingSlide from "./FillingSlide/FillingSlide";
 import {useDispatch, useSelector } from 'react-redux';
-import {RootState} from "../../../../../redux/store";
-import {setFilling} from "../../../../../redux/cakeConstructorSlice";
+import {RootState} from "../../../../../../redux/store";
+import {fillings, FillingType} from "../../../../../../data/fillings";
+import {setFilling} from "../../../../../../redux/cakeConstructorSlice";
+import ArrowIcon from "../../../../../UI/icons/ArrowIcon";
 
 type FillingControlsProps = {
     title: string;

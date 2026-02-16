@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import styles from './Decoration.module.scss';
-import {DecorationType} from '../../../../../../data/decorationsMain';
-import Tooltip from '../../../../../UI/Tooltip/Tooltip';
-import DecorationCounter from '../../../../../UI/DecorationCounter/DecorationCounter';
+import DecorationCounter from "../../../../../../UI/DecorationCounter/DecorationCounter";
+import Tooltip from '../../../../../../UI/Tooltip/Tooltip';
+import {DecorationType} from "../../../../../../../data/decorationsMain";
 
 type DecorationProps = {
     decoration: DecorationType;

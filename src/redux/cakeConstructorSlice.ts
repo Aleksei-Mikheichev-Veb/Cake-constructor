@@ -22,8 +22,6 @@ type initialStateType = {
     creamText:string;
     creamTextColor: string | null;
     imagePreview: string | null;
-    // mainDecorations: Array<DecorationType>;
-    // additionalDecorations: Array<DecorationType>;
     mainDecorations: EntityState<SelectedDecoration, string>;
     additionalDecorations: EntityState<SelectedDecoration, string>;
 }
@@ -38,8 +36,6 @@ const initialState:initialStateType = {
     creamText: '',
     creamTextColor: null,
     imagePreview: null,
-    // mainDecorations: [],
-    // additionalDecorations: [] ,
     mainDecorations: mainDecorAdapter.getInitialState(),
     additionalDecorations: additionalDecorAdapter.getInitialState() ,
 }
@@ -135,24 +131,6 @@ export const cakeConstructorSlice = createSlice({
                 })
             }
         }
-        // setMainDecorations: (state, action: PayloadAction<DecorationType>) => {
-        //     state.mainDecorations = action.payload
-        // },
-        // removeMainDecorations: (state, action: PayloadAction<string>) => {
-        //     state.mainDecorations = null
-        // },
-        // setMainDecorations: (state, action: PayloadAction<DecorationType>) => {
-        //     state.mainDecorations.push(action.payload)
-        // },
-        // removeMainDecorations: (state, action: PayloadAction<string>) => {
-        //     state.mainDecorations = state.mainDecorations.filter(decoration => decoration.id != action.payload)
-        // },
-        // setAdditionalDecorations:(state, action: PayloadAction<DecorationType>) => {
-        //     state.additionalDecorations.push(action.payload)
-        // },
-        // removeAdditionalDecoration:(state, action: PayloadAction<string>) => {
-        //     state.additionalDecorations = state.additionalDecorations.filter(decoration => decoration.id != action.payload)
-        // }
     }
 })
 

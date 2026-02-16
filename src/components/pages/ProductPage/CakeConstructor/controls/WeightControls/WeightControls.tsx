@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
-import Tooltip from "../../../../UI/Tooltip/Tooltip";
-import Button from "../../../../UI/Button";
 import styles from './WeightControls.module.scss'
-import {numberOfServing, NumberOfServingType} from "../../../../../data/numberOfServing";
 import { useDispatch, useSelector } from 'react-redux';
-import {RootState} from "../../../../../redux/store";
-import {setWeight} from "../../../../../redux/cakeConstructorSlice";
+import {numberOfServing, NumberOfServingType} from "../../../../../../data/numberOfServing";
+import {RootState} from "../../../../../../redux/store";
+import {setWeight} from "../../../../../../redux/cakeConstructorSlice";
+import Tooltip from "../../../../../UI/Tooltip/Tooltip";
+import Button from "../../../../../UI/Button";
 
 
 type WeightControlsProps = {

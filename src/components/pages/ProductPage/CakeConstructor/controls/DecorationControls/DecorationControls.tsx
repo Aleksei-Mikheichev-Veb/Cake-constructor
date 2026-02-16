@@ -1,10 +1,10 @@
 import React, {FC, useState} from 'react';
 import styles from './DecorationControls.module.scss'
 import Decoration from "./Decoration/Decoration";
-import {decorationsMain, DecorationType, SelectedDecoration} from "../../../../../data/decorationsMain";
-import {decorationsAdditional} from "../../../../../data/decorationsAdditional";
-import {decorationsAll} from "../../../../../data/decorationsAll";
 import {EntityState} from "@reduxjs/toolkit";
+import {decorationsMain, DecorationType, SelectedDecoration} from "../../../../../../data/decorationsMain";
+import {decorationsAdditional} from "../../../../../../data/decorationsAdditional";
+import {decorationsAll} from "../../../../../../data/decorationsAll";
 
 type DecorationControlsProps = {
     title:string;

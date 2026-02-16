@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import styles from './AddInscriptions.module.scss';
-import InputColor from "../../../../UI/inputs/InputColor/InputColor";
+import InputColor from "../../../../../UI/inputs/InputColor/InputColor";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../../../redux/store";
-import {setCreamText, setCreamTextColor} from "../../../../../redux/cakeConstructorSlice";
+import {RootState} from "../../../../../../redux/store";
+import {setCreamText, setCreamTextColor} from "../../../../../../redux/cakeConstructorSlice";
 
 const AddInscriptions = () => {
     const dispatch = useDispatch()

@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useState} from 'react';
 import styles from './SelectionControls.module.scss'
-import {ItemType} from "../../../../../data/templates";
 import Template from "../TemplateControls/Template/Template";
-import InputColor from "../../../../UI/inputs/InputColor/InputColor";
 import {useDispatch, useSelector } from 'react-redux';
-import {RootState} from "../../../../../redux/store";
-import {setColors} from "../../../../../redux/cakeConstructorSlice";
+import {RootState} from "../../../../../../redux/store";
+import InputColor from "../../../../../UI/inputs/InputColor/InputColor";
+import {ItemType} from "../../../../../../data/templates";
+import {setColors} from "../../../../../../redux/cakeConstructorSlice";
 
 type SelectionControlsProps = {
     title:string; // Название блока
