@@ -3,13 +3,16 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Menu = styled.nav`
-  width: 1400px;
+  //width: 1400px;
+  width: 100%;
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0%);
   z-index: 5;
+  background: #000;
 
   .list {
+    width: 1500px;
     display: flex;
     justify-content: flex-end;
     height: 60px;

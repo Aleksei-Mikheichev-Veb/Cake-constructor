@@ -1,15 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from "../ProductPage.module.scss";
 import globalStyles from "../../../../styles/global.module.scss";
 import {
     addAdditionalDecoration,
-    addMainDecoration, decrementAdditionalDecoration,
+    addMainDecoration, addReferenceImage, decrementAdditionalDecoration,
     decrementMainDecoration,
     incrementAdditionalDecoration,
     incrementMainDecoration,
     removeAdditionalDecoration,
-    removeMainDecoration,
-    setColorsTemplate,
+    removeMainDecoration, removeReferenceImage,
+    setColorsTemplate, setOrderComment,
     setSmudges,
     setTemplate
 } from "../../../../redux/cakeConstructorSlice";
@@ -25,6 +25,7 @@ import WeightControls from './controls/WeightControls/WeightControls';
 import SelectionControls from "./controls/TemplateControls/SelectionControls";
 import FillingControls from "./controls/FillingControls/FillingControls";
 import DecorationControls from "./controls/DecorationControls/DecorationControls";
+import ReferenceUpload from "./controls/ReferenceUpload/ReferenceUpload";
 
 const CakeConstructor = () => {
     const dispatch = useDispatch()
@@ -33,7 +34,21 @@ const CakeConstructor = () => {
     const smudgesTemplate = useSelector((state:RootState) => state.cakeConstructor.smudges)
     const mainDecorations = useSelector((state:RootState) => state.cakeConstructor.mainDecorations)
     const additionalDecorations = useSelector((state:RootState) => state.cakeConstructor.additionalDecorations)
+    const comment = useSelector((state: RootState) => state.cakeConstructor.orderComment);
+    const refImages = useSelector((state: RootState) => state.cakeConstructor.referenceImages);
 
+    const handleAddImages = (files: File[]) => {
+        files.forEach(file => {
+            const preview = URL.createObjectURL(file);
+            const id = Date.now().toString() + Math.random().toString(36).slice(2);
+            dispatch(addReferenceImage({ id, preview }));
+            // если нужно отправлять файл на сервер — сохраняй где-то отдельно или отправляй сразу
+        });
+    };
+
+    const handleRemoveImage = (id: string) => {
+        dispatch(removeReferenceImage(id));
+    };
     const isAllDecorationsMode = template?.id === 'empty' || template?.id === 'center';
     return (
         <section className={styles.constructorSection}>
@@ -95,6 +110,13 @@ const CakeConstructor = () => {
 
             <AddImage/>
             <AddInscriptions/>
+            <ReferenceUpload
+                comment={comment}
+                onCommentChange={(v) => dispatch(setOrderComment(v))}
+                images={refImages}
+                onAddImages={handleAddImages}
+                onRemoveImage={handleRemoveImage}
+            />
             <TotalPrice/>
         </section>
     );

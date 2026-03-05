@@ -1,6 +1,6 @@
 import {createEntityAdapter, createSlice, EntityState, PayloadAction} from "@reduxjs/toolkit";
 import {FillingType} from "../data/fillings";
-import {NumberOfServingType} from "../data/numberOfServing";
+import {numberOfServing, NumberOfServingType} from "../data/numberOfServing";
 import {ItemType} from "../data/templates";
 import {DecorationType, SelectedDecoration} from "../data/decorationsMain";
 
@@ -11,6 +11,12 @@ export const mainDecorAdapter = createEntityAdapter<SelectedDecoration, string>(
 export const additionalDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
     selectId: (deco) => deco.id
 });
+
+export type ReferenceImage = {
+    id: string;
+    preview: string;
+    file?: File;
+};
 
 type initialStateType = {
     numberOfServing: NumberOfServingType | null;
@@ -24,10 +30,12 @@ type initialStateType = {
     imagePreview: string | null;
     mainDecorations: EntityState<SelectedDecoration, string>;
     additionalDecorations: EntityState<SelectedDecoration, string>;
+    orderComment: string;
+    referenceImages: ReferenceImage[];
 }
 
 const initialState:initialStateType = {
-    numberOfServing: null,
+    numberOfServing: numberOfServing[0] || null,
     filling: null,
     template: null,
     colorsTemplate: null,
@@ -38,6 +46,8 @@ const initialState:initialStateType = {
     imagePreview: null,
     mainDecorations: mainDecorAdapter.getInitialState(),
     additionalDecorations: additionalDecorAdapter.getInitialState() ,
+    orderComment: '',
+    referenceImages: [],
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -130,7 +140,24 @@ export const cakeConstructorSlice = createSlice({
                     changes: {count: existing.count - 1}
                 })
             }
-        }
+        },
+        setOrderComment: (state, action: PayloadAction<string>) => {
+            state.orderComment = action.payload;
+        },
+
+        addReferenceImage: (state, action: PayloadAction<ReferenceImage>) => {
+            if (state.referenceImages.length < 3) {
+                state.referenceImages.push(action.payload);
+            }
+        },
+
+        removeReferenceImage: (state, action: PayloadAction<string>) => {
+            state.referenceImages = state.referenceImages.filter(img => img.id !== action.payload);
+        },
+
+        clearReferenceImages: (state) => {
+            state.referenceImages = [];
+        },
     }
 })
 
@@ -150,6 +177,10 @@ export const {setWeight,
     addAdditionalDecoration,
     removeAdditionalDecoration,
     incrementAdditionalDecoration,
-    decrementAdditionalDecoration
+    decrementAdditionalDecoration,
+    setOrderComment,
+    addReferenceImage,
+    removeReferenceImage,
+    clearReferenceImages,
 } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer
