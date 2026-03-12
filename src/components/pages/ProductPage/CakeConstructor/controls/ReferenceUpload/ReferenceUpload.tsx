@@ -10,7 +10,7 @@ type Props = {
     maxImages?: number;
 };
 
-export const ReferenceUpload = ({
+export const ReferenceControls = ({
                                     comment,
                                     onCommentChange,
                                     images,
@@ -100,4 +100,4 @@ export const ReferenceUpload = ({
     );
 };
 
-export default ReferenceUpload;
+export default ReferenceControls;

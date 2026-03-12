@@ -9,8 +9,11 @@ import CakeConstructor from "./CakeConstructor/CakeConstructor";
 
 const ProductPage = () => {
     const params = useParams()
-    const product = cakeTypes.find((product) => (product.id === params.type))
+    const product = cakeTypes.find((product) => (product.id === params.subcategory))
 
+    if (!product) {
+        return <div>Товар не найден</div>
+    }
     return (
         <div className={globalStyles.container}>
             <main className={styles.productPage}>

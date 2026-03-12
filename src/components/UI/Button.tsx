@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import styled from "styled-components";
-import {NumberOfServingType} from "../../data/numberOfServing";
+import {NumberOfServingType} from "../../data/cakes/biscuit/numberOfServing";
 
 type ButtonProps = {
     elem:NumberOfServingType;

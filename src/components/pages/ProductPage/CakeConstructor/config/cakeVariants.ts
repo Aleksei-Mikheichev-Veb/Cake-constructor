@@ -1,0 +1,117 @@
+import {numberOfServing, NumberOfServingType} from "../../../../../data/cakes/biscuit/numberOfServing";
+import {templates} from "../../../../../data/templates";
+import {colors} from "../../../../../data/colors";
+import {smudges} from "../../../../../data/smudges";
+import {numberOfServingBento} from "../../../../../data/cakes/bento/numberOfServingBento";
+
+export type ControlType =
+    | 'weight'
+    | 'filling'
+    | 'template'
+    | 'colors'
+    | 'smudges'
+    | 'creamText'
+    // | 'decorations'
+    | 'photoprint'
+    // | 'reference';
+    // | 'shape'     // для бенто, мусс, ярусные
+    // | 'gloss';    // для мусс
+
+interface ControlConfig {
+    type: ControlType;
+    title?: string;
+    // специфические пропсы для этого контрола
+    items?: any[];
+    isColor?: boolean;
+    decorationsMode?: 'split' | 'all';
+}
+
+export const cakeVariants: Record<string, {
+    title: string;
+    controls: ControlConfig[];
+    weightData: NumberOfServingType[];
+}> = {
+    biscuit: {
+        title: 'Бисквитный торт',
+        weightData: numberOfServing,
+        controls: [
+            { type: 'weight', title:'Выберите количество порций'},
+            { type: 'filling', title:'Выберите начинку'},
+            { type: 'template', items: templates, title: 'Шаблон оформления' },
+            { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
+            { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
+            // { type: 'decorations', decorationsMode: 'split' },
+            { type: 'photoprint' },
+            { type: 'creamText' },
+            // { type: 'reference' },
+        ],
+    },
+    bento: {
+        title: 'Бенто торт',
+        weightData: numberOfServingBento,
+        controls: [
+            { type: 'weight', title:'Выберите количество порций'},
+            { type: 'filling', title:'Выберите начинку'},
+            { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
+            { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
+            // { type: 'decorations', decorationsMode: 'split' },
+            { type: 'photoprint' },
+            { type: 'creamText' },
+            // { type: 'reference' },
+        ],
+    },
+    kids: {
+        title: 'Бисквитный торт',
+        weightData: numberOfServing,
+        controls: [
+            { type: 'weight', title:'Выберите количество порций'},
+            { type: 'filling', title:'Выберите начинку'},
+            { type: 'template', items: templates, title: 'Шаблон оформления' },
+            { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
+            { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
+            // { type: 'decorations', decorationsMode: 'split' },
+            { type: 'photoprint' },
+            { type: 'creamText' },
+            // { type: 'reference' },
+        ],
+    },
+    mousse: {
+        title: 'Бисквитный торт',
+        weightData: numberOfServing,
+        controls: [
+            { type: 'weight', title:'Выберите количество порций'},
+            { type: 'filling', title:'Выберите начинку'},
+            { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
+            { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
+            // { type: 'decorations', decorationsMode: 'split' },
+            { type: 'photoprint' },
+            { type: 'creamText' },
+            // { type: 'reference' },
+        ],
+    },
+    tiered: {
+        title: 'Бисквитный торт',
+        weightData: numberOfServing,
+        controls: [
+            { type: 'weight', title:'Выберите количество порций'},
+            { type: 'filling', title:'Выберите начинку'},
+            { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
+            { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
+            // { type: 'decorations', decorationsMode: 'split' },
+            { type: 'photoprint' },
+            { type: 'creamText' },
+            // { type: 'reference' },
+        ],
+    },
+    '3d': {
+    title: 'Бисквитный торт',
+        weightData: numberOfServing,
+        controls: [
+        { type: 'weight', title:'Выберите количество порций'},
+        { type: 'filling', title:'Выберите начинку'},
+        // { type: 'reference' },
+    ],
+}
+}
+
+export {};

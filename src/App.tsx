@@ -18,7 +18,7 @@ function App() {
                 <Route path='/constructor' element={<ConstructorPage/>}/>
                 <Route path='/constructor' element={<ConstructorPage/>}/>
                 <Route path='/constructor/cakes' element={<CakesType/>}/>
-                <Route path='/constructor/cakes/:type' element={<ProductPage/>}/>
+                <Route path='/constructor/cakes/:subcategory' element={<ProductPage/>}/>
             </Routes>
             <Footer/>
         </BrowserRouter>

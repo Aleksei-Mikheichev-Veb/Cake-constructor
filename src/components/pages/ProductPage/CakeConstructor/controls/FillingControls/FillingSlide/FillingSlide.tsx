@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import styles from "./FillingSlide.module.scss";
-import {FillingType} from "../../../../../../../data/fillings";
+import {FillingType} from "../../../../../../../data/cakes/biscuit/fillings";
 import Modal from "../../../../../../UI/Modal/Modal";
 
 type FillingSlideProps = {

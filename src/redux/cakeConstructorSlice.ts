@@ -1,6 +1,6 @@
 import {createEntityAdapter, createSlice, EntityState, PayloadAction} from "@reduxjs/toolkit";
-import {FillingType} from "../data/fillings";
-import {numberOfServing, NumberOfServingType} from "../data/numberOfServing";
+import {FillingType} from "../data/cakes/biscuit/fillings";
+import {numberOfServing, NumberOfServingType} from "../data/cakes/biscuit/numberOfServing";
 import {ItemType} from "../data/templates";
 import {DecorationType, SelectedDecoration} from "../data/decorationsMain";
 
@@ -18,7 +18,10 @@ export type ReferenceImage = {
     file?: File;
 };
 
+export type CakeSubcategory = 'biscuit' | 'bento' | 'mousse' | 'kids' | 'tiered' | '3d' | null;
+
 type initialStateType = {
+    subcategory: CakeSubcategory;
     numberOfServing: NumberOfServingType | null;
     filling: FillingType | null;
     template: ItemType | null;
@@ -35,6 +38,7 @@ type initialStateType = {
 }
 
 const initialState:initialStateType = {
+    subcategory: null,
     numberOfServing: numberOfServing[0] || null,
     filling: null,
     template: null,
@@ -54,6 +58,13 @@ export const cakeConstructorSlice = createSlice({
     name:'cakeConstructor',
     initialState,
     reducers: {
+        setSubcategory: (state, action: PayloadAction<CakeSubcategory>) => {
+            state.subcategory = action.payload;
+            if (action.payload !== 'biscuit' && action.payload !== 'kids') {
+                state.template = null;
+                state.colorsTemplate = null;
+            }
+        },
         setWeight: (state, action: PayloadAction<NumberOfServingType>) => {
             state.numberOfServing = action.payload
         },
@@ -161,7 +172,9 @@ export const cakeConstructorSlice = createSlice({
     }
 })
 
-export const {setWeight,
+export const {
+    setSubcategory,
+    setWeight,
     setFilling,
     setTemplate,
     setColorsTemplate,

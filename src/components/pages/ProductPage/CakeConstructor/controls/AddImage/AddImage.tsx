@@ -4,7 +4,7 @@ import styles from './AddImage.module.scss';
 import {RootState} from "../../../../../../redux/store";
 import {setImagePreview} from "../../../../../../redux/cakeConstructorSlice";
 
-const AddImage = () => {
+const PhotoprintControls = () => {
     const dispatch = useDispatch();
     const imagePreview = useSelector((state: RootState) => state.cakeConstructor.imagePreview);
 
@@ -74,4 +74,4 @@ const AddImage = () => {
     );
 };
 
-export default AddImage;
+export default PhotoprintControls;

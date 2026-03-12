@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import styles from './Modal.module.scss';
 import ReactDOM from "react-dom";
-import {FillingType} from "../../../data/fillings";
+import {FillingType} from "../../../data/cakes/biscuit/fillings";
 
 type ModalProps = {
     data: FillingType | null;

@@ -1,20 +1,19 @@
 import React from 'react';
 import styles from './TotalPrice.module.scss'
 import {useSelector} from "react-redux";
-import {selectCakePrice} from "../../../redux/selectors/cakeConstructorSelectors";
+import {selectCakePriceRange} from "../../../redux/selectors/cakeConstructorSelectors";
+
 
 const TotalPrice = () => {
-    const price = useSelector(selectCakePrice);
-    const {minPrice, maxPrice} = price;
-    if(minPrice == 0){
-        return null
-    }
+    const { min, max, isRange, currency } = useSelector(selectCakePriceRange);
+
     return (
         <div className={styles.price}>
-            {price.minPrice != 0 && `Итого: ${minPrice} - ${maxPrice} ₽`}
-
+            {isRange
+                ? `от ${min.toLocaleString()} до ${max.toLocaleString()} ${currency}`
+                : `${min.toLocaleString()} ${currency}`}
         </div>
-    );
+    )
 };
 
 export default TotalPrice;

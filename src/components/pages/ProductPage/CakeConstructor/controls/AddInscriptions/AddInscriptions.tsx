@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../../../redux/store";
 import {setCreamText, setCreamTextColor} from "../../../../../../redux/cakeConstructorSlice";
 
-const AddInscriptions = () => {
+const CreamTextControls = () => {
     const dispatch = useDispatch()
     const creamText = useSelector((state: RootState) => state.cakeConstructor.creamText)
     const creamTextColor = useSelector((state: RootState) => state.cakeConstructor.creamTextColor)
@@ -33,4 +33,4 @@ const AddInscriptions = () => {
     );
 };
 
-export default AddInscriptions;
+export default CreamTextControls;

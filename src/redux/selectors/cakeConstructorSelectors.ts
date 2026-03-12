@@ -1,51 +1,62 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { additionalDecorAdapter, mainDecorAdapter } from '../cakeConstructorSlice';
+import { mainDecorAdapter, additionalDecorAdapter } from '../cakeConstructorSlice';
+import { cakePriceConfig } from '../../components/pages/ProductPage/CakeConstructor/config/cakePriceConfig';
 
-// 1. Селектор всего слайса (удобно для дальнейших createSelector)
-export const selectCakeConstructor = (state: RootState) => state.cakeConstructor;
-
-// 2. Селекторы на конкретные EntityState
-export const selectMainDecorationsState = createSelector(
-    selectCakeConstructor,
-    (cake) => cake.mainDecorations
+const { selectAll: selectAllMain } = mainDecorAdapter.getSelectors(
+    (state: RootState) => state.cakeConstructor.mainDecorations
+);
+const { selectAll: selectAllAdd } = additionalDecorAdapter.getSelectors(
+    (state: RootState) => state.cakeConstructor.additionalDecorations
 );
 
-export const selectAdditionalDecorationsState = createSelector(
-    selectCakeConstructor,
-    (cake) => cake.additionalDecorations
-);
-
-// 3. Готовые селекторы от адаптеров (самое важное исправление)
-export const {
-    selectAll: selectAllMainDecorations,
-} = mainDecorAdapter.getSelectors(selectMainDecorationsState);
-
-export const {
-    selectAll: selectAllAdditionalDecorations,
-} = additionalDecorAdapter.getSelectors(selectAdditionalDecorationsState);
-
-// 4. Селектор цены (теперь использует готовые массивы)
-export const selectCakePrice = createSelector(
+export const selectCakePriceRange = createSelector(
     (state: RootState) => state.cakeConstructor.numberOfServing,
-    selectAllMainDecorations,
-    selectAllAdditionalDecorations,
+    (state: RootState) => state.cakeConstructor.subcategory,
+    selectAllMain,
+    selectAllAdd,
     (state: RootState) => state.cakeConstructor.imagePreview,
 
-    (serving, mainDecor, addDecor, imagePreview) => {
-        const baseMin = serving ? serving.weightMin * 1700 : 0;
-        const baseMax = serving ? serving.weightMax * 1700 : 0;
+    (serving, subcategory, mainDecors, addDecors, imagePreview) => {
+        if (!serving || !subcategory) {
+            return { min: 0, max: 0 };
+        }
+
+        const config = cakePriceConfig[subcategory];
+        if (!config) return { min: 0, max: 0 };
+
+        // Базовая стоимость торта
+        let baseMin = 0;
+        let baseMax = 0;
+
+        if (config.pricePerKg) {
+            // Линейная цена за кг (бисквит, мусс и т.д.)
+            baseMin = serving.weightMin * config.pricePerKg;
+            baseMax = serving.weightMax * config.pricePerKg;
+        } else if (config.fixedPrices) {
+            // Фиксированные цены (бенто и подобные)
+            const key = serving.weightMin;
+            const fixed = config.fixedPrices[key];
+            baseMin = fixed || 0;
+            baseMax = fixed || 0;
+        }
+
+        // Декорации
+        const decorsPrice =
+            mainDecors.reduce((sum, d) => sum + d.price * d.count, 0) +
+            addDecors.reduce((sum, d) => sum + d.price * d.count, 0);
+
+        // Фотопечать
         const photoPrice = imagePreview ? 650 : 0;
 
-        const mainPrice = mainDecor.reduce((sum, d) => sum + d.price * d.count, 0);
-
-        const addPrice = addDecor.reduce((sum, d) => sum + d.price * d.count, 0);
-
-        const common = mainPrice + addPrice + photoPrice;
+        const totalMin = Math.round(baseMin + decorsPrice + photoPrice);
+        const totalMax = Math.round(baseMax + decorsPrice + photoPrice);
 
         return {
-            minPrice: Math.round(baseMin + common),
-            maxPrice: Math.round(baseMax + common),
+            min: totalMin,
+            max: totalMax,
+            currency: '₽',
+            isRange: totalMin !== totalMax,
         };
     }
 );

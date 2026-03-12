@@ -7,7 +7,7 @@ import 'swiper/css/navigation';
 import FillingSlide from "./FillingSlide/FillingSlide";
 import {useDispatch, useSelector } from 'react-redux';
 import {RootState} from "../../../../../../redux/store";
-import {fillings, FillingType} from "../../../../../../data/fillings";
+import {fillings, FillingType} from "../../../../../../data/cakes/biscuit/fillings";
 import {setFilling} from "../../../../../../redux/cakeConstructorSlice";
 import ArrowIcon from "../../../../../UI/icons/ArrowIcon";
 

@@ -5,7 +5,8 @@ import {useDispatch, useSelector } from 'react-redux';
 import {RootState} from "../../../../../../redux/store";
 import InputColor from "../../../../../UI/inputs/InputColor/InputColor";
 import {ItemType} from "../../../../../../data/templates";
-import {setColors} from "../../../../../../redux/cakeConstructorSlice";
+import {setColors, setWeight} from "../../../../../../redux/cakeConstructorSlice";
+import WeightControls from "../WeightControls/WeightControls";
 
 type SelectionControlsProps = {
     title:string; // Название блока
