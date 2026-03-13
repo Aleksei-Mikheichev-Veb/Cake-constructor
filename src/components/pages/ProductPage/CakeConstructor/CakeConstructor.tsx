@@ -8,10 +8,10 @@ import {
     incrementAdditionalDecoration,
     incrementMainDecoration,
     removeAdditionalDecoration,
-    removeMainDecoration, removeReferenceImage,
+    removeMainDecoration, removeReferenceImage, resetCakeConstructor,
     setColorsTemplate, setOrderComment,
     setSmudges, setSubcategory,
-    setTemplate
+    setTemplate, setWeight
 } from "../../../../redux/cakeConstructorSlice";
 import {ItemType, templates} from "../../../../data/templates";
 import {colors} from "../../../../data/colors";
@@ -43,7 +43,12 @@ const CakeConstructor = () => {
 
     useEffect(() => {
         if (subcategory && cakeVariants[subcategory]) {
+            dispatch(resetCakeConstructor())
             dispatch(setSubcategory(subcategory as CakeSubcategory));
+            const firstServing = cakeVariants[subcategory].weightData[0];
+            if (firstServing) {
+                dispatch(setWeight(firstServing));
+            }
         }
     }, [subcategory, dispatch]);
 

@@ -39,7 +39,7 @@ type initialStateType = {
 
 const initialState:initialStateType = {
     subcategory: null,
-    numberOfServing: numberOfServing[0] || null,
+    numberOfServing:  null,
     filling: null,
     template: null,
     colorsTemplate: null,
@@ -169,6 +169,9 @@ export const cakeConstructorSlice = createSlice({
         clearReferenceImages: (state) => {
             state.referenceImages = [];
         },
+        resetCakeConstructor: (state) => {
+            return initialState;
+        }
     }
 })
 
@@ -195,5 +198,6 @@ export const {
     addReferenceImage,
     removeReferenceImage,
     clearReferenceImages,
+    resetCakeConstructor
 } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer
