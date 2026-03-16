@@ -1,6 +1,6 @@
 import {NumberOfServingType} from "../biscuit/numberOfServing";
 
-export const mousseServings: NumberOfServingType[] = [
+export const numberofServingMousse: NumberOfServingType[] = [
     {
         id: 1,
         quantity: '1 кг',

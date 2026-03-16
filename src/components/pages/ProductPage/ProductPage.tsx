@@ -21,7 +21,7 @@ const ProductPage = () => {
                     <div className={styles.productPage_leftColumn}>
                         <section className={`${styles.productPage_gallery} ${styles.gallery}`}>
                             <h2 className={globalStyles.visually_hidden}>Галерея товара</h2>
-                            <img src={img} className={styles.gallery_image} alt="Бисквитный торт"/>
+                            <img src={require(`../../../assets/images/categories/${product.image}`)} className={styles.gallery_image} alt={product.imageName}/>
                         </section>
                     </div>
                     <div className={styles.productPage_rightColumn}>

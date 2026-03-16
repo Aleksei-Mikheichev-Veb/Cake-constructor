@@ -5,8 +5,7 @@ import {useDispatch, useSelector } from 'react-redux';
 import {RootState} from "../../../../../../redux/store";
 import InputColor from "../../../../../UI/inputs/InputColor/InputColor";
 import {ItemType} from "../../../../../../data/templates";
-import {setColors, setWeight} from "../../../../../../redux/cakeConstructorSlice";
-import WeightControls from "../WeightControls/WeightControls";
+import {setColors} from "../../../../../../redux/cakeConstructorSlice";
 
 type SelectionControlsProps = {
     title:string; // Название блока
@@ -14,6 +13,7 @@ type SelectionControlsProps = {
     setSelectedItem:(item:ItemType) => void; // Функция для установки выбора варианта
     activeItemId:string | null; // Выбранный вариант
     isColorSelected?:boolean; // Надстройка для блока с выбором цвета торта.Подключает дополнительный функционал.
+    isTemplate?: boolean; // для проверки что это шаблон
 }
 
 const SelectionControls: FC<SelectionControlsProps> = ({
@@ -22,6 +22,7 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                                                            setSelectedItem,
                                                            activeItemId,
                                                            isColorSelected= false,
+                                                           isTemplate
                                                        }) => {
     const [countColorsSelected, setCountColorsSelected] = useState(0);
     const colors = useSelector((state: RootState) => state.cakeConstructor.colors)
@@ -61,7 +62,14 @@ const SelectionControls: FC<SelectionControlsProps> = ({
 
     return (
         <div className={styles.templateControls}>
-            <h2 className={styles.templateControls_title}>{title}</h2>
+            <h2 className={styles.templateControls_title}>
+                {title}
+                {isTemplate && !activeItemId && (   // показываем только если шаблон И ничего не выбрано
+                    <span className={styles.templateControls_subtitle}>
+                        (Выберите шаблон, чтобы появились декорации)
+                    </span>
+                )}
+            </h2>
             <div className={styles.templateControls_templates}>
                 {items.map(item => (
                     <Template
