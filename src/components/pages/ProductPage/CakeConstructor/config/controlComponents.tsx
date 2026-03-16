@@ -16,7 +16,7 @@ import {
     removeMainDecoration,
     removeReferenceImage,
     setColorsTemplate,
-    setOrderComment,
+    setOrderComment, setShape,
     setSmudges,
     setTemplate
 } from "../../../../../redux/cakeConstructorSlice";
@@ -40,13 +40,26 @@ export const TemplateControls = ({ items, title, isTemplate }: SelectionProps & 
         <SelectionControls
             title={title}
             items={items}
-            activeItemId={activeTemplate?.id ?? null}
+            activeItemId={activeTemplate ?? null}
             setSelectedItem={(item) => dispatch(setTemplate(item))}
             isTemplate={isTemplate}
         />
     );
 };
+// Обёртка для референсов
+export const ShapeControls = ({ items, title }: SelectionProps) => {
+    const dispatch = useDispatch();
+    const activeShape = useSelector((s:RootState) => s.cakeConstructor.shape)
 
+    return (
+        <SelectionControls
+            title={title}
+            items={items}
+            activeItemId={activeShape ?? null}
+            setSelectedItem={(item) => dispatch(setShape(item))}
+        />
+    );
+};
 
 // ─────────────────────────────────────────────
 // Обёртка для цвета
@@ -58,7 +71,7 @@ export const ColorsControls = ({ items, title, isColor }: SelectionProps) => {
         <SelectionControls
             title={title}
             items={items}
-            activeItemId={activeColor?.id ?? null}
+            activeItemId={activeColor ?? null}
             setSelectedItem={(item) => dispatch(setColorsTemplate(item))}
             isColorSelected={isColor}
         />
@@ -75,7 +88,7 @@ export const SmudgesControls = ({ items, title }: SelectionProps) => {
         <SelectionControls
             title={title}
             items={items}
-            activeItemId={activeSmudges?.id ?? null}
+            activeItemId={activeSmudges ?? null}
             setSelectedItem={(item) => dispatch(setSmudges(item))}
         />
     );
@@ -105,7 +118,7 @@ export const DecorationsSection: React.FC<DecorationsSectionProps> = ({
 
     // Для 'biscuit', 'kids', 'tiered' — split
     const template = useSelector((s:RootState) => s.cakeConstructor.template);
-    if (template?.id === 'empty' || template?.id === 'center') effectiveMode = 'all';
+    if (template === 'empty' || template === 'center') effectiveMode = 'all';
 
     // Если нет шаблона, то декорации не показыаются
     const requiresTemplate = ['biscuit', 'kids', 'tiered'];
@@ -182,6 +195,7 @@ export const ReferenceSection = () => {
         />
     );
 };
+
 // ─────────────────────────────────────────────
 // Экспорт маппинга компонентов
 export const controlComponents: Record<ControlType, React.FC<any>> = {
@@ -196,6 +210,6 @@ export const controlComponents: Record<ControlType, React.FC<any>> = {
     smudges: SmudgesControls,
 
     decorations: DecorationsSection,  // добавь, когда сделаешь
-    // shape: ShapeControls,
+    shape: ShapeControls,
     // gloss: GlossControls,
 };

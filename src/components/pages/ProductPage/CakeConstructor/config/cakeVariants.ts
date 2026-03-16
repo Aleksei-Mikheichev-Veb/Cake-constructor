@@ -4,6 +4,9 @@ import {colors} from "../../../../../data/colors";
 import {smudges} from "../../../../../data/smudges";
 import {numberOfServingBento} from "../../../../../data/cakes/bento/numberOfServingBento";
 import {numberofServingMousse} from "../../../../../data/cakes/mousse/numberOfServingMousse";
+import {shapeBento} from "../../../../../data/cakes/bento/shapeBento";
+import {shapeMousse} from "../../../../../data/cakes/mousse/shapeMousse";
+import {shapeTiered} from "../../../../../data/cakes/tiered/shapeTiered";
 
 export type ControlType =
     | 'weight'
@@ -14,8 +17,8 @@ export type ControlType =
     | 'creamText'
     | 'decorations'
     | 'photoPrint'
-    | 'reference';
-    // | 'shape'     // для бенто, мусс, ярусные
+    | 'reference'
+    | 'shape'; // для бенто, мусс, ярусные
     // | 'gloss';    // для мусс
 
 interface ControlConfig {
@@ -54,6 +57,7 @@ export const cakeVariants: Record<string, {
         controls: [
             { type: 'weight', title:'Выберите количество порций'},
             { type: 'filling', title:'Выберите начинку'},
+            { type: 'shape', items:shapeBento, title: 'Выбрите форму' },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
             { type: 'decorations', decorationsMode: 'all' },
@@ -83,6 +87,7 @@ export const cakeVariants: Record<string, {
         controls: [
             { type: 'weight', title:'Выберите количество порций'},
             { type: 'filling', title:'Выберите начинку'},
+            { type: 'shape', items:shapeMousse, title: 'Выбрите форму' },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
             { type: 'decorations', decorationsMode: 'all' },
@@ -99,6 +104,7 @@ export const cakeVariants: Record<string, {
             { type: 'filling', title:'Выберите начинку'},
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'template', items: templates, title: 'Шаблон оформления', isTemplate: true },
+            { type: 'shape', items:shapeTiered, title: 'Выбрите форму' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
             { type: 'decorations', decorationsMode: 'split' },
             { type: 'photoPrint' },

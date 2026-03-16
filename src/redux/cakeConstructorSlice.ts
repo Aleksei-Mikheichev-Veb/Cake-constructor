@@ -24,10 +24,10 @@ type initialStateType = {
     subcategory: CakeSubcategory;
     numberOfServing: NumberOfServingType | null;
     filling: FillingType | null;
-    template: ItemType | null;
-    colorsTemplate: ItemType | null;
+    template: string | null;
+    colorsTemplate: string | null;
     colors: Array<string>;
-    smudges: ItemType | null;
+    smudges: string | null;
     creamText:string;
     creamTextColor: string | null;
     imagePreview: string | null;
@@ -35,6 +35,7 @@ type initialStateType = {
     additionalDecorations: EntityState<SelectedDecoration, string>;
     orderComment: string;
     referenceImages: ReferenceImage[];
+    shape:string | null;
 }
 
 const initialState:initialStateType = {
@@ -52,6 +53,7 @@ const initialState:initialStateType = {
     additionalDecorations: additionalDecorAdapter.getInitialState() ,
     orderComment: '',
     referenceImages: [],
+    shape: null
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -71,17 +73,20 @@ export const cakeConstructorSlice = createSlice({
         setFilling: (state, action: PayloadAction<FillingType>) => {
           state.filling = action.payload
         },
-        setTemplate: (state, action: PayloadAction<ItemType>) => {
+        setTemplate: (state, action: PayloadAction<string>) => {
             state.template = action.payload
         },
-        setColorsTemplate: (state, action: PayloadAction<ItemType>) => {
+        setColorsTemplate: (state, action: PayloadAction<string>) => {
             state.colorsTemplate = action.payload
         },
         setColors: (state, action: PayloadAction<{color:string, index:number}>) => {
             state.colors[action.payload.index] = action.payload.color
         },
-        setSmudges: (state, action: PayloadAction<ItemType>) => {
+        setSmudges: (state, action: PayloadAction<string>) => {
             state.smudges = action.payload
+        },
+        setShape: (state,action: PayloadAction<string>) => {
+            state.shape = action.payload
         },
         setImagePreview: (state, action: PayloadAction<string | null>) => {
             state.imagePreview = action.payload
@@ -183,6 +188,7 @@ export const {
     setColorsTemplate,
     setColors,
     setSmudges,
+    setShape,
     setImagePreview,
     setCreamText,
     setCreamTextColor,

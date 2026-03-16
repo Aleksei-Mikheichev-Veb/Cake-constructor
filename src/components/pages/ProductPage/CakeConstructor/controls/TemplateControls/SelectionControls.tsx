@@ -10,7 +10,7 @@ import {setColors} from "../../../../../../redux/cakeConstructorSlice";
 type SelectionControlsProps = {
     title:string; // Название блока
     items:ItemType[]; // Закинутые варианты выбора
-    setSelectedItem:(item:ItemType) => void; // Функция для установки выбора варианта
+    setSelectedItem:(itemId:string) => void; // Функция для установки выбора варианта
     activeItemId:string | null; // Выбранный вариант
     isColorSelected?:boolean; // Надстройка для блока с выбором цвета торта.Подключает дополнительный функционал.
     isTemplate?: boolean; // для проверки что это шаблон

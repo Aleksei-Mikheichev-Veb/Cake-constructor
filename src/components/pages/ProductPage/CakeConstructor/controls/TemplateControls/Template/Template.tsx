@@ -5,7 +5,7 @@ import {ItemType} from "../../../../../../../data/templates";
 
 type TemplateProps = {
     item: ItemType;
-    setSelectedItem: (item: ItemType) => void;
+    setSelectedItem: (itemId: string) => void;
     activeItemId: string | null;
 }
 
@@ -17,7 +17,7 @@ const Template: FC<TemplateProps> = ({item, setSelectedItem, activeItemId}) => {
                 className={`${styles.slide} ${isActive ? styles.slide_active : ''}`}
                 role="button"
                 aria-label={`Выбрать вариант оформления ${item.name}`}
-                onClick={() => setSelectedItem(item)}>
+                onClick={() => setSelectedItem(item.id)}>
 
                 <div className={styles.imageContainer}>
                     <img className={styles.image} src={item.image} alt={item.name}/>
