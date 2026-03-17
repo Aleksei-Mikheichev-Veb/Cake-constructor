@@ -7,6 +7,7 @@ import {numberofServingMousse} from "../../../../../data/cakes/mousse/numberOfSe
 import {shapeBento} from "../../../../../data/cakes/bento/shapeBento";
 import {shapeMousse} from "../../../../../data/cakes/mousse/shapeMousse";
 import {shapeTiered} from "../../../../../data/cakes/tiered/shapeTiered";
+import { gloss } from "../../../../../data/cakes/mousse/gloss";
 
 export type ControlType =
     | 'weight'
@@ -18,8 +19,8 @@ export type ControlType =
     | 'decorations'
     | 'photoPrint'
     | 'reference'
-    | 'shape'; // для бенто, мусс, ярусные
-    // | 'gloss';    // для мусс
+    | 'shape' // для бенто, мусс, ярусные
+    | 'gloss';    // для мусс
 
 interface ControlConfig {
     type: ControlType;
@@ -88,6 +89,7 @@ export const cakeVariants: Record<string, {
             { type: 'weight', title:'Выберите количество порций'},
             { type: 'filling', title:'Выберите начинку'},
             { type: 'shape', items:shapeMousse, title: 'Выбрите форму' },
+            { type: 'gloss', items:gloss, title: 'Выберите тип поверхности торта' },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
             { type: 'decorations', decorationsMode: 'all' },

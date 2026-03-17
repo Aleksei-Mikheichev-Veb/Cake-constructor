@@ -16,6 +16,7 @@ import {
     removeMainDecoration,
     removeReferenceImage,
     setColorsTemplate,
+    setGloss,
     setOrderComment, setShape,
     setSmudges,
     setTemplate
@@ -46,7 +47,7 @@ export const TemplateControls = ({ items, title, isTemplate }: SelectionProps & 
         />
     );
 };
-// Обёртка для референсов
+// Обёртка для формы
 export const ShapeControls = ({ items, title }: SelectionProps) => {
     const dispatch = useDispatch();
     const activeShape = useSelector((s:RootState) => s.cakeConstructor.shape)
@@ -57,6 +58,20 @@ export const ShapeControls = ({ items, title }: SelectionProps) => {
             items={items}
             activeItemId={activeShape ?? null}
             setSelectedItem={(item) => dispatch(setShape(item))}
+        />
+    );
+};
+// Обёртка для глянца 
+export const GlossControls = ({ items, title }: SelectionProps) => {
+    const dispatch = useDispatch();
+    const activeGloss = useSelector((s:RootState) => s.cakeConstructor.gloss)
+
+    return (
+        <SelectionControls
+            title={title}
+            items={items}
+            activeItemId={activeGloss ?? null}
+            setSelectedItem={(item) => dispatch(setGloss(item))}
         />
     );
 };
@@ -211,5 +226,5 @@ export const controlComponents: Record<ControlType, React.FC<any>> = {
 
     decorations: DecorationsSection,  // добавь, когда сделаешь
     shape: ShapeControls,
-    // gloss: GlossControls,
+    gloss: GlossControls,
 };
