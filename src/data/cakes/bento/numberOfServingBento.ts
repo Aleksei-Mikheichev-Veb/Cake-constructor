@@ -6,7 +6,7 @@ export const numberOfServingBento: NumberOfServingType[] = [
         quantity: '0.5 кг',
         weightMin: 0.5,
         weightMax: 0.5,
-        weight: '0.5 кг',
+        weight: '0.5',
         height: 10,
         diameter: 12
     },
@@ -15,7 +15,7 @@ export const numberOfServingBento: NumberOfServingType[] = [
         quantity: '1 кг',
         weightMin: 1.0,
         weightMax: 1.0,
-        weight: '1 кг',
+        weight: '1',
         height: 10,
         diameter: 16
     }

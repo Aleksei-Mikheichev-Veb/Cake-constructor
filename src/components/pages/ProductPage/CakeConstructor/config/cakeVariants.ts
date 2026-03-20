@@ -8,6 +8,9 @@ import {shapeBento} from "../../../../../data/cakes/bento/shapeBento";
 import {shapeMousse} from "../../../../../data/cakes/mousse/shapeMousse";
 import {shapeTiered} from "../../../../../data/cakes/tiered/shapeTiered";
 import { gloss } from "../../../../../data/cakes/mousse/gloss";
+import {fillings, FillingType} from "../../../../../data/cakes/biscuit/fillings";
+import {fillingsBento} from "../../../../../data/cakes/bento/fillingsBento";
+import {fillingsMousse} from "../../../../../data/cakes/mousse/fillingsMousse";
 
 export type ControlType =
     | 'weight'
@@ -26,6 +29,7 @@ export type ControlType =
 interface ControlConfig {
     type: ControlType;
     title?: string;
+    fillings?:FillingType[];
     // специфические пропсы для этого контрола
     items?: any[];
     isColor?: boolean;
@@ -43,7 +47,7 @@ export const cakeVariants: Record<string, {
         weightData: numberOfServing,
         controls: [
             { type: 'weight', title:'Выберите количество порций'},
-            { type: 'filling', title:'Выберите начинку'},
+            { type: 'filling', title:'Выберите начинку', fillings: fillings},
             { type: 'template', items: templates, title: 'Шаблон оформления',isTemplate: true },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
@@ -58,7 +62,7 @@ export const cakeVariants: Record<string, {
         weightData: numberOfServingBento,
         controls: [
             { type: 'weight', title:'Выберите количество порций'},
-            { type: 'filling', title:'Выберите начинку'},
+            { type: 'filling', title:'Выберите начинку', fillings: fillingsBento},
             { type: 'shape', items:shapeBento, title: 'Выбрите форму' },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
@@ -73,7 +77,7 @@ export const cakeVariants: Record<string, {
         weightData: numberOfServing,
         controls: [
             { type: 'weight', title:'Выберите количество порций'},
-            { type: 'filling', title:'Выберите начинку'},
+            { type: 'filling', title:'Выберите начинку', fillings: fillings},
             { type: 'template', items: templates, title: 'Шаблон оформления', isTemplate: true },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
@@ -88,7 +92,7 @@ export const cakeVariants: Record<string, {
         weightData: numberofServingMousse,
         controls: [
             { type: 'weight', title:'Выберите количество порций'},
-            { type: 'filling', title:'Выберите начинку'},
+            { type: 'filling', title:'Выберите начинку', fillings: fillingsMousse},
             { type: 'shape', items:shapeMousse, title: 'Выбрите форму' },
             { type: 'gloss', items:gloss, title: 'Выберите тип поверхности торта' },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
@@ -119,7 +123,7 @@ export const cakeVariants: Record<string, {
         weightData: numberOfServing,
         controls: [
         { type: 'weight', title:'Выберите количество порций'},
-        { type: 'filling', title:'Выберите начинку'},
+        { type: 'filling', title:'Выберите начинку', fillings: fillings},
         { type: 'reference' },
     ],
 }

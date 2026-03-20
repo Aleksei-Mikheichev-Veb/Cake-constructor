@@ -5,19 +5,18 @@ import 'swiper/css';
 import styles from './FillingControls.module.scss'
 import 'swiper/css/navigation';
 import FillingSlide from "./FillingSlide/FillingSlide";
-import {useDispatch, useSelector } from 'react-redux';
-import {RootState} from "../../../../../../redux/store";
-import {fillings, FillingType} from "../../../../../../data/cakes/biscuit/fillings";
-import {setFilling} from "../../../../../../redux/cakeConstructorSlice";
+import {useDispatch } from 'react-redux';
+import {FillingType} from "../../../../../../data/cakes/biscuit/fillings";
 import ArrowIcon from "../../../../../UI/icons/ArrowIcon";
 
 type FillingControlsProps = {
     title: string;
+    fillings: FillingType[];
     activeFillingId: string | null;
     setActiveFilling: (filling:FillingType) => void;
 }
 
-const FillingControls: FC<FillingControlsProps> = ({title,activeFillingId,setActiveFilling}) => {
+const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillingId,setActiveFilling}) => {
 
     const dispatch = useDispatch();
     // const activeFillingId = useSelector((state:RootState) => state.cakeConstructor.filling)

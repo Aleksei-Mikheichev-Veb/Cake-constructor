@@ -25,6 +25,7 @@ import {
 import ReferenceControls from "../controls/ReferenceUpload/ReferenceUpload";
 import DecorationControls from "../controls/DecorationControls/DecorationControls";
 import TieredControls from "../controls/TieredControls/TieredControls";
+import {FillingType} from "../../../../../data/cakes/biscuit/fillings";
 
 // Тип пропсов для SelectionControls-обёрток
 type SelectionProps = {
@@ -53,9 +54,10 @@ export const TemplateControls = ({ items, title, isTemplate }: SelectionProps & 
 // Обёртка для начинок
 
 type FillingSectionProps = {
-    title:string
+    title:string;
+    fillings: FillingType[];
 }
-export const FillingSection = ({ title }:FillingSectionProps) => {
+export const FillingSection = ({ title, fillings }:FillingSectionProps) => {
     const dispatch = useDispatch();
     const activeFilling = useSelector((s: RootState) => s.cakeConstructor.filling);
     // const activeFilling = useSelector((s: RootState) => s.cakeConstructor.tiers?.layerFillings);
@@ -63,6 +65,7 @@ export const FillingSection = ({ title }:FillingSectionProps) => {
     return (
         <FillingControls
             title={title}
+            fillings={fillings}
             activeFillingId={activeFilling?.id ?? null}
             setActiveFilling={(filling) => dispatch(setFilling(filling))}
         />

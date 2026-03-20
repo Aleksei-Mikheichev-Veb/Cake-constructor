@@ -4,7 +4,7 @@ import {RootState} from '../../../../../../redux/store';
 import {setLayers, setPortions, setLayerFilling} from '../../../../../../redux/cakeConstructorSlice';
 import FillingControls from '../FillingControls/FillingControls'; // твой контрол
 import styles from './TieredControls.module.scss';
-import {FillingType} from "../../../../../../data/cakes/biscuit/fillings";
+import {fillings, FillingType} from "../../../../../../data/cakes/biscuit/fillings";
 import Tooltip from "../../../../../UI/Tooltip/Tooltip";
 import {LAYERS_RANGES} from '../../../../../../utils/tieredUtils';
 
@@ -87,6 +87,7 @@ const TieredControls = () => {
                         <h3 className={styles.sectionTitle}>Выберите начинку</h3>
                         <FillingControls
                             title={'Начинка первого яруса'}
+                            fillings={fillings}
                             activeFillingId={tiers.layerFillings[0]?.id ?? null}
                             setActiveFilling={handleFillingChange}
                         />
@@ -111,6 +112,7 @@ const TieredControls = () => {
 
                         <FillingControls
                             title={''}
+                            fillings={fillings}
                             activeFillingId={tiers.layerFillings[activeTab]?.id ?? null}
                             setActiveFilling={handleFillingChange}
                         />
