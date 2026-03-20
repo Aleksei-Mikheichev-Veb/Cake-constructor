@@ -13,12 +13,14 @@ import ArrowIcon from "../../../../../UI/icons/ArrowIcon";
 
 type FillingControlsProps = {
     title: string;
+    activeFillingId: string | null;
+    setActiveFilling: (filling:FillingType) => void;
 }
 
-const FillingControls: FC<FillingControlsProps> = ({title}) => {
+const FillingControls: FC<FillingControlsProps> = ({title,activeFillingId,setActiveFilling}) => {
 
     const dispatch = useDispatch();
-    const activeFillingId = useSelector((state:RootState) => state.cakeConstructor.filling)
+    // const activeFillingId = useSelector((state:RootState) => state.cakeConstructor.filling)
 
     const prevRef = useRef<HTMLButtonElement | null>(null)
     const nextRef = useRef<HTMLButtonElement | null>(null)
@@ -27,9 +29,9 @@ const FillingControls: FC<FillingControlsProps> = ({title}) => {
     const [isEnd, setIsEnd] = useState(false);
 
 
-    const handleFillingClick = (filling: FillingType) => {
-        dispatch(setFilling(filling))
-    }
+    // const handleFillingClick = (filling: FillingType) => {
+    //     dispatch(setFilling(filling))
+    // }
 
     return (
         <div className={styles.filling}>
@@ -73,8 +75,9 @@ const FillingControls: FC<FillingControlsProps> = ({title}) => {
                         <SwiperSlide key={filling.id} className={styles.swiper_slide}>
                             <FillingSlide
                                 filling={filling}
-                                activeFillingId={activeFillingId && activeFillingId.id}
-                                handleFillingClick={handleFillingClick}/>
+                                activeFillingId={activeFillingId}
+                                // activeFillingId={activeFillingId && activeFillingId.id}
+                                handleFillingClick={setActiveFilling}/>
                         </SwiperSlide>
                     ))}
                 </Swiper>

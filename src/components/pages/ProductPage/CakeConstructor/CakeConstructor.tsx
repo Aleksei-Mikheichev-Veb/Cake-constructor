@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {
     CakeSubcategory,
     resetCakeConstructor,
-    setSubcategory,
+    setSubcategory, setTiers,
     setWeight
 } from "../../../../redux/cakeConstructorSlice";
 import TotalPrice from "../../../UI/TotalPrice/TotalPrice";
@@ -21,11 +21,25 @@ const CakeConstructor = () => {
 
     useEffect(() => {
         if (subcategory && cakeVariants[subcategory]) {
-            dispatch(resetCakeConstructor())
+            // Сброс всего
+            dispatch(resetCakeConstructor());
+
+            // Установка подкатегории
             dispatch(setSubcategory(subcategory as CakeSubcategory));
+
+            // Автовыбор веса
             const firstServing = cakeVariants[subcategory].weightData[0];
             if (firstServing) {
                 dispatch(setWeight(firstServing));
+            }
+
+            // Инициализация tiers сразу здесь (для tiered)
+            if (subcategory === 'tiered') {
+                dispatch(setTiers({
+                    layers: 1,
+                    portions: 10,
+                    layerFillings: []
+                }));
             }
         }
     }, [subcategory, dispatch]);

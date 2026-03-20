@@ -18,6 +18,7 @@ export type ControlType =
     | 'decorations'
     | 'photoPrint'
     | 'reference'
+    | 'tiered'
     | 'shape'; // для бенто, мусс, ярусные
     // | 'gloss';    // для мусс
 
@@ -100,8 +101,7 @@ export const cakeVariants: Record<string, {
         title: 'Бисквитный торт',
         weightData: numberOfServing,
         controls: [
-            { type: 'weight', title:'Выберите количество порций'},
-            { type: 'filling', title:'Выберите начинку'},
+            { type: 'tiered', title:'Выберите начинку'},
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'template', items: templates, title: 'Шаблон оформления', isTemplate: true },
             { type: 'shape', items:shapeTiered, title: 'Выбрите форму' },

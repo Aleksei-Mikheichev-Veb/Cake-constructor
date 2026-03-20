@@ -3,6 +3,7 @@ import {FillingType} from "../data/cakes/biscuit/fillings";
 import {numberOfServing, NumberOfServingType} from "../data/cakes/biscuit/numberOfServing";
 import {ItemType} from "../data/templates";
 import {DecorationType, SelectedDecoration} from "../data/decorationsMain";
+import {getLayersForPortions, getMinPortionsForLayers} from "../utils/tieredUtils";
 
 export const mainDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
     selectId: (deco) => deco.id
@@ -11,6 +12,13 @@ export const mainDecorAdapter = createEntityAdapter<SelectedDecoration, string>(
 export const additionalDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
     selectId: (deco) => deco.id
 });
+
+type TiersState = {
+    layers: number;           // 1–4 яруса
+    portions: number;         // общее количество порций
+    layerFillings: Array<FillingType | null>; // начинка для каждого яруса
+};
+
 
 export type ReferenceImage = {
     id: string;
@@ -36,6 +44,7 @@ type initialStateType = {
     orderComment: string;
     referenceImages: ReferenceImage[];
     shape:string | null;
+    tiers: TiersState | null;
 }
 
 const initialState:initialStateType = {
@@ -53,7 +62,8 @@ const initialState:initialStateType = {
     additionalDecorations: additionalDecorAdapter.getInitialState() ,
     orderComment: '',
     referenceImages: [],
-    shape: null
+    shape: null,
+    tiers: null
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -170,6 +180,42 @@ export const cakeConstructorSlice = createSlice({
         removeReferenceImage: (state, action: PayloadAction<string>) => {
             state.referenceImages = state.referenceImages.filter(img => img.id !== action.payload);
         },
+        setTiers: (state, action: PayloadAction<TiersState>) => {
+            state.tiers = action.payload;
+            console.log(state.tiers)
+            console.log(action.payload)
+        },
+
+        setLayers: (state, action: PayloadAction<number>) => {
+            if (!state.tiers) return;
+            const newLayers = Math.max(1, Math.min(4, action.payload));
+
+            state.tiers.layers = newLayers;
+            state.tiers.portions = getMinPortionsForLayers(newLayers); // минимальное значение для яруса
+
+            // Если ярусов стало больше — добавляем пустые начинки
+            while (state.tiers.layerFillings.length < newLayers) {
+                state.tiers.layerFillings.push(null);
+            }
+            // Если меньше — обрезаем
+            state.tiers.layerFillings = state.tiers.layerFillings.slice(0, newLayers);
+        },
+
+        setPortions: (state, action: PayloadAction<number>) => {
+            if (!state.tiers) return;
+            const newPortions = Math.max(10, Math.min(84, action.payload));
+
+            state.tiers.portions = newPortions;
+            state.tiers.layers = getLayersForPortions(newPortions);
+        },
+
+        setLayerFilling: (state, action: PayloadAction<{ layerIndex: number; filling: FillingType }>) => {
+            if (!state.tiers) return;
+            const { layerIndex, filling } = action.payload;
+            if (layerIndex >= 0 && layerIndex < state.tiers.layers) {
+                state.tiers.layerFillings[layerIndex] = filling;
+            }
+        },
 
         clearReferenceImages: (state) => {
             state.referenceImages = [];
@@ -204,6 +250,10 @@ export const {
     addReferenceImage,
     removeReferenceImage,
     clearReferenceImages,
-    resetCakeConstructor
+    resetCakeConstructor,
+    setTiers,
+    setLayers,
+    setPortions,
+    setLayerFilling
 } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer

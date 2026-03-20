@@ -15,13 +15,14 @@ import {
     removeAdditionalDecoration,
     removeMainDecoration,
     removeReferenceImage,
-    setColorsTemplate,
+    setColorsTemplate, setFilling,
     setOrderComment, setShape,
     setSmudges,
     setTemplate
 } from "../../../../../redux/cakeConstructorSlice";
 import ReferenceControls from "../controls/ReferenceUpload/ReferenceUpload";
 import DecorationControls from "../controls/DecorationControls/DecorationControls";
+import TieredControls from "../controls/TieredControls/TieredControls";
 
 // Тип пропсов для SelectionControls-обёрток
 type SelectionProps = {
@@ -43,6 +44,25 @@ export const TemplateControls = ({ items, title, isTemplate }: SelectionProps & 
             activeItemId={activeTemplate ?? null}
             setSelectedItem={(item) => dispatch(setTemplate(item))}
             isTemplate={isTemplate}
+        />
+    );
+};
+
+// Обёртка для начинок
+
+type FillingSectionProps = {
+    title:string
+}
+export const FillingSection = ({ title }:FillingSectionProps) => {
+    const dispatch = useDispatch();
+    const activeFilling = useSelector((s: RootState) => s.cakeConstructor.filling);
+    // const activeFilling = useSelector((s: RootState) => s.cakeConstructor.tiers?.layerFillings);
+
+    return (
+        <FillingControls
+            title={title}
+            activeFillingId={activeFilling?.id ?? null}
+            setActiveFilling={(filling) => dispatch(setFilling(filling))}
         />
     );
 };
@@ -93,7 +113,7 @@ export const SmudgesControls = ({ items, title }: SelectionProps) => {
         />
     );
 };
-// Обёртка для референсов
+// Обёртка для декораций
 type DecorationsSectionProps = {
     decorationsMode?: 'split' | 'all';
     title?: string; // опционально, если хочешь переопределить
@@ -200,7 +220,8 @@ export const ReferenceSection = () => {
 // Экспорт маппинга компонентов
 export const controlComponents: Record<ControlType, React.FC<any>> = {
     weight: WeightControls,
-    filling: FillingControls,
+    // filling: FillingControls,
+    filling: FillingSection,
     creamText: CreamTextControls,
     photoPrint: PhotoprintControls,
     reference: ReferenceSection,
@@ -208,7 +229,7 @@ export const controlComponents: Record<ControlType, React.FC<any>> = {
     template: TemplateControls,
     colors: ColorsControls,
     smudges: SmudgesControls,
-
+    tiered: TieredControls,
     decorations: DecorationsSection,  // добавь, когда сделаешь
     shape: ShapeControls,
     // gloss: GlossControls,
