@@ -45,6 +45,7 @@ type initialStateType = {
     referenceImages: ReferenceImage[];
     shape:string | null;
     tiers: TiersState | null;
+    gloss: string | null;
 }
 
 const initialState:initialStateType = {
@@ -63,7 +64,8 @@ const initialState:initialStateType = {
     orderComment: '',
     referenceImages: [],
     shape: null,
-    tiers: null
+    tiers: null,
+    gloss: null
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -97,6 +99,9 @@ export const cakeConstructorSlice = createSlice({
         },
         setShape: (state,action: PayloadAction<string>) => {
             state.shape = action.payload
+        },
+        setGloss: (state, action: PayloadAction<string>) => {
+            state.gloss = action.payload
         },
         setImagePreview: (state, action: PayloadAction<string | null>) => {
             state.imagePreview = action.payload
@@ -235,6 +240,7 @@ export const {
     setColors,
     setSmudges,
     setShape,
+    setGloss,
     setImagePreview,
     setCreamText,
     setCreamTextColor,

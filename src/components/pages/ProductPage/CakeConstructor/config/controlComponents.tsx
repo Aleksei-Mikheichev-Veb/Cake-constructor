@@ -15,7 +15,9 @@ import {
     removeAdditionalDecoration,
     removeMainDecoration,
     removeReferenceImage,
-    setColorsTemplate, setFilling,
+     setFilling,
+    setColorsTemplate,
+    setGloss,
     setOrderComment, setShape,
     setSmudges,
     setTemplate
@@ -66,7 +68,7 @@ export const FillingSection = ({ title }:FillingSectionProps) => {
         />
     );
 };
-// Обёртка для референсов
+// Обёртка для формы
 export const ShapeControls = ({ items, title }: SelectionProps) => {
     const dispatch = useDispatch();
     const activeShape = useSelector((s:RootState) => s.cakeConstructor.shape)
@@ -77,6 +79,20 @@ export const ShapeControls = ({ items, title }: SelectionProps) => {
             items={items}
             activeItemId={activeShape ?? null}
             setSelectedItem={(item) => dispatch(setShape(item))}
+        />
+    );
+};
+// Обёртка для глянца 
+export const GlossControls = ({ items, title }: SelectionProps) => {
+    const dispatch = useDispatch();
+    const activeGloss = useSelector((s:RootState) => s.cakeConstructor.gloss)
+
+    return (
+        <SelectionControls
+            title={title}
+            items={items}
+            activeItemId={activeGloss ?? null}
+            setSelectedItem={(item) => dispatch(setGloss(item))}
         />
     );
 };
@@ -220,7 +236,6 @@ export const ReferenceSection = () => {
 // Экспорт маппинга компонентов
 export const controlComponents: Record<ControlType, React.FC<any>> = {
     weight: WeightControls,
-    // filling: FillingControls,
     filling: FillingSection,
     creamText: CreamTextControls,
     photoPrint: PhotoprintControls,
@@ -232,5 +247,5 @@ export const controlComponents: Record<ControlType, React.FC<any>> = {
     tiered: TieredControls,
     decorations: DecorationsSection,  // добавь, когда сделаешь
     shape: ShapeControls,
-    // gloss: GlossControls,
+    gloss: GlossControls,
 };
