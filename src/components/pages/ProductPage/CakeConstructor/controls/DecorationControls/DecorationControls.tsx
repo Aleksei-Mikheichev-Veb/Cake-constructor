@@ -42,7 +42,7 @@ const DecorationControls: FC<DecorationControlsProps> = ({
     }
 
     return (
-        <div className={styles.decorationControls}>
+        <section className={styles.decorationControls}>
             <h2 className={styles.decorationControls_title}>{title}</h2>
 
             <div className={styles.decorationControls_decorations}>
@@ -59,7 +59,7 @@ const DecorationControls: FC<DecorationControlsProps> = ({
                     />
                 ))}
             </div>
-        </div>
+        </section>
     );
 };
 

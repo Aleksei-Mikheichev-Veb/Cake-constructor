@@ -16,7 +16,6 @@ const CakeConstructor = () => {
 
 
     const { subcategory } = useParams<{ subcategory: string }>();
-    console.log(subcategory)
     const dispatch = useDispatch();
 
     useEffect(() => {

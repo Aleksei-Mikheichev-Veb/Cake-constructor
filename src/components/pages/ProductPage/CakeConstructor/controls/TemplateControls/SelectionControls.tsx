@@ -61,7 +61,7 @@ const SelectionControls: FC<SelectionControlsProps> = ({
 
 
     return (
-        <div className={styles.templateControls}>
+        <section className={styles.templateControls}>
             <h2 className={styles.templateControls_title}>
                 {title}
                 {isTemplate && !activeItemId && (   // показываем только если шаблон И ничего не выбрано
@@ -115,7 +115,7 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                     </div>
                 </div>
             )}
-        </div>
+        </section>
     );
 };
 
