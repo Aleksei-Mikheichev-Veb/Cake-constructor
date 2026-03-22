@@ -1,6 +1,6 @@
 import {numberOfServing, NumberOfServingType} from "../../../../../data/cakes/biscuit/numberOfServing";
 import {templates} from "../../../../../data/templates";
-import {colors} from "../../../../../data/colors";
+import {colors} from "../../../../../data/cakes/biscuit/colors";
 import {smudges} from "../../../../../data/smudges";
 import {numberOfServingBento} from "../../../../../data/cakes/bento/numberOfServingBento";
 import {numberofServingMousse} from "../../../../../data/cakes/mousse/numberOfServingMousse";
@@ -8,6 +8,7 @@ import {shapeBento} from "../../../../../data/cakes/bento/shapeBento";
 import {shapeMousse} from "../../../../../data/cakes/mousse/shapeMousse";
 import {shapeTiered} from "../../../../../data/cakes/tiered/shapeTiered";
 import { gloss } from "../../../../../data/cakes/mousse/gloss";
+import { colorsMousse } from "../../../../../data/cakes/mousse/colorsMousse";
 
 export type ControlType =
     | 'weight'
@@ -44,7 +45,7 @@ export const cakeVariants: Record<string, {
         controls: [
             { type: 'weight', title:'Выберите количество порций'},
             { type: 'filling', title:'Выберите начинку'},
-            { type: 'template', items: templates, title: 'Шаблон оформления',isTemplate: true },
+            { type: 'template', items: templates, title: 'Способ оформления украшениями',isTemplate: true },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
             { type: 'decorations', decorationsMode: 'split' },
@@ -74,7 +75,7 @@ export const cakeVariants: Record<string, {
         controls: [
             { type: 'weight', title:'Выберите количество порций'},
             { type: 'filling', title:'Выберите начинку'},
-            { type: 'template', items: templates, title: 'Шаблон оформления', isTemplate: true },
+            { type: 'template', items: templates, title: 'Способ оформления украшениями', isTemplate: true },
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
             { type: 'decorations', decorationsMode: 'split' },
@@ -91,7 +92,7 @@ export const cakeVariants: Record<string, {
             { type: 'filling', title:'Выберите начинку'},
             { type: 'shape', items:shapeMousse, title: 'Выбрите форму' },
             { type: 'gloss', items:gloss, title: 'Выберите тип поверхности торта' },
-            { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
+            { type: 'colors', items: colorsMousse, isColor: true, title: 'Цвет торта' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
             { type: 'decorations', decorationsMode: 'all' },
             { type: 'photoPrint' },
@@ -105,7 +106,7 @@ export const cakeVariants: Record<string, {
         controls: [
             { type: 'tiered', title:'Выберите начинку'},
             { type: 'colors', items: colors, isColor: true, title: 'Цвет торта' },
-            { type: 'template', items: templates, title: 'Шаблон оформления', isTemplate: true },
+            { type: 'template', items: templates, title: 'Способ оформления украшениями', isTemplate: true },
             { type: 'shape', items:shapeTiered, title: 'Выбрите форму' },
             { type: 'smudges', items: smudges, title: 'Выберите оформление подтеками' },
             { type: 'decorations', decorationsMode: 'split' },

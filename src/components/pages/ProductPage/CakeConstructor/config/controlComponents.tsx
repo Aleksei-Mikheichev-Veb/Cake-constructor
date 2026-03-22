@@ -154,11 +154,11 @@ export const DecorationsSection: React.FC<DecorationsSectionProps> = ({
 
     // Для 'biscuit', 'kids', 'tiered' — split
     const template = useSelector((s:RootState) => s.cakeConstructor.template);
-    if (template === 'empty' || template === 'center') effectiveMode = 'all';
+    if (template === 'center') effectiveMode = 'all';
 
-    // Если нет шаблона, то декорации не показыаются
+    // Если нет шаблона или выбран пустой шаблон, то декорации не показыаются
     const requiresTemplate = ['biscuit', 'kids', 'tiered'];
-    if (!template && requiresTemplate.includes(subcategory ?? '')) {
+    if (!template && requiresTemplate.includes(subcategory ?? '') || template === 'empty') {
         return null;
     }
 

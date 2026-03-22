@@ -8,7 +8,7 @@ export type ItemType = {
 export const templates: ItemType[] = [
     {
         id: 'empty',
-        name: 'Без шаблона',
+        name: 'Без оформления украшениями',
         description: 'Полная свобода творчества: выберите и расположите угощения на торте по своему желанию.',
         image: require('../assets/images/templates/empty.webp'),
     },
