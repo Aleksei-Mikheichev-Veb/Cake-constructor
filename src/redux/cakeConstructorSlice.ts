@@ -4,6 +4,7 @@ import {numberOfServing, NumberOfServingType} from "../data/cakes/biscuit/number
 import {ItemType} from "../data/templates";
 import {DecorationType, SelectedDecoration} from "../data/decorationsMain";
 import {getLayersForPortions, getMinPortionsForLayers} from "../utils/tieredUtils";
+import { log } from "console";
 
 export const mainDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
     selectId: (deco) => deco.id
@@ -46,6 +47,10 @@ type initialStateType = {
     shape:string | null;
     tiers: TiersState | null;
     gloss: string | null;
+    chocolateText: {
+    letters?: string;
+    numbers?: string;
+  } | null;
 }
 
 const initialState:initialStateType = {
@@ -65,7 +70,8 @@ const initialState:initialStateType = {
     referenceImages: [],
     shape: null,
     tiers: null,
-    gloss: null
+    gloss: null,
+    chocolateText: null,
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -172,6 +178,11 @@ export const cakeConstructorSlice = createSlice({
                 })
             }
         },
+        clearAllDecorations: (state) => {
+            mainDecorAdapter.removeAll(state.mainDecorations);
+            additionalDecorAdapter.removeAll(state.additionalDecorations);
+            state.chocolateText = null;
+        },
         setOrderComment: (state, action: PayloadAction<string>) => {
             state.orderComment = action.payload;
         },
@@ -219,6 +230,18 @@ export const cakeConstructorSlice = createSlice({
                 state.tiers.layerFillings[layerIndex] = filling;
             }
         },
+        setChocolateLetters: (state, action: PayloadAction<string>) => {
+            if (!state.chocolateText) state.chocolateText = {};
+                state.chocolateText.letters = action.payload;
+        },
+        setChocolateNumbers: (state, action: PayloadAction<string>) => {
+            if (!state.chocolateText) state.chocolateText = {};
+                state.chocolateText.numbers = action.payload;
+        },
+        clearChocolateText: (state) => {
+            state.chocolateText = null;
+            console.log('nrn')
+        },
 
         clearReferenceImages: (state) => {
             state.referenceImages = [];
@@ -250,6 +273,7 @@ export const {
     removeAdditionalDecoration,
     incrementAdditionalDecoration,
     decrementAdditionalDecoration,
+    clearAllDecorations,
     setOrderComment,
     addReferenceImage,
     removeReferenceImage,
@@ -258,6 +282,9 @@ export const {
     setTiers,
     setLayers,
     setPortions,
-    setLayerFilling
+    setLayerFilling,
+    setChocolateLetters,
+    setChocolateNumbers,
+    clearChocolateText
 } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer

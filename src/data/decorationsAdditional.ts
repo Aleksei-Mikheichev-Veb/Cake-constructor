@@ -14,16 +14,16 @@ export const decorationsAdditional: DecorationType[] = [
         name: 'Шоколадные цифры',
         description: 'Объёмные цифры из белого, молочного или тёмного шоколада для украшения торта',
         image: require('../assets/images/decorations/chocolate_numbers.webp'),
-        price: 200,
-        byThePiece:true,
+        price: 100,
+        
     },
     {
         id: 'chocolate_letters',
         name: 'Шоколадные буквы',
         description: 'Слова или фразы из объёмных шоколадных букв (цена за букву)',
         image: require('../assets/images/decorations/chocolate_letters.webp'),
-        price: 50,
-        byThePiece:true,
+        price: 30,
+        
     },
     {
         id: 'lollipops',

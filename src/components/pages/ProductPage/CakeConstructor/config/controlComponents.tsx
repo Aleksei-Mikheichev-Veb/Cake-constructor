@@ -20,12 +20,15 @@ import {
     setGloss,
     setOrderComment, setShape,
     setSmudges,
-    setTemplate
+    setTemplate,
+    clearAllDecorations
 } from "../../../../../redux/cakeConstructorSlice";
 import ReferenceControls from "../controls/ReferenceUpload/ReferenceUpload";
 import DecorationControls from "../controls/DecorationControls/DecorationControls";
 import TieredControls from "../controls/TieredControls/TieredControls";
 import {FillingType} from "../../../../../data/cakes/biscuit/fillings";
+import ChocolateTextInputs from "../controls/ChocolateTextInputs/ChocolateTextInputs";
+import { useEffect } from "react";
 
 // Тип пропсов для SelectionControls-обёрток
 type SelectionProps = {
@@ -40,6 +43,10 @@ export const TemplateControls = ({ items, title, isTemplate }: SelectionProps & 
     const dispatch = useDispatch();
     const activeTemplate = useSelector((s: RootState) => s.cakeConstructor.template);
 
+    useEffect(() => {
+        dispatch(clearAllDecorations());
+    }, [activeTemplate, dispatch]);
+    
     return (
         <SelectionControls
             title={title}
@@ -167,15 +174,20 @@ export const DecorationsSection: React.FC<DecorationsSectionProps> = ({
 
     if (effectiveMode === 'all') {
         return (
-            <DecorationControls
-                title="Украшения"
-                decorations="all"
-                setActiveDecoration={(decoration) => dispatch(addMainDecoration(decoration))}
-                removeDecoration={(id) => dispatch(removeMainDecoration(id))}
-                increment={(id) => dispatch(incrementMainDecoration(id))}
-                decrement={(id) => dispatch(decrementMainDecoration(id))}
-                activeDecoration={additionalDecorations} // или main, если логика другая
-            />
+            <>
+                <DecorationControls
+                    title="Украшения"
+                    decorations="all"
+                    setActiveDecoration={(decoration) => dispatch(addMainDecoration(decoration))}
+                    removeDecoration={(id) => dispatch(removeMainDecoration(id))}
+                    increment={(id) => dispatch(incrementMainDecoration(id))}
+                    decrement={(id) => dispatch(decrementMainDecoration(id))}
+                    activeDecoration={mainDecorations} 
+                />
+                <ChocolateTextInputs />
+            </>
+            
+            
         );
     }
 
@@ -200,6 +212,7 @@ export const DecorationsSection: React.FC<DecorationsSectionProps> = ({
                 decrement={(id) => dispatch(decrementAdditionalDecoration(id))}
                 activeDecoration={additionalDecorations}
             />
+            <ChocolateTextInputs />
         </>
     );
 };
