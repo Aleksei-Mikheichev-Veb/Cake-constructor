@@ -26,7 +26,7 @@ const PhotoPrintControls = () => {
     };
 
     return (
-        <div className={styles.addImage}>
+        <section className={styles.addImage}>
             <h2 className={styles.addImage_title}>Фотопечать + 650 руб</h2>
             <div className={styles.addImage_container}>
                 <label htmlFor="addFile" className={styles.addImage_icon}>
@@ -35,7 +35,7 @@ const PhotoPrintControls = () => {
                         height="42px"
                         width="42px"
                         viewBox="0 0 32 32"
-                        enable-background="new 0 0 32 32"
+                        enableBackground="new 0 0 32 32"
                         id="svg2"
                         version="1.1"
                     >
@@ -70,7 +70,7 @@ const PhotoPrintControls = () => {
                     </div>
                 )}
             </div>
-        </div>
+        </section>
     );
 };
 

@@ -10,7 +10,7 @@ const CreamTextControls = () => {
     const creamText = useSelector((state: RootState) => state.cakeConstructor.creamText)
     const creamTextColor = useSelector((state: RootState) => state.cakeConstructor.creamTextColor)
     return (
-        <div className={styles.addText}>
+        <section className={styles.addText}>
             <h2 className={styles.addText_title}>Добавить надписи кремом</h2>
             <div className={styles.form__group}>
                 <input
@@ -29,7 +29,7 @@ const CreamTextControls = () => {
                                       setSelectedColor={(color) => dispatch(setCreamTextColor(color))}
             />}
 
-        </div>
+        </section>
     );
 };
 

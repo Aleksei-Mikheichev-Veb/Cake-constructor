@@ -5,7 +5,7 @@ import {numberOfServing, NumberOfServingType} from "../../../../../../data/cakes
 import {RootState} from "../../../../../../redux/store";
 import {setWeight} from "../../../../../../redux/cakeConstructorSlice";
 import Tooltip from "../../../../../UI/Tooltip/Tooltip";
-import Button from "../../../../../UI/Button";
+import Button from "../../../../../UI/Button/Button";
 import { cakeVariants } from "../../config/cakeVariants";
 
 type WeightControlsProps = {
@@ -32,7 +32,7 @@ const WeightControls: FC<WeightControlsProps> = ({ title }) => {
     }
 
     return (
-        <div className={styles.weightControls}>
+        <section className={styles.weightControls}>
             <h2 className={styles.weightControls_title}>{title}</h2>
             <div className={styles.weightControls_row}>
                 {servings.map((elem) => (
@@ -50,7 +50,7 @@ const WeightControls: FC<WeightControlsProps> = ({ title }) => {
                     </Tooltip>
                 ))}
             </div>
-        </div>
+        </section>
     );
 };
 

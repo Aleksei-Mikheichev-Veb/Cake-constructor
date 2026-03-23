@@ -19,7 +19,6 @@ type FillingControlsProps = {
 const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillingId,setActiveFilling}) => {
 
     const dispatch = useDispatch();
-    // const activeFillingId = useSelector((state:RootState) => state.cakeConstructor.filling)
 
     const prevRef = useRef<HTMLButtonElement | null>(null)
     const nextRef = useRef<HTMLButtonElement | null>(null)
@@ -28,12 +27,8 @@ const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillin
     const [isEnd, setIsEnd] = useState(false);
 
 
-    // const handleFillingClick = (filling: FillingType) => {
-    //     dispatch(setFilling(filling))
-    // }
-
     return (
-        <div className={styles.filling}>
+        <section className={styles.filling}>
             <h2 className={styles.filling_title}>{title}</h2>
             <div className={styles.swiper_box}>
                 <button ref={prevRef} className={`${styles.swiper_button} ${styles.prev}`}>
@@ -82,7 +77,7 @@ const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillin
                 </Swiper>
             </div>
 
-        </div>
+        </section>
     );
 };
 

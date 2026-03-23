@@ -187,8 +187,6 @@ export const cakeConstructorSlice = createSlice({
         },
         setTiers: (state, action: PayloadAction<TiersState>) => {
             state.tiers = action.payload;
-            console.log(state.tiers)
-            console.log(action.payload)
         },
 
         setLayers: (state, action: PayloadAction<number>) => {
