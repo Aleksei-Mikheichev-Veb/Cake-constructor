@@ -3,6 +3,8 @@ export type ItemType = {
     name:string;
     description:string;
     image:string;
+    showColorCountSelector?: boolean;
+    colorOptions?:number;
 }
 
 export const templates: ItemType[] = [

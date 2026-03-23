@@ -1,88 +1,233 @@
-import React, {FC, useEffect, useState} from 'react';
-import styles from './SelectionControls.module.scss'
+// import React, {FC, useEffect, useState} from 'react';
+// import styles from './SelectionControls.module.scss'
+// import Template from "../TemplateControls/Template/Template";
+// import {useDispatch, useSelector } from 'react-redux';
+// import {RootState} from "../../../../../../redux/store";
+// import InputColor from "../../../../../UI/inputs/InputColor/InputColor";
+// import {ItemType} from "../../../../../../data/templates";
+// import {setColors} from "../../../../../../redux/cakeConstructorSlice";
+//
+// type SelectionControlsProps = {
+//     title:string; // Название блока
+//     items:ItemType[]; // Закинутые варианты выбора
+//     setSelectedItem:(itemId:string) => void; // Функция для установки выбора варианта
+//     activeItemId:string | null; // Выбранный вариант
+//     isColorSelected?:boolean; // Надстройка для блока с выбором цвета торта.Подключает дополнительный функционал.
+//     isTemplate?: boolean; // для проверки что это шаблон
+// }
+//
+// const SelectionControls: FC<SelectionControlsProps> = ({
+//                                                            title,
+//                                                            items,
+//                                                            setSelectedItem,
+//                                                            activeItemId,
+//                                                            isColorSelected= false,
+//                                                            isTemplate
+//                                                        }) => {
+//     const [countColorsSelected, setCountColorsSelected] = useState(0);
+//     const colors = useSelector((state: RootState) => state.cakeConstructor.colors)
+//     const dispatch = useDispatch()
+//     useEffect(() => {
+//         if(activeItemId){
+//             switch(activeItemId){
+//                 case 'color1':
+//                     setCountColorsSelected(1);
+//                     break;
+//                 case 'color2':
+//                     setCountColorsSelected(colors.length || 2);
+//                     break;
+//                 case 'color3':
+//                     setCountColorsSelected(0);
+//                     break;
+//                 case 'color4':
+//                     setCountColorsSelected(2);
+//                     break;
+//                 case 'color5':
+//                     setCountColorsSelected(2);
+//                     break;
+//                 default:setCountColorsSelected(0);
+//
+//             }
+//         }
+//     },[activeItemId])
+//
+//
+//     // Установить количество цветов торта
+//     const handleColorCountChange = (count: number) => {
+//         // if (!setSelectedColors) return;
+//         setCountColorsSelected(count);
+//
+//     };
+//
+//
+//     return (
+//         <section className={styles.templateControls}>
+//             <h2 className={styles.templateControls_title}>
+//                 {title}
+//                 {isTemplate && !activeItemId && (   // показываем только если шаблон И ничего не выбрано
+//                     <span className={styles.templateControls_subtitle}>
+//                         (Выберите шаблон, чтобы появились декорации)
+//                     </span>
+//                 )}
+//             </h2>
+//             <div className={styles.templateControls_templates}>
+//                 {items.map(item => (
+//                     <Template
+//                         key={item.id}
+//                         activeItemId={activeItemId}
+//                         setSelectedItem={setSelectedItem}
+//                         item={item}/>
+//                 ))}
+//             </div>
+//             {isColorSelected && activeItemId && activeItemId !== 'color3' && (
+//                 <div className={styles.colorPicker}>
+//                     <label>Выберите цвет(а):</label>
+//                     {activeItemId === 'color2' && (
+//                         <div className={styles.colorPicker_colorCountSelector}>
+//                             <label>
+//                                 <input
+//                                     type="radio"
+//                                     name="colorCount"
+//                                     checked={countColorsSelected === 2}
+//                                     onChange={() => handleColorCountChange(2)}
+//                                 />
+//                                 2 цвета
+//                             </label>
+//                             <label>
+//                                 <input
+//                                     type="radio"
+//                                     name="colorCount"
+//                                     value="3"
+//                                     checked={countColorsSelected === 3}
+//                                     onChange={() => handleColorCountChange(3)}
+//                                 />
+//                                 3 цвета
+//                             </label>
+//                         </div>
+//                     )}
+//                     {activeItemId === 'color2' && (
+//                         <div className={styles.colorPicker_colorCountSelector}>
+//                             <label>
+//                                 <input
+//                                     type="radio"
+//                                     name="colorCount"
+//                                     checked={countColorsSelected === 2}
+//                                     onChange={() => handleColorCountChange(2)}
+//                                 />
+//                                 2 цвета
+//                             </label>
+//                             <label>
+//                                 <input
+//                                     type="radio"
+//                                     name="colorCount"
+//                                     value="3"
+//                                     checked={countColorsSelected === 3}
+//                                     onChange={() => handleColorCountChange(3)}
+//                                 />
+//                                 3 цвета
+//                             </label>
+//                         </div>
+//                     )}
+//                     <div className={styles.colorPicker_colorInputs}>
+//                         {Array.from({ length: countColorsSelected }).map((_, index) => (
+//                             <InputColor key={index}
+//                                         selectedColor={colors && colors[index] || '#000000'}
+//                                         setSelectedColor={(color:string) => dispatch(setColors({color, index}))}
+//                             />
+//                         ))}
+//                     </div>
+//                 </div>
+//             )}
+//         </section>
+//     );
+// };
+//
+// export default SelectionControls;
+import React, { FC, useEffect, useState } from 'react';
+import styles from './SelectionControls.module.scss';
 import Template from "../TemplateControls/Template/Template";
-import {useDispatch, useSelector } from 'react-redux';
-import {RootState} from "../../../../../../redux/store";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "../../../../../../redux/store";
 import InputColor from "../../../../../UI/inputs/InputColor/InputColor";
-import {ItemType} from "../../../../../../data/templates";
-import {setColors} from "../../../../../../redux/cakeConstructorSlice";
+import { ItemType } from "../../../../../../data/templates";
+import { setColors } from "../../../../../../redux/cakeConstructorSlice";
 
 type SelectionControlsProps = {
-    title:string; // Название блока
-    items:ItemType[]; // Закинутые варианты выбора
-    setSelectedItem:(itemId:string) => void; // Функция для установки выбора варианта
-    activeItemId:string | null; // Выбранный вариант
-    isColorSelected?:boolean; // Надстройка для блока с выбором цвета торта.Подключает дополнительный функционал.
-    isTemplate?: boolean; // для проверки что это шаблон
-}
+    title: string;
+    items: ItemType[];
+    setSelectedItem: (itemId: string) => void;
+    activeItemId: string | null;
+    isColorSelected?: boolean;
+    isTemplate?: boolean;
+};
 
 const SelectionControls: FC<SelectionControlsProps> = ({
                                                            title,
                                                            items,
                                                            setSelectedItem,
                                                            activeItemId,
-                                                           isColorSelected= false,
-                                                           isTemplate
+                                                           isColorSelected = false,
+                                                           isTemplate,
                                                        }) => {
     const [countColorsSelected, setCountColorsSelected] = useState(0);
-    const colors = useSelector((state: RootState) => state.cakeConstructor.colors)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        if(activeItemId){
-            switch(activeItemId){
-                case 'color1':
-                    setCountColorsSelected(1);
-                    break;
-                case 'color2':
-                    setCountColorsSelected(colors.length || 2);
-                    break;
-                case 'color3':
-                    setCountColorsSelected(0);
-                    break;
-                case 'color4':
-                    setCountColorsSelected(2);
-                    break;
-                case 'color5':
-                    setCountColorsSelected(2);
-                    break;
-                default:setCountColorsSelected(0);
+    const colors = useSelector((state: RootState) => state.cakeConstructor.colors);
+    const dispatch = useDispatch();
 
+    // Находим выбранный элемент (может быть undefined)
+    const selectedItem = items.find(item => item.id === activeItemId);
+
+    useEffect(() => {
+        if (!activeItemId || !isColorSelected) {
+            setCountColorsSelected(0);
+            return;
+        }
+
+        if (selectedItem) {
+            // Если у элемента есть флаг showColorCountSelector — используем его
+            if (selectedItem.showColorCountSelector) {
+                // Берём текущее количество цветов или дефолт 2–3
+                setCountColorsSelected(colors.length || 3);
+            } else if (selectedItem.colorOptions) {
+                // Фиксированное количество
+                setCountColorsSelected(selectedItem.colorOptions);
+            } else {
+                setCountColorsSelected(0);
             }
         }
-    },[activeItemId])
+    }, [activeItemId, isColorSelected, selectedItem, colors.length]);
 
-
-    // Установить количество цветов торта
     const handleColorCountChange = (count: number) => {
-        // if (!setSelectedColors) return;
         setCountColorsSelected(count);
-
     };
-
 
     return (
         <section className={styles.templateControls}>
             <h2 className={styles.templateControls_title}>
                 {title}
-                {isTemplate && !activeItemId && (   // показываем только если шаблон И ничего не выбрано
+                {isTemplate && !activeItemId && (
                     <span className={styles.templateControls_subtitle}>
-                        (Выберите шаблон, чтобы появились декорации)
-                    </span>
+            (Выберите шаблон, чтобы появились декорации)
+          </span>
                 )}
             </h2>
+
             <div className={styles.templateControls_templates}>
                 {items.map(item => (
                     <Template
                         key={item.id}
                         activeItemId={activeItemId}
                         setSelectedItem={setSelectedItem}
-                        item={item}/>
+                        item={item}
+                    />
                 ))}
             </div>
-            {isColorSelected && activeItemId && activeItemId !== 'color3' && (
+
+            {isColorSelected &&  activeItemId != 'space' && activeItemId && selectedItem && (
                 <div className={styles.colorPicker}>
                     <label>Выберите цвет(а):</label>
-                    {activeItemId === 'color2' && (
+
+                    {/* Выбор 2 или 3 цвета — только если флаг true */}
+                    {selectedItem.showColorCountSelector && (
                         <div className={styles.colorPicker_colorCountSelector}>
                             <label>
                                 <input
@@ -97,7 +242,6 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                                 <input
                                     type="radio"
                                     name="colorCount"
-                                    value="3"
                                     checked={countColorsSelected === 3}
                                     onChange={() => handleColorCountChange(3)}
                                 />
@@ -105,11 +249,13 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                             </label>
                         </div>
                     )}
+
                     <div className={styles.colorPicker_colorInputs}>
                         {Array.from({ length: countColorsSelected }).map((_, index) => (
-                            <InputColor key={index}
-                                        selectedColor={colors && colors[index] || '#000000'}
-                                        setSelectedColor={(color:string) => dispatch(setColors({color, index}))}
+                            <InputColor
+                                key={index}
+                                selectedColor={colors[index] || '#000000'}
+                                setSelectedColor={(color: string) => dispatch(setColors({ color, index }))}
                             />
                         ))}
                     </div>

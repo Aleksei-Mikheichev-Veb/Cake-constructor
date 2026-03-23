@@ -6,23 +6,27 @@ export const colorsMousse: ItemType[] = [
         name: 'Один цвет',
         image: require('../../../assets/images/color/mousse/mousse.webp'),
         description: 'Торт покрыт одним равномерным цветом.',
+        colorOptions:1
     },
     {
         id: 'color2',
         name: '2-3 цвета',
         image: require('../../../assets/images/color/mousse/twoColors.jpg'),
         description: 'Комбинация 2-3 цветов для яркого дизайна.',
+        showColorCountSelector: true
     },
     {
-        id: 'color3',
+        id: 'space',
         name: 'Стиль космоса',
         image: require('../../../assets/images/color/mousse/space.webp'),
         description: 'Галактический стиль с темными тонами и яркими акцентами.',
+        colorOptions:0
     },
     {
         id: 'color4',
         name: 'Авторские цветовые решения',
         image: require('../../../assets/images/color/mousse/notStandart.webp'),
         description: 'Авторская палитра: нестандартные оттенки, мраморные разводы и яркие контрасты для незабываемого вида.',
+        showColorCountSelector: true
     },
 ];
