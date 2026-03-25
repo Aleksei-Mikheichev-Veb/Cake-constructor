@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './TotalPrice.module.scss'
 import {useSelector} from "react-redux";
-import {selectCakePriceRange} from "../../../redux/selectors/cakeConstructorSelectors";
+import {selectDessertPriceRange} from "../../../redux/selectors/selectDessertPriceRange";
 
 
 const TotalPrice = () => {
-    const { min, max, isRange, currency } = useSelector(selectCakePriceRange);
+    const { min, max, isRange, currency } = useSelector(selectDessertPriceRange);
 
     return (
         <div className={styles.price}>

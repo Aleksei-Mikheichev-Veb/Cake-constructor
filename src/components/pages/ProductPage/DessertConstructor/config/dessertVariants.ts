@@ -1,5 +1,6 @@
 import { FillingType } from "../../../../../data/cakes/biscuit/fillings";
 import { numberOfServingCupcakes, NumberOfServingDessertType } from "../../../../../data/cupcakes/numberOfServingCupcakes";
+import { numberOfServingTrifles } from "../../../../../data/trifles/numberOfServingTrifles";
 
 
 
@@ -29,6 +30,17 @@ export const dessertVariants: Record<string, {
     cupcakes: {
         title: 'Капкейки',
         portionData: numberOfServingCupcakes,
+        controls: [
+            { type: 'portions', title:'Выберите количество порций'},
+            // { type: 'weight', title:'Выберите количество порций'},
+            // { type: 'filling', title:'Выберите начинку', fillings: fillings},
+            // { type: 'decorations', decorationsMode: 'split' },
+            { type: 'reference' },
+        ],
+    },
+    trifles: {
+        title: 'Капкейки',
+        portionData: numberOfServingTrifles,
         controls: [
             { type: 'portions', title:'Выберите количество порций'},
             // { type: 'weight', title:'Выберите количество порций'},

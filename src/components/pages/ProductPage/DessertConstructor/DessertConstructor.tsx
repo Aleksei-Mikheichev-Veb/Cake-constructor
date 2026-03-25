@@ -2,13 +2,13 @@ import React, {useEffect} from 'react';
 import {
     CakeSubcategory,
     resetCakeConstructor,
-    setDessertPortions,
+    setDessertType,
+    setQuantity,
     setSubcategory, setTiers,
     setWeight
 } from "../../../../redux/cakeConstructorSlice";
 import TotalPrice from "../../../UI/TotalPrice/TotalPrice";
 import {useDispatch, useSelector} from "react-redux";
-// import {cakeVariants} from "./config/cakeVariants";
 import {useParams} from "react-router-dom";
 import { controlDessertComponents } from './config/controlDessertComponents';
 import { dessertVariants } from './config/dessertVariants';
@@ -17,7 +17,7 @@ import { dessertVariants } from './config/dessertVariants';
 const DessertConstructor = () => {
 
 
-    const { subcategory, category } = useParams<{ subcategory: string, category: string }>();
+    const { category } = useParams<{ subcategory: string, category: string }>();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const DessertConstructor = () => {
             // Автовыбор веса порций
             const firstServing = dessertVariants[category].portionData[0];
             if (firstServing) {
-                dispatch(setDessertPortions(firstServing));
+                dispatch(setQuantity(firstServing));
             }
         }
     }, [category, dispatch]);

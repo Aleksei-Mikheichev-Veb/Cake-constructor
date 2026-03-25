@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import styles from './PortionsControls.module.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import {RootState} from "../../../../../../redux/store";
-import {setDessertPortions, setWeight} from "../../../../../../redux/cakeConstructorSlice";
+import {setQuantity, setWeight} from "../../../../../../redux/cakeConstructorSlice";
 import Tooltip from "../../../../../UI/Tooltip/Tooltip";
 import Button from "../../../../../UI/Button/Button";
 import { useParams } from 'react-router-dom';
@@ -21,10 +21,10 @@ const PorionsControls: FC<PortionsControlsProps> = ({ title }) => {
     const variant = category ? dessertVariants[category] : null;
     const servings = variant?.portionData || []; // если нет — пустой массив
 
-    const activeServing = useSelector((state: RootState) => state.cakeConstructor.dessertPortions);
+    const activeServing = useSelector((state: RootState) => state.cakeConstructor.quantity);
 
     const handleButtonClick = (elem: NumberOfServingDessertType) => {
-        dispatch(setDessertPortions(elem));
+        dispatch(setQuantity(elem));
     };
 
     if (servings.length === 0) {

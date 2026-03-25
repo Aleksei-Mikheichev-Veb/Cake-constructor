@@ -1,38 +1,53 @@
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import CakeConstructor from "./CakeConstructor/CakeConstructor";
 import DessertConstructor from './DessertConstructor/DessertConstructor';
-import { useParams } from 'react-router-dom';
+
 import styles from './ProductPage.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
 import { catalog } from "./../../../data/catalog";
+import { setDessertType } from '../../../redux/cakeConstructorSlice';
 
 
 const ProductPage = () => {
-    type CategoryKey = keyof typeof catalog;
     const { category, subcategory } = useParams<{
-        category: CategoryKey;
+        category: string;
         subcategory?: string;
     }>();
 
-    const categoryData = category ? catalog[category] : null;
+    const dispatch = useDispatch();
 
-    // если категории нет
+    // Определяем тип десерта
+    const dessertType = category === 'cakes' ? 'cake' 
+                      : category === 'truffles' ? 'truffle'
+                      : category === 'cupcakes' ? 'cupcake'
+                      : null;
+
+    // Устанавливаем dessertType в Redux при изменении категории
+    useEffect(() => {
+        if (dessertType) {
+            dispatch(setDessertType(dessertType));
+        } else {
+            dispatch(setDessertType(null));
+        }
+    }, [dessertType, dispatch]);
+
+    const categoryData = category ? catalog[category as keyof typeof catalog] : null;
+
     if (!categoryData) {
         return <div>Категория не найдена</div>;
     }
 
     let product = null;
 
-    // если это торты
     if (categoryData.hasSubcategories) {
         if (!subcategory) {
             return <div>Подкатегория не выбрана</div>;
         }
-
-        product = categoryData.subcategories.find(
-            (item) => item.id === subcategory
-        );
+        product = categoryData.subcategories.find(item => item.id === subcategory);
     } else {
-        //обычные десерты
         product = categoryData.product;
     }
 
@@ -71,6 +86,7 @@ const ProductPage = () => {
                     </div>
                 </div>
 
+                {/* Выбор конструктора в зависимости от типа */}
                 {category === 'cakes' ? (
                     <CakeConstructor />
                 ) : (
