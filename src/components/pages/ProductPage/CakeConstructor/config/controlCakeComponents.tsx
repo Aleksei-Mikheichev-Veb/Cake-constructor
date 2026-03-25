@@ -250,7 +250,7 @@ export const ReferenceSection = () => {
 
 // ─────────────────────────────────────────────
 // Экспорт маппинга компонентов
-export const controlComponents: Record<ControlType, React.FC<any>> = {
+export const controlCakeComponents: Record<ControlType, React.FC<any>> = {
     weight: WeightControls,
     filling: FillingSection,
     creamText: CreamTextControls,
@@ -261,7 +261,7 @@ export const controlComponents: Record<ControlType, React.FC<any>> = {
     colors: ColorsControls,
     smudges: SmudgesControls,
     tiered: TieredControls,
-    decorations: DecorationsSection,  // добавь, когда сделаешь
+    decorations: DecorationsSection,  
     shape: ShapeControls,
     gloss: GlossControls,
 };

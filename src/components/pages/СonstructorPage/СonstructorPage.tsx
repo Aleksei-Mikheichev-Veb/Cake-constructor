@@ -8,9 +8,13 @@ import globalStyles from './../../../styles/global.module.scss'
 const ConstructorPage = () => {
     const navigate = useNavigate();
 
-    const handleClickCategory = (id:string) => {
-        navigate(`/constructor/${id}`)
-    }
+    const handleClickCategory = (id: string) => {
+        if (id === 'cakes') {
+            navigate('/constructor/cakes');           // торты → выбор подкатегории
+        } else {
+            navigate(`/constructor/${id}`);           // трайфлы и капкейки → сразу в ProductPage
+        }
+    };
     return (
         <div className={globalStyles.container}>
             <h1>Конструктор десертов</h1>

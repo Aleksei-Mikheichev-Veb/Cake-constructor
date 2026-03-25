@@ -9,7 +9,7 @@ import TotalPrice from "../../../UI/TotalPrice/TotalPrice";
 import {useDispatch, useSelector} from "react-redux";
 import {cakeVariants} from "./config/cakeVariants";
 import {useParams} from "react-router-dom";
-import {controlComponents} from "./config/controlComponents";
+import {controlCakeComponents} from "./config/controlCakeComponents";
 
 
 const CakeConstructor = () => {
@@ -26,13 +26,14 @@ const CakeConstructor = () => {
             // Установка подкатегории
             dispatch(setSubcategory(subcategory as CakeSubcategory));
 
-            // Автовыбор веса
+            // Автовыбор веса или порций
+
             const firstServing = cakeVariants[subcategory].weightData[0];
             if (firstServing) {
                 dispatch(setWeight(firstServing));
             }
 
-            // Инициализация tiers сразу здесь (для tiered)
+            // Инициализация tiers
             if (subcategory === 'tiered') {
                 dispatch(setTiers({
                     layers: 1,
@@ -54,7 +55,7 @@ const CakeConstructor = () => {
         <div>
             {variant.controls.map((control, index) => {
 
-                const Component = controlComponents[control.type]
+                const Component = controlCakeComponents[control.type]
 
                 if (!Component) return null
 

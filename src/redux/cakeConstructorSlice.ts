@@ -4,7 +4,7 @@ import {numberOfServing, NumberOfServingType} from "../data/cakes/biscuit/number
 import {ItemType} from "../data/templates";
 import {DecorationType, SelectedDecoration} from "../data/decorationsMain";
 import {getLayersForPortions, getMinPortionsForLayers} from "../utils/tieredUtils";
-import { log } from "console";
+import { NumberOfServingDessertType } from "../data/cupcakes/numberOfServingCupcakes";
 
 export const mainDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
     selectId: (deco) => deco.id
@@ -51,6 +51,7 @@ type initialStateType = {
     letters?: string;
     numbers?: string;
   } | null;
+    dessertPortions: NumberOfServingDessertType | null;
 }
 
 const initialState:initialStateType = {
@@ -72,6 +73,7 @@ const initialState:initialStateType = {
     tiers: null,
     gloss: null,
     chocolateText: null,
+    dessertPortions: null
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -87,6 +89,9 @@ export const cakeConstructorSlice = createSlice({
         },
         setWeight: (state, action: PayloadAction<NumberOfServingType>) => {
             state.numberOfServing = action.payload
+        },
+        setDessertPortions: (state, action: PayloadAction<NumberOfServingDessertType>) => {
+            state.dessertPortions = action.payload;
         },
         setFilling: (state, action: PayloadAction<FillingType>) => {
           state.filling = action.payload
@@ -240,7 +245,6 @@ export const cakeConstructorSlice = createSlice({
         },
         clearChocolateText: (state) => {
             state.chocolateText = null;
-            console.log('nrn')
         },
 
         clearReferenceImages: (state) => {
@@ -254,6 +258,7 @@ export const cakeConstructorSlice = createSlice({
 
 export const {
     setSubcategory,
+    setDessertPortions,
     setWeight,
     setFilling,
     setTemplate,

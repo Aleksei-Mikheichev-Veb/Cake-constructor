@@ -30,7 +30,7 @@ const WeightControls: FC<WeightControlsProps> = ({ title }) => {
     if (servings.length === 0) {
         return <div>Вес не найден для этого типа торта</div>;
     }
-
+    const servingType = subcategory === 'mousse' || subcategory === 'bento'? 'кг': "порций";
     return (
         <section className={styles.weightControls}>
             <h2 className={styles.weightControls_title}>{title}</h2>
@@ -42,6 +42,7 @@ const WeightControls: FC<WeightControlsProps> = ({ title }) => {
                     >
                         <Button
                             elem={elem}
+                            servingType={servingType}
                             quantity={elem.quantity}
                             activeId={activeServing?.id ?? null}
                             id={elem.id}

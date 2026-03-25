@@ -3,8 +3,8 @@ import styles from './Tooltip.module.scss';
 
 type TooltipContent = string | {
     weight: string;
-    height: number;
-    diameter: number;
+    height?: number;
+    diameter?: number;
 };
 
 type TooltipProps = {
@@ -28,15 +28,20 @@ const Tooltip: FC<TooltipProps> = ({ children, content }) => {
                     <div className={styles.text}>{content}</div>
                 ) : (
                     <div className={styles.description}>
-                        <h4 className={styles.descriptionTitle}>Вес: {content.weight} кг</h4>
-                        <div className={styles.row}>
-                            <span>Высота</span>
-                            <span>{content.height} см</span>
-                        </div>
-                        <div className={styles.row}>
-                            <span>Диаметр</span>
-                            <span>{content.diameter} см</span>
-                        </div>
+                        <h4 className={styles.descriptionTitle}>Вес: {content.weight}</h4>
+                        {content.height != null && (
+                            <div className={styles.row}>
+                                <span>Высота: </span>
+                                <span>{content.height} см</span>
+                            </div>
+                        )}
+
+                        {content.diameter != null && (
+                            <div className={styles.row}>
+                                <span>Диаметр: </span>
+                                <span>{content.diameter} см</span>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

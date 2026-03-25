@@ -34,7 +34,7 @@ export const ReferenceControls = ({
         <section className={styles.referenceBlock}>
             <h2 className={styles.title}>Референсное фото</h2>
             <p className={styles.hint}>
-                Прикрепите пример торта, который вам нравится (до {maxImages} шт.)
+                Прикрепите пример десерта, который вам нравится (до {maxImages} шт.)
             </p>
 
             {canAddMore && (

@@ -12,6 +12,8 @@ import {fillings, FillingType} from "../../../../../data/cakes/biscuit/fillings"
 import {fillingsBento} from "../../../../../data/cakes/bento/fillingsBento";
 import {fillingsMousse} from "../../../../../data/cakes/mousse/fillingsMousse";
 import { colorsMousse } from "../../../../../data/cakes/mousse/colorsMousse";
+import { numberOfServingCupcakes, NumberOfServingDessertType } from "../../../../../data/cupcakes/numberOfServingCupcakes";
+import { numberOfServing3d } from "../../../../../data/cakes/3d/numberOfServing3d";
 
 export type ControlType =
     | 'weight'
@@ -27,7 +29,7 @@ export type ControlType =
     | 'shape' // для бенто, мусс, ярусные
     | 'gloss';    // для мусс
 
-interface ControlConfig {
+export interface ControlConfig {
     type: ControlType;
     title?: string;
     fillings?:FillingType[];
@@ -121,7 +123,7 @@ export const cakeVariants: Record<string, {
     },
     '3d': {
     title: 'Бисквитный торт',
-        weightData: numberOfServing,
+        weightData: numberOfServing3d,
         controls: [
         { type: 'weight', title:'Выберите количество порций'},
         { type: 'filling', title:'Выберите начинку', fillings: fillings},

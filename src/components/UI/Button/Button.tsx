@@ -1,55 +1,18 @@
-// import React, {FC} from 'react';
-// import styled from "styled-components";
-// import {NumberOfServingType} from "../../data/cakes/biscuit/numberOfServing";
-
-// type ButtonProps = {
-//     elem:NumberOfServingType;
-//     quantity: string;
-//     activeId: number | null;
-//     id:number;
-//     handleButtonClick: () => void;
-// }
-
-// const ButtonStyle = styled.button<{isActive: boolean}>`
-//   background: ${({isActive}) => isActive ? '#fff' : '#333439'};
-//   padding: 15px;
-//   color: ${({isActive}) => isActive ? '#333439' : '#fff'};
-//   font-weight: 500;
-//   font-size: 16px;
-//   border-radius: 5px;
-//   border:  ${({isActive}) => isActive ? '1px solid #333439' : 'none'};
-//   cursor: pointer;
-//   &:hover {
-//     background: ${({isActive}) => isActive ? '#fff' : '#575860'};
-//     color:${({isActive}) => isActive ? '#575860' : '#fff'};
-//   }
-// `
-
-// const Button: FC<ButtonProps> = ({elem, quantity, activeId, id, handleButtonClick}) => {
-//     // console.log(activeId)
-//     // console.log(id)
-//     return (
-//         <ButtonStyle isActive={activeId === id} onClick={() => handleButtonClick()}>
-//             {quantity} порций
-//         </ButtonStyle>
-//     );
-// };
-
-// export default Button;
-// Button.tsx
 import React, { FC } from 'react';
 import styles from './Button.module.scss'; // создай этот файл
 import { NumberOfServingType } from '../../../data/cakes/biscuit/numberOfServing';
+import { NumberOfServingDessertType } from '../../../data/cupcakes/numberOfServingCupcakes';
 
 type ButtonProps = {
-  elem: NumberOfServingType;
+  elem: NumberOfServingType | NumberOfServingDessertType;
   quantity: string;
+  servingType?: string;
   activeId: number | null;
   id: number;
   handleButtonClick: () => void;
 };
 
-const Button: FC<ButtonProps> = ({ quantity, activeId, id, handleButtonClick }) => {
+const Button: FC<ButtonProps> = ({ quantity,servingType = "порций", activeId, id, handleButtonClick }) => {
   const isActive = activeId === id;
 
   return (
@@ -57,7 +20,7 @@ const Button: FC<ButtonProps> = ({ quantity, activeId, id, handleButtonClick }) 
       className={`${styles.button} ${isActive ? styles.active : ''}`}
       onClick={handleButtonClick}
     >
-      {quantity} порций
+      {quantity} {servingType}
     </button>
   );
 };

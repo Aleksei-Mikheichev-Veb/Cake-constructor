@@ -25,9 +25,10 @@ function App() {
             <Routes>
                 <Route index path='/*' element={<Home/>}/>
                 <Route path='/constructor' element={<ConstructorPage/>}/>
-                <Route path='/constructor' element={<ConstructorPage/>}/>
                 <Route path='/constructor/cakes' element={<CakesType/>}/>
-                <Route path='/constructor/cakes/:subcategory' element={<ProductPage/>}/>
+                <Route path='/constructor/:category/:subcategory' element={<ProductPage/>}/>
+                <Route path='/constructor/:category' element={<ProductPage />} />
+                <Route path='/constructor/:category' element={<ProductPage />} />
             </Routes>
             <Footer/>
         </BrowserRouter>
