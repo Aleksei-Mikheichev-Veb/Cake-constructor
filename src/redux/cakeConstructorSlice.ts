@@ -30,7 +30,7 @@ export type ReferenceImage = {
 export type CakeSubcategory = 'biscuit' | 'bento' | 'mousse' | 'kids' | 'tiered' | '3d' | null;
 
 type initialStateType = {
-    dessertType: 'cake' | 'truffle' | 'cupcake' | null;
+    dessertType: 'cake' | 'trifles' | 'cupcake' | null;
     subcategory: CakeSubcategory;
     numberOfServing: NumberOfServingType | null;
     filling: FillingType | null;
@@ -82,7 +82,7 @@ export const cakeConstructorSlice = createSlice({
     name: 'cakeConstructor',
     initialState,
     reducers: {
-        setDessertType: (state, action: PayloadAction<'truffle' | 'cupcake' | 'cake' | null>) => {
+        setDessertType: (state, action: PayloadAction<'trifles' | 'cupcake' | 'cake' | null>) => {
             state.dessertType = action.payload;
         },
         setSubcategory: (state, action: PayloadAction<CakeSubcategory>) => {

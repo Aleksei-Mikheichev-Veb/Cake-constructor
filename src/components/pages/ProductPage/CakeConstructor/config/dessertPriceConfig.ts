@@ -1,4 +1,4 @@
-export type DessertType = 'biscuit' | 'bento' | 'mousse' | 'kids' | 'tiered' | '3d' | 'truffle' | 'cupcake';
+export type DessertType = 'biscuit' | 'bento' | 'mousse' | 'kids' | 'tiered' | '3d' | 'trifles' | 'cupcake';
 
 export const dessertPriceConfig: Record<DessertType, {
     pricePerKg?: number;
@@ -14,7 +14,7 @@ export const dessertPriceConfig: Record<DessertType, {
     '3d': { pricePerKg: 2400 },
 
     
-    truffle: {
+    trifles: {
         fixedPricesByQuantity: {
             6: 1900,
             9: 2800,

@@ -25,7 +25,7 @@ export const selectDessertPriceRange = createSelector(
     // === ОПРЕДЕЛЯЕМ КЛЮЧ ДЛЯ КОНФИГА ===
     let key: DessertType;
 
-    if (dessertType === 'truffle' || dessertType === 'cupcake') {
+    if (dessertType === 'trifles' || dessertType === 'cupcake') {
       key = dessertType;
     } 
     else if (subcategory) {

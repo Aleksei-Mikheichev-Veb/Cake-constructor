@@ -21,7 +21,7 @@ const ProductPage = () => {
 
     // Определяем тип десерта
     const dessertType = category === 'cakes' ? 'cake' 
-                      : category === 'truffles' ? 'truffle'
+                      : category === 'trifles' ? 'trifles'
                       : category === 'cupcakes' ? 'cupcake'
                       : null;
 
