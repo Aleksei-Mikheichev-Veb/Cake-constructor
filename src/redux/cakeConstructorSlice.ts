@@ -53,6 +53,7 @@ type initialStateType = {
         numbers?: string;
     } | null;
     quantity: NumberOfServingDessertType | null;
+    stylingOption: 'all-same' | 'split-2' | 'split-3' | null;
 }
 
 const initialState: initialStateType = {
@@ -75,7 +76,8 @@ const initialState: initialStateType = {
     tiers: null,
     gloss: null,
     chocolateText: null,
-    quantity: null
+    quantity: null,
+    stylingOption: null
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -248,6 +250,7 @@ export const cakeConstructorSlice = createSlice({
             if (!state.chocolateText) state.chocolateText = {};
             state.chocolateText.numbers = action.payload;
         },
+        setStylingOption: (state, action) => { state.stylingOption = action.payload; },
         clearChocolateText: (state) => {
             state.chocolateText = null;
         },
@@ -296,6 +299,7 @@ export const {
     setLayerFilling,
     setChocolateLetters,
     setChocolateNumbers,
+    setStylingOption,
     clearChocolateText
 } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer

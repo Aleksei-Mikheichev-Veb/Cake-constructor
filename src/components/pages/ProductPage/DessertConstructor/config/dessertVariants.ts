@@ -8,6 +8,7 @@ export type ControlType =
     | 'portions'
     | 'filling'
     | 'colors'
+    | 'styling'
     // | 'decorations'
     | 'reference';  
 
@@ -32,7 +33,7 @@ export const dessertVariants: Record<string, {
         portionData: numberOfServingCupcakes,
         controls: [
             { type: 'portions', title:'Выберите количество порций'},
-            // { type: 'weight', title:'Выберите количество порций'},
+            { type: 'styling'},
             // { type: 'filling', title:'Выберите начинку', fillings: fillings},
             // { type: 'decorations', decorationsMode: 'split' },
             { type: 'reference' },

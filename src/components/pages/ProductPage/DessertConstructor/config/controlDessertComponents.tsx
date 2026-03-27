@@ -7,6 +7,7 @@ import { FillingType } from "../../../../../data/cakes/biscuit/fillings";
 import FillingControls from "../../CakeConstructor/controls/FillingControls/FillingControls";
 import { ControlType } from "./dessertVariants";
 import PorionsControls from "../../CakeConstructor/controls/ProtionsControl/PortionsControls";
+import DessertStylingControls from "../../CakeConstructor/controls/DessertStylingControls/DessertStylingControls";
 
 // Тип пропсов для SelectionControls-обёрток
 type SelectionProps = {
@@ -96,6 +97,6 @@ export const controlDessertComponents: Record<ControlType, React.FC<any>> = {
     portions: PorionsControls,
     filling: FillingSection,
     reference: ReferenceSection,
-
+    styling: DessertStylingControls,
     colors: ColorsControls,
 };
