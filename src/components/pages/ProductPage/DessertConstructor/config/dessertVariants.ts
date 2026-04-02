@@ -44,6 +44,7 @@ export const dessertVariants: Record<string, {
         portionData: numberOfServingTrifles,
         controls: [
             { type: 'portions', title:'Выберите количество порций'},
+            { type: 'styling'},
             // { type: 'weight', title:'Выберите количество порций'},
             // { type: 'filling', title:'Выберите начинку', fillings: fillings},
             // { type: 'decorations', decorationsMode: 'split' },

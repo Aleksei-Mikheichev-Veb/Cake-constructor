@@ -142,7 +142,7 @@ export const SmudgesControls = ({ items, title }: SelectionProps) => {
 // Обёртка для декораций
 type DecorationsSectionProps = {
     decorationsMode?: 'split' | 'all';
-    title?: string; // опционально, если хочешь переопределить
+    title?: string;
 };
 
 export const DecorationsSection: React.FC<DecorationsSectionProps> = ({

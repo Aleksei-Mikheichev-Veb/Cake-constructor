@@ -1,26 +1,30 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../../../redux/store';
-import { setStylingOption } from '../../../../../../redux/cakeConstructorSlice';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../../../../redux/store';
+import {setStylingConfig, updateStylingGroup} from '../../../../../../redux/cakeConstructorSlice';
+import {smallDecorAdapter} from '../../../../../../redux/cakeConstructorSlice';
+import SelectionControls from '../TemplateControls/SelectionControls';
+import DecorationControls from '../DecorationControls/DecorationControls';
 import styles from './DessertStylingControls.module.scss';
+import {topColors} from "../../../../../../data/cupcakes/topColors";
 
 type StylingOption = 'all-same' | 'split-2' | 'split-3';
 
-const options = [
+const options: { id: StylingOption; title: string; description: string; example: string }[] = [
     {
-        id: 'all-same' as const,
+        id: 'all-same',
         title: 'Все одинаковые',
         description: 'Все десерты будут оформлены в едином стиле',
         example: 'Все десерты в одном стиле'
     },
     {
-        id: 'split-2' as const,
+        id: 'split-2',
         title: 'Два разных стиля',
         description: 'Разделить десерты на две группы',
         example: 'Примерно поровну'
     },
     {
-        id: 'split-3' as const,
+        id: 'split-3',
         title: 'Три разных стиля',
         description: 'Разделить десерты на три группы',
         example: 'Примерно поровну'
@@ -29,17 +33,41 @@ const options = [
 
 const DessertStylingControls = () => {
     const dispatch = useDispatch();
-    const selectedOption = useSelector((state: RootState) => state.cakeConstructor.stylingOption);
+    // const quantity = useSelector((s: RootState) => s.cakeConstructor.quantity || 6);
     const quantity = useSelector((state: RootState) => Number(state.cakeConstructor.quantity) || 6);
+    const stylingConfig = useSelector((s: RootState) => s.cakeConstructor.stylingConfig || []);
+
+    const [selectedOption, setSelectedOption] = useState<StylingOption>('all-same');
+
+    // Инициализация конфига при смене количества групп
+    useEffect(() => {
+        const groupsCount = selectedOption === 'all-same' ? 1 : selectedOption === 'split-2' ? 2 : 3;
+
+        if (stylingConfig.length !== groupsCount) {
+            const newConfig = Array.from({length: groupsCount}, () => ({
+                topColor: null,
+                decorations: smallDecorAdapter.getInitialState(),
+            }));
+            dispatch(setStylingConfig(newConfig));
+        }
+    }, [selectedOption, stylingConfig.length, dispatch]);
 
     const handleSelect = (option: StylingOption) => {
-        dispatch(setStylingOption(option));
+        setSelectedOption(option);
+        dispatch(setStylingConfig(null)); // сброс перед новой инициализацией
     };
+
+    const updateGroup = (groupIndex: number, field: 'topColor' | 'decorations', value: any) => {
+        dispatch(updateStylingGroup({groupIndex, [field]: value}));
+    };
+
+    const groupsCount = selectedOption === 'all-same' ? 1 : selectedOption === 'split-2' ? 2 : 3;
 
     return (
         <section className={styles.stylingSection}>
             <h2 className={styles.title}>Как украсить десерты?</h2>
 
+            {/* Карточки выбора стиля */}
             <div className={styles.optionsGrid}>
                 {options.map((option) => (
                     <div
@@ -54,48 +82,55 @@ const DessertStylingControls = () => {
                 ))}
             </div>
 
-            {/* Предпросмотр */}
-            {selectedOption && (
-                <div className={styles.preview}>
-                    <h4>Предпросмотр оформления:</h4>
+            {/* Группы с шапками и декорациями */}
+            <div className={styles.groupsContainer}>
+                {Array.from({length: groupsCount}).map((_, index) => {
+                    const group = stylingConfig[index] || {
+                        topColor: null,
+                        decorations: smallDecorAdapter.getInitialState()
+                    };
+                    const groupSize = Math.ceil(quantity / groupsCount);
 
-                    {selectedOption === 'all-same' && (
-                        <div className={styles.previewBox}>
-                            Все {quantity} десертов будут оформлены одинаково
-                        </div>
-                    )}
+                    return (
+                        <div key={index} className={styles.groupCard}>
+                            <h4>Группа {index + 1} ({groupSize} шт.)</h4>
 
-                    {selectedOption === 'split-2' && (
-                        <div className={styles.previewSplit}>
-                            <div className={styles.group}>
-                                <span>Группа 1 ({Math.ceil(quantity / 2)} шт.)</span>
-                                <div className={styles.styleBox}>Стиль A</div>
-                            </div>
-                            <div className={styles.group}>
-                                <span>Группа 2 ({Math.floor(quantity / 2)} шт.)</span>
-                                <div className={styles.styleBox}>Стиль B</div>
-                            </div>
-                        </div>
-                    )}
+                            {/* Кремовая шапка */}
+                            <SelectionControls
+                                title="Кремовая шапка"
+                                items={topColors}
+                                activeItemId={group.topColor?.id ?? null}
+                                setSelectedItem={(item) => updateGroup(index, 'topColor', item)}
+                                isColorSelected={true}
+                            />
 
-                    {selectedOption === 'split-3' && (
-                        <div className={styles.previewSplit}>
-                            <div className={styles.group}>
-                                <span>Группа 1</span>
-                                <div className={styles.styleBox}>Стиль A</div>
-                            </div>
-                            <div className={styles.group}>
-                                <span>Группа 2</span>
-                                <div className={styles.styleBox}>Стиль B</div>
-                            </div>
-                            <div className={styles.group}>
-                                <span>Группа 3</span>
-                                <div className={styles.styleBox}>Стиль C</div>
-                            </div>
+                            {/* Декорации */}
+                            <DecorationControls
+                                title="Декорации (до 5 шт.)"
+                                decorations="small"
+                                setActiveDecoration={(decoration) => {
+                                    const currentEntities = group.decorations.entities;
+                                    if (Object.keys(currentEntities).length >= 5) return;
+
+                                    smallDecorAdapter.addOne(group.decorations, {...decoration, count: 1});
+                                    updateGroup(index, 'decorations', group.decorations);
+                                }}
+                                removeDecoration={(id) => {
+                                    smallDecorAdapter.removeOne(group.decorations, id);
+                                    updateGroup(index, 'decorations', group.decorations);
+                                }}
+                                increment={(id) => {
+
+                                }}
+                                decrement={(id) => {
+
+                                }}
+                                activeDecoration={group.decorations}
+                            />
                         </div>
-                    )}
-                </div>
-            )}
+                    );
+                })}
+            </div>
         </section>
     );
 };

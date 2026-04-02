@@ -5,10 +5,11 @@ import {EntityState} from "@reduxjs/toolkit";
 import {decorationsMain, DecorationType, SelectedDecoration} from "../../../../../../data/decorationsMain";
 import {decorationsAdditional} from "../../../../../../data/decorationsAdditional";
 import {decorationsAll} from "../../../../../../data/decorationsAll";
+import {smallDecorations} from "../../../../../../data/cupcakes/smallDecorations";
 
 type DecorationControlsProps = {
     title:string;
-    decorations:'all' | 'main' | 'additional';
+    decorations:'all' | 'main' | 'additional' | 'small';
     setActiveDecoration:(decoration:DecorationType) => void;
     removeDecoration:(decorationId: string) => void;
     increment: (decorationId: string) => void;
@@ -36,6 +37,9 @@ const DecorationControls: FC<DecorationControlsProps> = ({
             break;
         case 'all':
             currentDecorations = decorationsAll;
+            break;
+        case 'small':
+            currentDecorations = smallDecorations;
             break;
         default:
             currentDecorations = decorationsAll;

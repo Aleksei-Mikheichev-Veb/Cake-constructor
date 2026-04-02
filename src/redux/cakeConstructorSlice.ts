@@ -14,12 +14,20 @@ export const additionalDecorAdapter = createEntityAdapter<SelectedDecoration, st
     selectId: (deco) => deco.id
 });
 
+export const smallDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
+    selectId: (deco) => deco.id
+});
+
 type TiersState = {
     layers: number;           // 1–4 яруса
     portions: number;         // общее количество порций
     layerFillings: Array<FillingType | null>; // начинка для каждого яруса
 };
 
+type StylingGroup = {
+    topColor: ItemType | null;           // кремовая шапка
+    decorations: EntityState<SelectedDecoration, string>;   // выбранные декорации для этой группы
+};
 
 export type ReferenceImage = {
     id: string;
@@ -53,7 +61,7 @@ type initialStateType = {
         numbers?: string;
     } | null;
     quantity: NumberOfServingDessertType | null;
-    stylingOption: 'all-same' | 'split-2' | 'split-3' | null;
+    stylingConfig: StylingGroup[] | null;
 }
 
 const initialState: initialStateType = {
@@ -77,7 +85,7 @@ const initialState: initialStateType = {
     gloss: null,
     chocolateText: null,
     quantity: null,
-    stylingOption: null
+    stylingConfig: null,
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -250,11 +258,27 @@ export const cakeConstructorSlice = createSlice({
             if (!state.chocolateText) state.chocolateText = {};
             state.chocolateText.numbers = action.payload;
         },
-        setStylingOption: (state, action) => { state.stylingOption = action.payload; },
         clearChocolateText: (state) => {
             state.chocolateText = null;
         },
+        setStylingConfig: (state, action: PayloadAction<StylingGroup[] | null>) => {
+            state.stylingConfig = action.payload;
+        },
+        updateStylingGroup: (state, action: PayloadAction<{
+            groupIndex: number;
+            topColor?: ItemType | null;
+            decorations?: EntityState<SelectedDecoration, string>;
+        }>) => {
+            const { groupIndex, topColor, decorations } = action.payload;
+            if (!state.stylingConfig || !state.stylingConfig[groupIndex]) return;
 
+            if (topColor !== undefined) {
+                state.stylingConfig[groupIndex].topColor = topColor;
+            }
+            if (decorations) {
+                state.stylingConfig[groupIndex].decorations = decorations;
+            }
+        },
         clearReferenceImages: (state) => {
             state.referenceImages = [];
         },
@@ -299,7 +323,8 @@ export const {
     setLayerFilling,
     setChocolateLetters,
     setChocolateNumbers,
-    setStylingOption,
+    setStylingConfig,
+    updateStylingGroup,
     clearChocolateText
 } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer

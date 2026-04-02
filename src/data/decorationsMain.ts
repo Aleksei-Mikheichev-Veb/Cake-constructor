@@ -3,7 +3,7 @@ export type DecorationType = {
     name: string;
     description: string;
     image: string;
-    price: number;
+    price?: number;
     minCount?:number;
     byThePiece?:boolean;
 };
