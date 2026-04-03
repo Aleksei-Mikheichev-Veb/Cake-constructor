@@ -1,6 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/store";
-import { addReferenceImage, removeReferenceImage, setColorsTemplate, setFilling, setOrderComment } from "../../../../../redux/cakeConstructorSlice";
+import {
+    addReferenceImage,
+    removeReferenceImage,
+    setColorsTemplate,
+    setCupcakeBase,
+    setCupcakeFilling,
+    setFilling,
+    setOrderComment,
+} from "../../../../../redux/cakeConstructorSlice";
 import ReferenceControls from "../../CakeConstructor/controls/ReferenceUpload/ReferenceUpload";
 import SelectionControls from "../../CakeConstructor/controls/TemplateControls/SelectionControls";
 import { FillingType } from "../../../../../data/cakes/biscuit/fillings";
@@ -26,7 +34,6 @@ type FillingSectionProps = {
 export const FillingSection = ({ title, fillings }:FillingSectionProps) => {
     const dispatch = useDispatch();
     const activeFilling = useSelector((s: RootState) => s.cakeConstructor.filling);
-    // const activeFilling = useSelector((s: RootState) => s.cakeConstructor.tiers?.layerFillings);
 
     return (
         <FillingControls
@@ -58,8 +65,38 @@ export const ColorsControls = ({ items, title, isColor }: SelectionProps) => {
 };
 
 // ─────────────────────────────────────────────
+// Обёртка для основы капкейка
+export const CupcakeBaseControls = ({ items, title }: SelectionProps) => {
+    const dispatch = useDispatch();
+    const activeBase = useSelector((s: RootState) => s.cakeConstructor.cupcakeBase);
 
+    return (
+        <SelectionControls
+            title={title}
+            items={items}
+            activeItemId={activeBase ?? null}
+            setSelectedItem={(itemId) => dispatch(setCupcakeBase(itemId))}
+        />
+    );
+};
 
+// ─────────────────────────────────────────────
+// Обёртка для начинки капкейка
+export const CupcakeFillingControls = ({ items, title }: SelectionProps) => {
+    const dispatch = useDispatch();
+    const activeFilling = useSelector((s: RootState) => s.cakeConstructor.cupcakeFilling);
+
+    return (
+        <SelectionControls
+            title={title}
+            items={items}
+            activeItemId={activeFilling ?? null}
+            setSelectedItem={(itemId) => dispatch(setCupcakeFilling(itemId))}
+        />
+    );
+};
+
+// ─────────────────────────────────────────────
 // Обёртка для референсов
 export const ReferenceSection = () => {
     const dispatch = useDispatch();
@@ -99,4 +136,6 @@ export const controlDessertComponents: Record<ControlType, React.FC<any>> = {
     reference: ReferenceSection,
     styling: DessertStylingControls,
     colors: ColorsControls,
+    cupcakeBase: CupcakeBaseControls,
+    cupcakeFilling: CupcakeFillingControls,
 };

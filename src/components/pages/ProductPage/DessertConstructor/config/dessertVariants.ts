@@ -1,6 +1,8 @@
-import { FillingType } from "../../../../../data/cakes/biscuit/fillings";
+import {fillings, FillingType} from "../../../../../data/cakes/biscuit/fillings";
 import { numberOfServingCupcakes, NumberOfServingDessertType } from "../../../../../data/cupcakes/numberOfServingCupcakes";
 import { numberOfServingTrifles } from "../../../../../data/trifles/numberOfServingTrifles";
+import { cupcakeBases } from "../../../../../data/cupcakes/cupcakeBases";
+import { cupcakeFillings } from "../../../../../data/cupcakes/cupcakeFillings";
 
 
 
@@ -9,14 +11,14 @@ export type ControlType =
     | 'filling'
     | 'colors'
     | 'styling'
-    // | 'decorations'
-    | 'reference';  
+    | 'cupcakeBase'
+    | 'cupcakeFilling'
+    | 'reference';
 
 export interface ControlConfig {
     type: ControlType;
     title?: string;
     fillings?:FillingType[];
-    // специфические пропсы для этого контрола
     items?: any[];
     isColor?: boolean;
     decorationsMode?: 'split' | 'all';
@@ -32,26 +34,24 @@ export const dessertVariants: Record<string, {
         title: 'Капкейки',
         portionData: numberOfServingCupcakes,
         controls: [
-            { type: 'portions', title:'Выберите количество порций'},
-            { type: 'styling'},
-            // { type: 'filling', title:'Выберите начинку', fillings: fillings},
-            // { type: 'decorations', decorationsMode: 'split' },
+            { type: 'portions', title: 'Выберите количество порций' },
+            { type: 'cupcakeBase', title: 'Выберите основу кекса', items: cupcakeBases },
+            { type: 'cupcakeFilling', title: 'Выберите начинку', items: cupcakeFillings },
+            { type: 'styling' },
             { type: 'reference' },
         ],
     },
     trifles: {
-        title: 'Капкейки',
+        title: 'Трайфлы',
         portionData: numberOfServingTrifles,
         controls: [
-            { type: 'portions', title:'Выберите количество порций'},
-            { type: 'styling'},
-            // { type: 'weight', title:'Выберите количество порций'},
-            // { type: 'filling', title:'Выберите начинку', fillings: fillings},
-            // { type: 'decorations', decorationsMode: 'split' },
+            { type: 'portions', title: 'Выберите количество порций' },
+            { type: 'filling', title: 'Выберите начинку', fillings: fillings },
+            { type: 'styling' },
             { type: 'reference' },
         ],
     },
-    
+
 }
 
 

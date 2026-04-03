@@ -22,7 +22,8 @@ export const selectDessertPriceRange = createSelector(
 
     (serving, subcategory, dessertType, quantity, mainDecors, addDecors, imagePreview, chocolateText) => {
 
-        const key: DessertType = (dessertType || subcategory) as DessertType;
+        // const key: DessertType = (dessertType || subcategory) as DessertType;
+        const key = (dessertType === 'cake' ? subcategory : dessertType) as DessertType;
         const config = dessertPriceConfig[key];
 
         if (!config) {

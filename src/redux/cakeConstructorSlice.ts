@@ -1,7 +1,6 @@
 import { createEntityAdapter, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
 import { FillingType } from "../data/cakes/biscuit/fillings";
-import { numberOfServing, NumberOfServingType } from "../data/cakes/biscuit/numberOfServing";
-import { ItemType } from "../data/templates";
+import { NumberOfServingType } from "../data/cakes/biscuit/numberOfServing";
 import { DecorationType, SelectedDecoration } from "../data/decorationsMain";
 import { getLayersForPortions, getMinPortionsForLayers } from "../utils/tieredUtils";
 import { NumberOfServingDessertType } from "../data/cupcakes/numberOfServingCupcakes";
@@ -19,14 +18,14 @@ export const smallDecorAdapter = createEntityAdapter<SelectedDecoration, string>
 });
 
 type TiersState = {
-    layers: number;           // 1–4 яруса
-    portions: number;         // общее количество порций
-    layerFillings: Array<FillingType | null>; // начинка для каждого яруса
+    layers: number;
+    portions: number;
+    layerFillings: Array<FillingType | null>;
 };
 
 type StylingGroup = {
-    topColor: ItemType | null;           // кремовая шапка
-    decorations: EntityState<SelectedDecoration, string>;   // выбранные декорации для этой группы
+    topColor: string | null;
+    decorations: EntityState<SelectedDecoration, string>;
 };
 
 export type ReferenceImage = {
@@ -62,6 +61,8 @@ type initialStateType = {
     } | null;
     quantity: NumberOfServingDessertType | null;
     stylingConfig: StylingGroup[] | null;
+    cupcakeBase: string | null;
+    cupcakeFilling: string | null;
 }
 
 const initialState: initialStateType = {
@@ -86,6 +87,8 @@ const initialState: initialStateType = {
     chocolateText: null,
     quantity: null,
     stylingConfig: null,
+    cupcakeBase: null,
+    cupcakeFilling: null,
 }
 
 export const cakeConstructorSlice = createSlice({
@@ -94,6 +97,16 @@ export const cakeConstructorSlice = createSlice({
     reducers: {
         setDessertType: (state, action: PayloadAction<'trifles' | 'cupcake' | 'cake' | null>) => {
             state.dessertType = action.payload;
+            // Для десертов (капкейки/трайфлы) сразу инициализируем stylingConfig
+            // с одной группой по умолчанию ("все одинаковые"),
+            if (action.payload === 'cupcake' || action.payload === 'trifles') {
+                if (!state.stylingConfig) {
+                    state.stylingConfig = [{
+                        topColor: null,
+                        decorations: smallDecorAdapter.getInitialState(),
+                    }];
+                }
+            }
         },
         setSubcategory: (state, action: PayloadAction<CakeSubcategory>) => {
             state.subcategory = action.payload;
@@ -148,7 +161,6 @@ export const cakeConstructorSlice = createSlice({
         },
         removeMainDecoration: (state, action: PayloadAction<string>) => {
             mainDecorAdapter.removeOne(state.mainDecorations, action.payload)
-
         },
         incrementMainDecoration: (state, action: PayloadAction<string>) => {
             const id = action.payload;
@@ -206,35 +218,29 @@ export const cakeConstructorSlice = createSlice({
         setOrderComment: (state, action: PayloadAction<string>) => {
             state.orderComment = action.payload;
         },
-
         addReferenceImage: (state, action: PayloadAction<ReferenceImage>) => {
             if (state.referenceImages.length < 3) {
                 state.referenceImages.push(action.payload);
             }
         },
-
         removeReferenceImage: (state, action: PayloadAction<string>) => {
             state.referenceImages = state.referenceImages.filter(img => img.id !== action.payload);
         },
         setTiers: (state, action: PayloadAction<TiersState>) => {
             state.tiers = action.payload;
         },
-
         setLayers: (state, action: PayloadAction<number>) => {
             if (!state.tiers) return;
             const newLayers = Math.max(1, Math.min(4, action.payload));
 
             state.tiers.layers = newLayers;
-            state.tiers.portions = getMinPortionsForLayers(newLayers); // минимальное значение для яруса
+            state.tiers.portions = getMinPortionsForLayers(newLayers);
 
-            // Если ярусов стало больше — добавляем пустые начинки
             while (state.tiers.layerFillings.length < newLayers) {
                 state.tiers.layerFillings.push(null);
             }
-            // Если меньше — обрезаем
             state.tiers.layerFillings = state.tiers.layerFillings.slice(0, newLayers);
         },
-
         setPortions: (state, action: PayloadAction<number>) => {
             if (!state.tiers) return;
             const newPortions = Math.max(10, Math.min(84, action.payload));
@@ -242,7 +248,6 @@ export const cakeConstructorSlice = createSlice({
             state.tiers.portions = newPortions;
             state.tiers.layers = getLayersForPortions(newPortions);
         },
-
         setLayerFilling: (state, action: PayloadAction<{ layerIndex: number; filling: FillingType }>) => {
             if (!state.tiers) return;
             const { layerIndex, filling } = action.payload;
@@ -266,7 +271,7 @@ export const cakeConstructorSlice = createSlice({
         },
         updateStylingGroup: (state, action: PayloadAction<{
             groupIndex: number;
-            topColor?: ItemType | null;
+            topColor?: string | null;
             decorations?: EntityState<SelectedDecoration, string>;
         }>) => {
             const { groupIndex, topColor, decorations } = action.payload;
@@ -279,10 +284,39 @@ export const cakeConstructorSlice = createSlice({
                 state.stylingConfig[groupIndex].decorations = decorations;
             }
         },
+        addStylingGroupDecoration: (state, action: PayloadAction<{
+            groupIndex: number;
+            decoration: DecorationType;
+        }>) => {
+            const { groupIndex, decoration } = action.payload;
+            if (!state.stylingConfig || !state.stylingConfig[groupIndex]) return;
+
+            const groupDecorations = state.stylingConfig[groupIndex].decorations;
+            if (groupDecorations.ids.length >= 5) return;
+            if (groupDecorations.entities[decoration.id]) return;
+
+            smallDecorAdapter.addOne(groupDecorations, { ...decoration, count: 1 });
+        },
+        removeStylingGroupDecoration: (state, action: PayloadAction<{
+            groupIndex: number;
+            decorationId: string;
+        }>) => {
+            const { groupIndex, decorationId } = action.payload;
+            if (!state.stylingConfig || !state.stylingConfig[groupIndex]) return;
+
+            smallDecorAdapter.removeOne(state.stylingConfig[groupIndex].decorations, decorationId);
+        },
+        // Капкейки: основа и начинка
+        setCupcakeBase: (state, action: PayloadAction<string>) => {
+            state.cupcakeBase = action.payload;
+        },
+        setCupcakeFilling: (state, action: PayloadAction<string>) => {
+            state.cupcakeFilling = action.payload;
+        },
         clearReferenceImages: (state) => {
             state.referenceImages = [];
         },
-        resetCakeConstructor: (state) => {
+        resetCakeConstructor: () => {
             return initialState;
         }
     }
@@ -325,6 +359,10 @@ export const {
     setChocolateNumbers,
     setStylingConfig,
     updateStylingGroup,
-    clearChocolateText
+    addStylingGroupDecoration,
+    removeStylingGroupDecoration,
+    clearChocolateText,
+    setCupcakeBase,
+    setCupcakeFilling,
 } = cakeConstructorSlice.actions
 export default cakeConstructorSlice.reducer
