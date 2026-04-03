@@ -14,8 +14,8 @@ import SelectionControls from "../../CakeConstructor/controls/TemplateControls/S
 import { FillingType } from "../../../../../data/cakes/biscuit/fillings";
 import FillingControls from "../../CakeConstructor/controls/FillingControls/FillingControls";
 import { ControlType } from "./dessertVariants";
-import PorionsControls from "../../CakeConstructor/controls/ProtionsControl/PortionsControls";
 import DessertStylingControls from "../../CakeConstructor/controls/DessertStylingControls/DessertStylingControls";
+import PortionsControls from "../../CakeConstructor/controls/PortionsControl/PortionsControls";
 
 // Тип пропсов для SelectionControls-обёрток
 type SelectionProps = {
@@ -131,7 +131,7 @@ export const ReferenceSection = () => {
 // ─────────────────────────────────────────────
 // Экспорт маппинга компонентов
 export const controlDessertComponents: Record<ControlType, React.FC<any>> = {
-    portions: PorionsControls,
+    portions: PortionsControls,
     filling: FillingSection,
     reference: ReferenceSection,
     styling: DessertStylingControls,

@@ -13,7 +13,7 @@ type PortionsControlsProps = {
     title: string;
 };
 
-const PorionsControls: FC<PortionsControlsProps> = ({ title }) => {
+const PortionsControls: FC<PortionsControlsProps> = ({ title }) => {
     const dispatch = useDispatch();
     const {category} = useParams<{category: string}>()
 
@@ -54,4 +54,4 @@ const PorionsControls: FC<PortionsControlsProps> = ({ title }) => {
     );
 };
 
-export default PorionsControls;
+export default PortionsControls;
