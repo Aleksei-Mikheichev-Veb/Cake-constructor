@@ -1,5 +1,3 @@
-import { NumberOfServingType } from "../cakes/biscuit/numberOfServing";
-
 export type NumberOfServingDessertType = {
     id: number;
     quantity: string;
