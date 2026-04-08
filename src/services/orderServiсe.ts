@@ -1,7 +1,6 @@
 import { RootState } from '../redux/store';
 import { mainDecorAdapter, additionalDecorAdapter } from '../redux/cakeConstructorSlice';
 
-// === Импорты данных для резолва ID → название ===
 import { templates } from '../data/templates';
 import { smudges } from '../data/smudges';
 import { colors } from '../data/cakes/biscuit/colors';
@@ -13,8 +12,7 @@ import { shapeTiered } from '../data/cakes/tiered/shapeTiered';
 import { topColors } from '../data/cupcakes/topColors';
 import { cupcakeBases } from '../data/cupcakes/cupcakeBases';
 import { cupcakeFillings } from '../data/cupcakes/cupcakeFillings';
-import { OrderData, OrderResponse, OrderStylingGroup } from './../../../../cake-backend/src/types/order';
-
+import { OrderResponse, OrderStylingGroup } from '../types/order';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
