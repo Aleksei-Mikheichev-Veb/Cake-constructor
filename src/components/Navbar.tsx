@@ -9,7 +9,7 @@ const Menu = styled.nav`
   left: 50%;
   transform: translate(-50%, 0%);
   z-index: 5;
-  background: #000;
+//   background: #000;
 
   .list {
     width: 1500px;
@@ -25,18 +25,18 @@ const Menu = styled.nav`
       padding-left: 15px;
       font-size: 28px;
       font-family: Pacifico;
-      color: #fff;
+      color: #0C0B0B;
       text-decoration: none;
       transition: transform 0.3s ease;
       &:hover{
-        color: #e7b7f6;
+        color: #fff;
         transform: scale(1.05);
       }
     }
     
     a.active {
       font-size: 32px;
-      color: #e7b7f6;
+      color: #fff;
     }
   }
 `

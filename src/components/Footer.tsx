@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const FooterScreen = styled.footer`
     margin-top: 100px;
-    background-color: #333;
+    // background-color: #333;
     color: white;
     padding: 50px;
     text-align: center;

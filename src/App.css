@@ -1,19 +1,25 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
 
-*{
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    /* background: linear-gradient(to bottom, #A4D3FD, #BCE1FE, #F8B8D4, #FFCADE, #CEB5DC); */
+    background: linear-gradient(to bottom,
+            #A4D3FD 0%,
+            #BCE1FE 25%,
+            #FDB1CD 50%,
+            #FFCADE 75%,
+            #CEB5DC 100%);
 }
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
+
 .App {
-  /*text-align: center;*/
-  /*width: 1200px;*/
-  /*margin: 0 auto;*/
+    /*text-align: center;*/
+    /*width: 1200px;*/
+    /*margin: 0 auto;*/
 }
-
-
-

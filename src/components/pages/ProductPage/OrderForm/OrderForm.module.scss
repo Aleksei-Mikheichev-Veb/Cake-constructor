@@ -1,176 +1,214 @@
 .orderForm {
-  padding: 24px;
-  max-width: 460px;
-  width: 100%;
-  margin: 0 auto;
+    padding: 24px;
+    max-width: 460px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .title {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-align: center;
 }
 
 .priceInfo {
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 24px;
-  padding: 12px;
-  background: linear-gradient(135deg, #f3e8ff, #fce7f3);
-  border-radius: 12px;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 24px;
+    padding: 12px;
+    background: linear-gradient(135deg, #f3e8ff, #fce7f3);
+    border-radius: 12px;
 
-  strong {
-    font-size: 22px;
-    background: linear-gradient(135deg, #9333ea, #ec4899);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+    strong {
+        font-size: 22px;
+        background: linear-gradient(135deg, #9333ea, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 }
 
 .field {
-  margin-bottom: 16px;
+    margin-bottom: 16px;
 }
 
 .label {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: #374151;
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #374151;
 }
 
 .required {
-  color: #ef4444;
+    color: #ef4444;
 }
 
 .input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1.5px solid #d1d5db;
-  border-radius: 10px;
-  font-size: 15px;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
 
-  &:focus {
-    outline: none;
-    border-color: #9333ea;
-    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
-  }
+    &:focus {
+        outline: none;
+        border-color: #9333ea;
+        box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+    }
 
-  &::placeholder {
-    color: #9ca3af;
-  }
+    &::placeholder {
+        color: #9ca3af;
+    }
+}
+
+.inputError {
+    border-color: #ef4444;
+
+    &:focus {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+}
+
+.fieldError {
+    display: block;
+    color: #ef4444;
+    font-size: 13px;
+    margin-top: 4px;
 }
 
 .error {
-  color: #ef4444;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 12px;
-  padding: 8px;
-  background: #fef2f2;
-  border-radius: 8px;
+    color: #ef4444;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 12px;
+    padding: 8px;
+    background: #fef2f2;
+    border-radius: 8px;
 }
 
 .actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
 }
 
 .cancelButton,
 .submitButton {
-  flex: 1;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
 
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
 }
 
 .cancelButton {
-  background: #f3f4f6;
-  color: #374151;
+    background: #f3f4f6;
+    color: #374151;
 
-  &:hover:not(:disabled) {
-    background: #e5e7eb;
-  }
+    &:hover:not(:disabled) {
+        background: #e5e7eb;
+    }
 }
 
 .submitButton {
-  background: linear-gradient(135deg, #9333ea, #ec4899);
-  color: white;
+    background: linear-gradient(135deg, #9333ea, #ec4899);
+    color: white;
 
-  &:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
-  }
+    &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+    }
 }
 
-// Экран когда удачно
+// === Спиннер ===
+.spinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
 
+.spinnerDot {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// === Экран успеха ===
 .successBlock {
-  text-align: center;
-  padding: 20px 0;
+    text-align: center;
+    padding: 20px 0;
 }
 
 .successIcon {
-  font-size: 48px;
-  margin-bottom: 16px;
+    font-size: 48px;
+    margin-bottom: 16px;
 }
 
 .successTitle {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 8px;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .successText {
-  color: #6b7280;
-  font-size: 15px;
-  margin-bottom: 24px;
+    color: #6b7280;
+    font-size: 15px;
+    margin-bottom: 24px;
 }
 
 .vkButton {
-  display: inline-block;
-  padding: 12px 28px;
-  background: #0077ff;
-  color: white;
-  text-decoration: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 500;
-  margin-bottom: 12px;
-  transition: all 0.2s;
+    display: inline-block;
+    padding: 12px 28px;
+    background: #0077ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    transition: all 0.2s;
 
-  &:hover {
-    background: #0066dd;
-    transform: translateY(-1px);
-  }
+    &:hover {
+        background: #0066dd;
+        transform: translateY(-1px);
+    }
 }
 
 .closeButton {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 12px;
-  background: #f3f4f6;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  cursor: pointer;
-  color: #374151;
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    cursor: pointer;
+    color: #374151;
 
-  &:hover {
-    background: #e5e7eb;
-  }
+    &:hover {
+        background: #e5e7eb;
+    }
 }
