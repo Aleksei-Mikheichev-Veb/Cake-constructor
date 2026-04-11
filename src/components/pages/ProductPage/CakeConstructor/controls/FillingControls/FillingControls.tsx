@@ -39,15 +39,40 @@ const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillin
                 </button>
 
                 <Swiper
-                    modules={[Navigation]} // Подключаем модули
-                    spaceBetween={10} // Отступ между слайдами
-                    slidesPerView={6} // Количество видимых слайдов
+                    modules={[Navigation]}
+                    spaceBetween={16}
+                    slidesPerView={6}
+                    breakpoints={{
+                        0: {
+                            slidesPerView: 2,
+                            spaceBetween: 10,
+                        },
+                        400: {
+                            slidesPerView: 2.5,
+                            spaceBetween: 12,
+                        },
+                        520: {
+                            slidesPerView: 3,
+                            spaceBetween: 14,
+                        },
+                        700: {
+                            slidesPerView: 4,
+                            spaceBetween: 14,
+                        },
+                        1020: {
+                            slidesPerView: 5,
+                            spaceBetween: 16,
+                        },
+                        1200: {
+                            slidesPerView: 6,
+                            spaceBetween: 16,
+                        },
+                    }}
                     navigation={{
                         prevEl: prevRef.current,
                         nextEl: nextRef.current,
                     }}
                     onBeforeInit={(swiper: any) => {
-                        // Подключаем кнопки к swiper при инициализации
                         if (swiper.params.navigation) {
                             (swiper.params.navigation as any).prevEl = prevRef.current;
                             (swiper.params.navigation as any).nextEl = nextRef.current;
@@ -58,11 +83,10 @@ const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillin
                         setIsEnd(swiper.isEnd);
                     }}
                     onAfterInit={(swiper: any) => {
-                        // Установим начальные состояния
                         setIsBeginning(swiper.isBeginning);
                         setIsEnd(swiper.isEnd);
                     }}
-                    pagination={{clickable: true}} // Включаем точки пагинации
+                    pagination={{clickable: true}}
                     className={styles.swiper}
                 >
                     {fillings.map(filling => (
@@ -70,7 +94,6 @@ const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillin
                             <FillingSlide
                                 filling={filling}
                                 activeFillingId={activeFillingId}
-                                // activeFillingId={activeFillingId && activeFillingId.id}
                                 handleFillingClick={setActiveFilling}/>
                         </SwiperSlide>
                     ))}

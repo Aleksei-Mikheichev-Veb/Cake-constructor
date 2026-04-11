@@ -1,0 +1,103 @@
+$primary: #9333ea;
+$secondary: #ec4899;
+
+.addText {
+    margin-bottom: 36px;
+
+    &_title {
+        // font-size: 20px;
+        // font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 20px;
+    }
+}
+
+// ─── Поле ввода с плавающим лейблом ──────────
+.form__group {
+    position: relative;
+    padding: 20px 0 0;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 480px;
+}
+
+.form__field {
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid #d1d5db;
+    outline: 0;
+    font-size: 16px;
+    color: #1f2937;
+    padding: 8px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+
+    &::placeholder {
+        color: transparent;
+    }
+
+    &:placeholder-shown ~ .form__label {
+        font-size: 16px;
+        cursor: text;
+        top: 28px;
+    }
+}
+
+.form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 13px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.form__field:focus {
+    ~ .form__label {
+        position: absolute;
+        top: 0;
+        display: block;
+        transition: 0.2s;
+        font-size: 13px;
+        color: $primary;
+        font-weight: 600;
+    }
+
+    padding-bottom: 7px;
+    border-width: 2px;
+    border-image: linear-gradient(to right, $primary, $secondary);
+    border-image-slice: 1;
+}
+
+.form__field {
+    &:required,
+    &:invalid {
+        box-shadow: none;
+    }
+}
+
+// =============================================
+// Адаптив
+// =============================================
+@media (max-width: 768px) {
+    .addText {
+        margin-bottom: 28px;
+    }
+
+    .addText_title {
+        font-size: 18px;
+    }
+
+    .form__group {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .form__field {
+        font-size: 15px;
+    }
+}

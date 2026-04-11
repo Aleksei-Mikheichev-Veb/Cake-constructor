@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styles from './AddImage.module.scss';
+import styles from './PhotoPrintControls.module.scss';
 import {RootState} from "../../../../../../redux/store";
 import {setImagePreview} from "../../../../../../redux/cakeConstructorSlice";
 

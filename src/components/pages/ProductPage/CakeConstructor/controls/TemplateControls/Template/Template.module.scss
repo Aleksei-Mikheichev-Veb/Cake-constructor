@@ -1,174 +1,348 @@
 .slide {
-  width: 180px;
-  //height: 300px; // Фиксированная высота
-  cursor: pointer;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid transparent;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
+    cursor: pointer;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: #e0e0e0;
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 
-    .imageContainer .overlay {
-      opacity: 1;
-    }
-  }
+        .overlay {
+            opacity: 1;
+        }
 
-  &_active {
-    border-color: #4f46e5;
-    box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
-
-    .imageContainer .overlay {
-      opacity: 1;
-      background: rgba(79, 70, 229, 0.9);
+        .image {
+            transform: scale(1.05);
+        }
     }
 
-    .checkmark {
-      opacity: 1;
-      transform: scale(1);
-    }
+    // Активное состояние
+    &_active {
+        border-color: transparent;
+        box-shadow: 0 4px 20px rgba(147, 51, 234, 0.2), 0 0 0 2px rgba(147, 51, 234, 0.6);
 
-    .activeBadge {
-      opacity: 1;
-      transform: translateY(0);
+        .overlay {
+            opacity: 1;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.8), rgba(236, 72, 153, 0.7));
+        }
+
+        .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .activeBadge {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-  }
 }
 
+//Изображение
 .imageContainer {
-  position: relative;
-  width: calc(100% - 24px);
-  height: 156px; // Фиксированная высота для изображения
-  overflow: hidden;
-  border-radius: 12px;
-  margin: 12px 12px 0 12px;
-  flex-shrink: 0; // Не сжимается
+    position: relative;
+    width: calc(100% - 16px);
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    margin: 8px 8px 0;
+    flex-shrink: 0;
 }
 
 .image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-
-  .slide:hover & {
-    transform: scale(1.05);
-  }
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
 }
 
 .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: all 0.3s ease;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
 }
 
 .checkmark {
-  width: 48px;
-  height: 48px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4f46e5;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9333ea;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .activeBadge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: #4f46e5;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  opacity: 0;
-  transform: translateY(-8px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: #fff;
+    background: linear-gradient(135deg, #9333ea, #ec4899);
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(147, 51, 234, 0.3);
 }
 
+// Контент
 .content {
-  padding: 16px 16px 20px;
-  text-align: center;
-  flex: 1; // Занимает оставшееся место
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; // Распределяем пространство между элементами
-  min-height: 0; // Позволяет контенту сжиматься
+    padding: 12px 12px 16px;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
 }
 
 .name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-align: center;
-  flex-grow: 1; // Название занимает доступное пространство
-  max-height: 44px; // Максимальная высота для двух строк (16px * 1.4 * 2)
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-
-// Адаптивность
+// =============================================
+// Адаптив
+// =============================================
 @media (max-width: 768px) {
-  .slide {
-    width: 160px;
-    height: 260px;
-  }
+    .imageContainer {
+        aspect-ratio: 1 / 0.9;
+    }
 
-  .imageContainer {
-    height: 136px;
-  }
+    .name {
+        font-size: 13px;
+    }
 
-  .name {
-    font-size: 14px;
-  }
-
+    .checkmark {
+        width: 36px;
+        height: 36px;
+    }
 }
 
 @media (max-width: 480px) {
-  .slide {
-    width: 140px;
-    height: 240px;
-  }
+    .slide {
+        border-radius: 12px;
+    }
 
-  .imageContainer {
-    margin: 8px;
-    width: calc(100% - 16px);
-    height: 116px;
-  }
+    .imageContainer {
+        margin: 6px 6px 0;
+        width: calc(100% - 12px);
+        border-radius: 10px;
+    }
 
-  .content {
-    padding: 12px;
-  }
+    .content {
+        padding: 8px 8px 12px;
+    }
 
-  .name {
-    font-size: 13px;
-  }
+    .name {
+        font-size: 12px;
+    }
+
+    .activeBadge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
 }
+
+// .slide {
+//   width: 180px;
+//   //height: 300px; // Фиксированная высота
+//   cursor: pointer;
+//   border-radius: 16px;
+//   background: #ffffff;
+//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+//   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+//   border: 2px solid transparent;
+//   overflow: hidden;
+//   position: relative;
+//   display: flex;
+//   flex-direction: column;
+
+//   &:hover {
+//     transform: translateY(-4px);
+//     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+//     border-color: #e0e0e0;
+
+//     .imageContainer .overlay {
+//       opacity: 1;
+//     }
+//   }
+
+//   &_active {
+//     border-color: #4f46e5;
+//     box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+
+//     .imageContainer .overlay {
+//       opacity: 1;
+//       background: rgba(79, 70, 229, 0.9);
+//     }
+
+//     .checkmark {
+//       opacity: 1;
+//       transform: scale(1);
+//     }
+
+//     .activeBadge {
+//       opacity: 1;
+//       transform: translateY(0);
+//     }
+//   }
+// }
+
+// .imageContainer {
+//   position: relative;
+//   width: calc(100% - 24px);
+//   height: 156px; // Фиксированная высота для изображения
+//   overflow: hidden;
+//   border-radius: 12px;
+//   margin: 12px 12px 0 12px;
+//   flex-shrink: 0; // Не сжимается
+// }
+
+// .image {
+//   width: 100%;
+//   height: 100%;
+//   object-fit: cover;
+//   transition: transform 0.3s ease;
+
+//   .slide:hover & {
+//     transform: scale(1.05);
+//   }
+// }
+
+// .overlay {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   background: rgba(0, 0, 0, 0.4);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   opacity: 0;
+//   transition: all 0.3s ease;
+// }
+
+// .checkmark {
+//   width: 48px;
+//   height: 48px;
+//   background: white;
+//   border-radius: 50%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   color: #4f46e5;
+//   opacity: 0;
+//   transform: scale(0.8);
+//   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+// }
+
+// .activeBadge {
+//   position: absolute;
+//   top: 8px;
+//   right: 8px;
+//   background: #4f46e5;
+//   color: white;
+//   padding: 4px 8px;
+//   border-radius: 12px;
+//   font-size: 11px;
+//   font-weight: 600;
+//   text-transform: uppercase;
+//   letter-spacing: 0.5px;
+//   opacity: 0;
+//   transform: translateY(-8px);
+//   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+// }
+
+// .content {
+//   padding: 16px 16px 20px;
+//   text-align: center;
+//   flex: 1; // Занимает оставшееся место
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between; // Распределяем пространство между элементами
+//   min-height: 0; // Позволяет контенту сжиматься
+// }
+
+// .name {
+//   font-size: 16px;
+//   font-weight: 600;
+//   color: #1f2937;
+//   margin: 0;
+//   line-height: 1.4;
+//   display: -webkit-box;
+//   -webkit-line-clamp: 2;
+//   -webkit-box-orient: vertical;
+//   overflow: hidden;
+//   text-align: center;
+//   flex-grow: 1; // Название занимает доступное пространство
+//   max-height: 44px; // Максимальная высота для двух строк (16px * 1.4 * 2)
+// }
+
+
+// // Адаптивность
+// @media (max-width: 768px) {
+//   .slide {
+//     width: 160px;
+//     height: 260px;
+//   }
+
+//   .imageContainer {
+//     height: 136px;
+//   }
+
+//   .name {
+//     font-size: 14px;
+//   }
+
+// }
+
+// @media (max-width: 480px) {
+//   .slide {
+//     width: 140px;
+//     height: 240px;
+//   }
+
+//   .imageContainer {
+//     margin: 8px;
+//     width: calc(100% - 16px);
+//     height: 116px;
+//   }
+
+//   .content {
+//     padding: 12px;
+//   }
+
+//   .name {
+//     font-size: 13px;
+//   }
+// }

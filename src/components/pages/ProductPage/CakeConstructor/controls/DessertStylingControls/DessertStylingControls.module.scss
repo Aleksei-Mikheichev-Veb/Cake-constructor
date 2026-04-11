@@ -1,111 +1,144 @@
+// =============================================
+// DessertStylingControls — стилизация десертов
+// Стиль: gradient accent #9333ea → #ec4899
+// =============================================
+
 .stylingSection {
-    margin-top: 32px;
-    padding: 24px;
-    background: #ffffff;
-    border-radius: 16px;
-    border: 1px solid #f0f0f0;
+    margin-top: 36px;
+    margin-bottom: 36px;
 }
 
 .title {
-    font-size: 1.35rem;
+    font-size: 20px;
     font-weight: 600;
+    color: #1a1a2e;
     margin-bottom: 20px;
-    color: #333;
 }
 
+// ─── Карточки выбора стиля ───────────────────
 .optionsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
     margin-bottom: 28px;
 }
 
 .optionCard {
-    padding: 20px;
-    border: 2px solid #e5e5e5;
-    border-radius: 12px;
+    padding: 18px;
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px #e5e7eb;
 
     &:hover {
-        border-color: #ff6b6b;
+        box-shadow: inset 0 0 0 1px #c084fc;
         transform: translateY(-2px);
     }
 
     &.active {
-        border-color: #ff6b6b;
-        background: #fff5f5;
+        box-shadow: inset 0 0 0 2px rgba(147, 51, 234, 0.6), 0 4px 16px rgba(147, 51, 234, 0.15);
+        background: linear-gradient(135deg, #faf5ff, #fdf2f8);
     }
 
     h3 {
-        margin: 0 0 8px;
-        font-size: 1.1rem;
-        color: #222;
+        margin: 0 0 6px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #1f2937;
     }
 
     .description {
-        font-size: 0.95rem;
-        color: #555;
-        margin-bottom: 8px;
+        font-size: 13px;
+        color: #6b7280;
+        margin: 0 0 6px;
+        line-height: 1.4;
     }
 
     .example {
-        font-size: 0.85rem;
-        color: #888;
+        font-size: 12px;
+        color: #9ca3af;
         font-style: italic;
+        margin: 0;
     }
 }
 
-.preview {
-    margin-top: 24px;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 12px;
-    border: 1px solid #eee;
-
-    h4 {
-        margin: 0 0 16px;
-        font-size: 1rem;
-        color: #444;
-    }
-}
-
-.previewBox {
-    padding: 16px;
-    background: white;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 1.05rem;
-    color: #333;
-}
-
-.previewSplit {
+// ─── Группы стилизации ───────────────────────
+.groupsContainer {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
-.group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: white;
-    border-radius: 10px;
-    border: 1px solid #eee;
+.groupCard {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 
-    span {
-        font-weight: 500;
-        min-width: 140px;
+    h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin: 0 0 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+}
+
+// =============================================
+// Адаптив
+// =============================================
+@media (max-width: 768px) {
+    .stylingSection {
+        margin-top: 28px;
+        margin-bottom: 28px;
     }
 
-    .styleBox {
-        flex: 1;
+    .title {
+        font-size: 18px;
+    }
+
+    .optionsGrid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .optionCard {
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        h3 {
+            font-size: 14px;
+        }
+    }
+
+    .groupCard {
+        padding: 16px;
+
+        h4 {
+            font-size: 15px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .optionCard {
         padding: 12px;
-        background: #f0f0f0;
-        border-radius: 8px;
-        text-align: center;
-        font-size: 1rem;
-        color: #555;
+
+        .description {
+            font-size: 12px;
+        }
+    }
+
+    .groupCard {
+        padding: 12px;
     }
 }

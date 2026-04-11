@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import styles from './AddInscriptions.module.scss';
+import styles from './CreamTextControls.module.scss';
 import InputColor from "../../../../../UI/inputs/InputColor/InputColor";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../../../redux/store";

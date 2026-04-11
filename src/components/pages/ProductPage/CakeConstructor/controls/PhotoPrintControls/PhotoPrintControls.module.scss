@@ -1,0 +1,165 @@
+// =============================================
+// PhotoPrintControls — фотопечать
+// Стиль: gradient accent #9333ea → #ec4899
+// =============================================
+
+.addImage {
+    margin-bottom: 36px;
+
+    &_title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 20px;
+
+        // Цена как акцент
+        // «Фотопечать + 650 руб» — если нужно выделить цену
+    }
+
+    &_container {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    &_input {
+        display: none;
+    }
+
+    &_icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.03);
+        border: 2px dashed #d1d5db;
+        cursor: pointer;
+        transition: border-color 0.25s, background 0.25s;
+        flex-shrink: 0;
+
+        svg {
+            fill: #9ca3af;
+            transition: fill 0.25s;
+        }
+
+        &:hover {
+            border-color: #9333ea;
+            background: #faf5ff;
+
+            svg {
+                fill: #9333ea;
+            }
+        }
+    }
+
+    &_imageBox {
+        position: relative;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    &_preview {
+        width: 64px;
+        height: 64px;
+        border-radius: 14px;
+        object-fit: cover;
+        border: 2px solid rgba(0, 0, 0, 0.06);
+        display: block;
+    }
+
+    &_delete {
+        position: absolute;
+        top: -7px;
+        right: -7px;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ef4444;
+        color: #fff;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        font-size: 0;
+        cursor: pointer;
+        transition: background 0.2s;
+        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+
+        // Рисуем крестик через псевдоэлементы — всегда ровный
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 2px;
+            background: #fff;
+            border-radius: 1px;
+        }
+
+        &::before {
+            transform: rotate(45deg);
+        }
+
+        &::after {
+            transform: rotate(-45deg);
+        }
+
+        &:hover {
+            background: #dc2626;
+        }
+    }
+}
+
+// =============================================
+// Адаптив
+// =============================================
+@media (max-width: 768px) {
+    .addImage {
+        margin-bottom: 28px;
+    }
+
+    .addImage_title {
+        font-size: 18px;
+    }
+
+    .addImage_icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+
+        svg {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    .addImage_preview {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .addImage_container {
+        gap: 12px;
+    }
+
+    .addImage_icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+
+        svg {
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    .addImage_preview {
+        width: 48px;
+        height: 48px;
+    }
+}

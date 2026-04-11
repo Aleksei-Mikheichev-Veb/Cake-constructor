@@ -12,8 +12,8 @@
   }
 
   &_input {
-    width: 70px;
-    height: 70px;
+    width: 56px;
+    height: 56px;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -61,4 +61,35 @@
   100% {
     box-shadow: 0 0 0 0 var(--pulse-color-alpha-0);
   }
+}
+
+// =============================================
+// Адаптив
+// =============================================
+@media (max-width: 768px) {
+    .inputColor_input {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+    }
+
+    .inputColor_value {
+        width: 48px;
+        font-size: 11px;
+    }
+
+    .inputColor_label {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .inputColor_input {
+        width: 44px;
+        height: 44px;
+    }
+
+    .inputColor_value {
+        width: 44px;
+    }
 }

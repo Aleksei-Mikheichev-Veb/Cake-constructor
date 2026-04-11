@@ -1,14 +1,37 @@
-.portionControls{
+// =============================================
+// PortionsControls — выбор количества (капкейки/трайфлы)
+// =============================================
 
-  margin-bottom: 30px;
-  &_title{
-    margin-bottom: 20px;
-  }
-  &_row{
-    display: flex;
-    gap: 5px;
-    padding: 10px;
-  }
+.portionControls {
+    margin-bottom: 36px;
+
+    &_title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 20px;
+    }
+
+    &_row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 }
 
+// =============================================
+// Адаптив
+// =============================================
+@media (max-width: 768px) {
+    .portionControls {
+        margin-bottom: 28px;
+    }
 
+    .portionControls_title {
+        font-size: 18px;
+    }
+
+    .portionControls_row {
+        gap: 6px;
+    }
+}

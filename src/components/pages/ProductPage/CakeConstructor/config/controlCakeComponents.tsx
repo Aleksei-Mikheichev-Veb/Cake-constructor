@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/store";
 import WeightControls from "../controls/WeightControls/WeightControls";
 import FillingControls from "../controls/FillingControls/FillingControls";
-import CreamTextControls from "../controls/AddInscriptions/AddInscriptions";
+import CreamTextControls from "../controls/CreamTextControls/CreamTextControls";
 import PhotoprintControls from "../controls/PhotoPrintControls/PhotoPrintControls";
 import SelectionControls from "../controls/TemplateControls/SelectionControls";
 import { ControlType } from "./cakeVariants";

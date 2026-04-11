@@ -1,12 +1,42 @@
-.decorationControls{
-  margin-bottom: 30px;
-  &_title{
-    margin-bottom: 20px;
-  }
 
-  &_decorations{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap:15px;
-  }
+.decorationControls {
+    margin-bottom: 36px;
+
+    &_title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 20px;
+    }
+
+    &_decorations {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+        gap: 16px;
+    }
+}
+
+// =============================================
+// Адаптив
+// =============================================
+@media (max-width: 768px) {
+    .decorationControls {
+        margin-bottom: 28px;
+    }
+
+    .decorationControls_title {
+        font-size: 18px;
+    }
+
+    .decorationControls_decorations {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .decorationControls_decorations {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
 }

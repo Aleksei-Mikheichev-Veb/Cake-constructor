@@ -9,17 +9,17 @@ body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    /* background: linear-gradient(to bottom, #A4D3FD, #BCE1FE, #F8B8D4, #FFCADE, #CEB5DC); */
     background: linear-gradient(to bottom,
             #A4D3FD 0%,
             #BCE1FE 25%,
             #FDB1CD 50%,
             #FFCADE 75%,
             #CEB5DC 100%);
+    min-height: 100vh;
 }
 
 .App {
-    /*text-align: center;*/
-    /*width: 1200px;*/
-    /*margin: 0 auto;*/
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }

@@ -1,33 +1,40 @@
+// =============================================
+// Global layout
+// =============================================
+
 .container {
-    width: 1200px;
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding-top: 100px;
+    padding: 84px 24px 80px; // top: navbar(64) + gap(20), bottom: отступ до footer
+    box-sizing: border-box;
 
-    @media (max-width: 1199px) {
-        width: 960px;
+    @media (max-width: 768px) {
+        padding: 80px 16px 60px;
     }
 
-    @media (max-width: 991px) {
-        width: 720px;
-    }
-
-    @media (max-width: 767px) {
-        width: 100%;
-        padding: 20px;
-    }
-
-    @media (max-width: 479px) {
-        padding: 10px;
+    @media (max-width: 480px) {
+        padding: 74px 12px 48px;
     }
 }
 
 .title {}
 
 .categoriesList {
-    padding-top: 100px;
+    padding-top: 80px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    gap: 16px;
+
+    @media (max-width: 960px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 600px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding-top: 40px;
+    }
 }
 
 .visually_hidden {

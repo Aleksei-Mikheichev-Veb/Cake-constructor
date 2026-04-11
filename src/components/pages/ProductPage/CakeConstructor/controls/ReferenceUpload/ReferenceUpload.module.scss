@@ -1,122 +1,244 @@
+// =============================================
+// ReferenceUpload — референсное фото
+// Стиль: gradient accent #9333ea → #ec4899
+// =============================================
+
 .referenceBlock {
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background: #f9fafb;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+    margin: 36px 0;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .title {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
+    margin: 0 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a2e;
 }
 
 .hint {
-  margin: 0 0 1rem;
-  color: #6b7280;
-  font-size: 0.95rem;
+    margin: 0 0 16px;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
+// ─── Дропзона ────────────────────────────────
 .dropzone {
-  border: 2px dashed #d1d5db;
-  border-radius: 8px;
-  padding: 2rem;
-  text-align: center;
-  transition: all 0.2s;
+    border: 2px dashed #d1d5db;
+    border-radius: 14px;
+    padding: 24px 16px;
+    text-align: center;
+    transition: all 0.2s;
 
-  &.dropzoneActive {
-    border-color: #3b82f6;
-    background: #eff6ff;
-  }
+    &.dropzoneActive {
+        border-color: #9333ea;
+        background: #faf5ff;
+    }
 }
 
 .hiddenInput {
-  display: none;
+    display: none;
 }
 
 .uploadButton {
-  cursor: pointer;
-  color: #3b82f6;
-  font-weight: 500;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid #3b82f6;
-  border-radius: 6px;
-  background: white;
-  transition: all 0.2s;
+    display: inline-block;
+    cursor: pointer;
+    color: #9333ea;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px 20px;
+    border: 1.5px solid #9333ea;
+    border-radius: 12px;
+    background: #fff;
+    transition: all 0.2s;
+    line-height: 1.4;
+    text-align: center;
+    word-break: break-word;
 
-  &:hover {
-    background: #3b82f6;
-    color: white;
-  }
+    &:hover {
+        background: linear-gradient(135deg, #9333ea, #ec4899);
+        color: #fff;
+        border-color: transparent;
+        box-shadow: 0 2px 10px rgba(147, 51, 234, 0.3);
+    }
 }
 
+// ─── Превью загруженных фото ─────────────────
 .previews {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin: 1.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
 }
 
 .previewItem {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 14px;
+    overflow: visible; // чтобы кнопка удаления не обрезалась
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .previewImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 2px solid rgba(0, 0, 0, 0.04);
 }
 
 .removeButton {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 24px;
-  height: 24px;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 1.1rem;
-  line-height: 1;
-  cursor: pointer;
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ef4444;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    font-size: 0;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+    padding: 0;
+
+    // Крестик через псевдоэлементы
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 2px;
+        background: #fff;
+        border-radius: 1px;
+    }
+
+    &::before {
+        transform: rotate(45deg);
+    }
+
+    &::after {
+        transform: rotate(-45deg);
+    }
+
+    &:hover {
+        background: #dc2626;
+    }
+    
 }
 
+// ─── Комментарий ─────────────────────────────
 .commentArea {
-  margin-top: 1.5rem;
+    margin-top: 20px;
 }
 
 .commentLabel {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #374151;
 }
 
 .textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 1rem;
-  resize: vertical;
+    width: 100%;
+    min-height: 100px;
+    padding: 12px 14px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
 
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
+    &:focus {
+        outline: none;
+        border-color: #9333ea;
+        box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+    }
+
+    &::placeholder {
+        color: #9ca3af;
+    }
 }
 
 .charCount {
-  margin-top: 0.25rem;
-  text-align: right;
-  font-size: 0.875rem;
-  color: #6b7280;
+    margin-top: 4px;
+    text-align: right;
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+// =============================================
+// Адаптив
+// =============================================
+@media (max-width: 768px) {
+    .referenceBlock {
+        padding: 20px 16px;
+        margin: 28px 0;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .previewItem {
+        width: 88px;
+        height: 88px;
+    }
+
+    .dropzone {
+        padding: 20px 12px;
+    }
+}
+
+@media (max-width: 460px) {
+    .referenceBlock {
+        padding: 16px 12px;
+    }
+
+    .dropzone {
+        padding: 16px 10px;
+    }
+
+    .uploadButton {
+        font-size: 13px;
+        padding: 10px 14px;
+        // текст корректно переносится благодаря word-break
+    }
+
+    .previewItem {
+        width: 76px;
+        height: 76px;
+        border-radius: 12px;
+    }
+
+    .previewImage {
+        border-radius: 12px;
+    }
+
+    .removeButton {
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+        top: -6px;
+        right: -6px;
+    }
+
+    .textarea {
+        font-size: 14px;
+        min-height: 80px;
+    }
 }
