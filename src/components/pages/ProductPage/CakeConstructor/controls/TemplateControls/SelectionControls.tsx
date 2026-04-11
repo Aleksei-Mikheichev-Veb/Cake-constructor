@@ -28,28 +28,26 @@ const SelectionControls: FC<SelectionControlsProps> = ({
     const colors = useSelector((state: RootState) => state.cakeConstructor.colors);
     const dispatch = useDispatch();
 
-    // Находим выбранный элемент (может быть undefined)
     const selectedItem = items.find(item => item.id === activeItemId);
 
+    // Инициализация количества цветов только при смене элемента
     useEffect(() => {
         if (!activeItemId || !isColorSelected) {
             setCountColorsSelected(0);
             return;
         }
-        
+
         if (selectedItem) {
-            // Если у элемента есть флаг showColorCountSelector — используем его
             if (selectedItem.showColorCountSelector) {
-                // Берём текущее количество цветов или дефолт 2–3
-                setCountColorsSelected(colors.length || 3);
+                // Устанавливаем дефолт только при первом выборе, не перезаписываем
+                setCountColorsSelected((prev) => prev || 3);
             } else if (selectedItem.colorOptions) {
-                // Фиксированное количество
                 setCountColorsSelected(selectedItem.colorOptions);
             } else {
                 setCountColorsSelected(0);
             }
         }
-    }, [activeItemId, isColorSelected, selectedItem, colors.length]);
+    }, [activeItemId, isColorSelected, selectedItem]);
 
     const handleColorCountChange = (count: number) => {
         setCountColorsSelected(count);
@@ -61,8 +59,8 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                 {title}
                 {isTemplate && !activeItemId && (
                     <span className={styles.templateControls_subtitle}>
-            (Выберите шаблон, чтобы появились декорации)
-          </span>
+                        (Выберите шаблон, чтобы появились декорации)
+                    </span>
                 )}
             </h2>
 
@@ -77,11 +75,10 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                 ))}
             </div>
 
-            {isColorSelected &&  activeItemId != 'space' && activeItemId && selectedItem && (
+            {isColorSelected && activeItemId !== 'space' && activeItemId && selectedItem && (
                 <div className={styles.colorPicker}>
                     <label>Выберите цвет(а):</label>
 
-                    {/* Выбор 2 или 3 цвета — только если флаг true */}
                     {selectedItem.showColorCountSelector && (
                         <div className={styles.colorPicker_colorCountSelector}>
                             <label>
