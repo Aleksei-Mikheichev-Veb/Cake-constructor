@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import CakeConstructor from "./CakeConstructor/CakeConstructor";
+import CakeConstructor from './CakeConstructor/CakeConstructor';
 import DessertConstructor from './DessertConstructor/DessertConstructor';
 
 import styles from './ProductPage.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
-import { catalog } from "./../../../data/catalog";
-import { setDessertType } from '../../../redux/cakeConstructorSlice';
-
+import { setDessertType, setSubcategory } from '../../../redux/cakeConstructorSlice';
+import { useGetCategoriesQuery } from '../../../api/constructorApi';
+import { resolveImageUrl } from '../../../utils/imageUrl';
 
 const ProductPage = () => {
     const { category, subcategory } = useParams<{
@@ -19,13 +19,16 @@ const ProductPage = () => {
 
     const dispatch = useDispatch();
 
-    // Определяем тип десерта
-    const dessertType = category === 'cakes' ? 'cake' 
-                      : category === 'trifles' ? 'trifles'
-                      : category === 'cupcakes' ? 'cupcake'
-                      : null;
+    // Загружаем категории с API
+    const { data: categories, isLoading, isError } = useGetCategoriesQuery();
 
-    // Устанавливаем dessertType в Redux при изменении категории
+    // Определяем тип десерта
+    const dessertType = category === 'cakes' ? 'cake'
+        : category === 'trifles' ? 'trifles'
+            : category === 'cupcakes' ? 'cupcake'
+                : null;
+
+    // Устанавливаем dessertType и subcategory в Redux
     useEffect(() => {
         if (dessertType) {
             dispatch(setDessertType(dessertType));
@@ -34,21 +37,50 @@ const ProductPage = () => {
         }
     }, [dessertType, dispatch]);
 
-    const categoryData = category ? catalog[category as keyof typeof catalog] : null;
+    useEffect(() => {
+        if (subcategory) {
+            dispatch(setSubcategory(subcategory as any));
+        }
+    }, [subcategory, dispatch]);
 
-    if (!categoryData) {
+    // Находим текущую категорию в данных API
+    const categoryData = useMemo(() => {
+        if (!categories || !category) return null;
+        return categories.find(c => c.id === category) || null;
+    }, [categories, category]);
+
+    if (isLoading) {
+        return <div>Загрузка...</div>;
+    }
+
+    if (isError || !categoryData) {
         return <div>Категория не найдена</div>;
     }
 
-    let product = null;
+    // Находим продукт
+    let product: { name: string; description: string | null; image: string | null; imageName: string | null } | null = null;
 
     if (categoryData.hasSubcategories) {
         if (!subcategory) {
             return <div>Подкатегория не выбрана</div>;
         }
-        product = categoryData.subcategories.find(item => item.id === subcategory);
+        const sub = categoryData.subcategories.find(s => s.id === subcategory);
+        if (sub) {
+            product = {
+                name: sub.name,
+                description: sub.description,
+                image: sub.image,
+                imageName: sub.imageName,
+            };
+        }
     } else {
-        product = categoryData.product;
+        // Для десертов без подкатегорий — данные самой категории
+        product = {
+            name: categoryData.name,
+            description: categoryData.description,
+            image: categoryData.image,
+            imageName: categoryData.imageName,
+        };
     }
 
     if (!product) {
@@ -65,11 +97,13 @@ const ProductPage = () => {
                                 Галерея товара
                             </h2>
 
-                            <img
-                                src={require(`../../../assets/images/categories/${product.image}`)}
-                                className={styles.gallery_image}
-                                alt={product.imageName}
-                            />
+                            {product.image && (
+                                <img
+                                    src={resolveImageUrl(product.image)}
+                                    className={styles.gallery_image}
+                                    alt={product.imageName || product.name}
+                                />
+                            )}
                         </section>
                     </div>
 

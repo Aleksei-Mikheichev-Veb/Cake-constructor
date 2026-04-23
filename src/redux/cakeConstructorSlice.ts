@@ -1,9 +1,9 @@
 import { createEntityAdapter, createSlice, EntityState, PayloadAction } from "@reduxjs/toolkit";
-import { FillingType } from "../data/cakes/biscuit/fillings";
-import { NumberOfServingType } from "../data/cakes/biscuit/numberOfServing";
-import { DecorationType, SelectedDecoration } from "../data/decorationsMain";
 import { getLayersForPortions, getMinPortionsForLayers } from "../utils/tieredUtils";
-import { NumberOfServingDessertType } from "../data/cupcakes/numberOfServingCupcakes";
+import { DecorationType, SelectedDecoration } from "../types/DecorationType";
+import { FillingType } from "../types/FillingType";
+import { NumberOfServingType } from "../types/NumberOfServingType";
+import { NumberOfServingDessertType } from "../types/NumberOfServingDessertType";
 
 export const mainDecorAdapter = createEntityAdapter<SelectedDecoration, string>({
     selectId: (deco) => deco.id

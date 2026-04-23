@@ -1,7 +1,7 @@
-import React, {FC} from 'react';
+import React, { FC } from 'react';
 import styles from './Template.module.scss'
 import Tooltip from "../../../../../../UI/Tooltip/Tooltip";
-import {ItemType} from "../../../../../../../data/templates";
+import { ItemType } from '../../../../../../../types/ItemType';
 
 type TemplateProps = {
     item: ItemType;
@@ -9,7 +9,7 @@ type TemplateProps = {
     activeItemId: string | null;
 }
 
-const Template: FC<TemplateProps> = ({item, setSelectedItem, activeItemId}) => {
+const Template: FC<TemplateProps> = ({ item, setSelectedItem, activeItemId }) => {
     const isActive = activeItemId === item.id
     return (
         <Tooltip content={item.description}>
@@ -20,12 +20,12 @@ const Template: FC<TemplateProps> = ({item, setSelectedItem, activeItemId}) => {
                 onClick={() => setSelectedItem(item.id)}>
 
                 <div className={styles.imageContainer}>
-                    <img className={styles.image} src={item.image} alt={item.name}/>
+                    <img className={styles.image} src={item.image} alt={item.name} />
                     <div className={styles.overlay}>
                         <div className={styles.checkmark}>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-                                      fill="currentColor"/>
+                                    fill="currentColor" />
                             </svg>
                         </div>
                     </div>

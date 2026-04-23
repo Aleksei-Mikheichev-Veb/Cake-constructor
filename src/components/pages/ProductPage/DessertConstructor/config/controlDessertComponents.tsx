@@ -1,5 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../../../redux/store";
+// ============================================================
+// Обёртки компонентов для десертного конструктора (капкейки, трайфлы).
+// Данные приходят с API через пропсы.
+// ============================================================
+
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../../redux/store';
 import {
     addReferenceImage,
     removeReferenceImage,
@@ -8,47 +14,60 @@ import {
     setCupcakeFilling,
     setFilling,
     setOrderComment,
-} from "../../../../../redux/cakeConstructorSlice";
-import ReferenceControls from "../../CakeConstructor/controls/ReferenceUpload/ReferenceUpload";
-import SelectionControls from "../../CakeConstructor/controls/TemplateControls/SelectionControls";
-import { FillingType } from "../../../../../data/cakes/biscuit/fillings";
-import FillingControls from "../../CakeConstructor/controls/FillingControls/FillingControls";
-import { ControlType } from "./dessertVariants";
-import DessertStylingControls from "../../CakeConstructor/controls/DessertStylingControls/DessertStylingControls";
-import PortionsControls from "../../CakeConstructor/controls/PortionsControl/PortionsControls";
+} from '../../../../../redux/cakeConstructorSlice';
+import ReferenceControls from '../../CakeConstructor/controls/ReferenceUpload/ReferenceUpload';
+import SelectionControls from '../../CakeConstructor/controls/TemplateControls/SelectionControls';
+import FillingControls from '../../CakeConstructor/controls/FillingControls/FillingControls';
+import DessertStylingControls from '../../CakeConstructor/controls/DessertStylingControls/DessertStylingControls';
+import PortionsControls from '../../CakeConstructor/controls/PortionsControl/PortionsControls';
+import { FillingFromServer } from '../../../../../api/constructorApi';
+import { useGetCupcakeBasesQuery, useGetCupcakeFillingsQuery } from '../../../../../api/constructorApi';
+import { FillingType } from '../../../../../types/FillingType';
+import { ItemType } from '../../../../../types/ItemType';
+import { resolveImageUrl } from '../../../../../utils/imageUrl';
 
-// Тип пропсов для SelectionControls-обёрток
 type SelectionProps = {
     items: any[];
     title: string;
     isColor?: boolean;
 };
 
-
-// Обёртка для начинок
+// ─── Начинки ───
+function adaptFillings(serverFillings: FillingFromServer[]): FillingType[] {
+    return serverFillings.map(f => ({
+        id: f.id,
+        name: f.name,
+        description: Array.isArray(f.description)
+            ? f.description
+            : f.description
+                ? f.description.split(',').map(s => s.trim())
+                : [],
+        image: resolveImageUrl(f.image),
+    }));
+}
 
 type FillingSectionProps = {
-    title:string;
-    fillings: FillingType[];
-}
-export const FillingSection = ({ title, fillings }:FillingSectionProps) => {
+    title: string;
+    fillings: FillingFromServer[];
+};
+
+export const FillingSection = ({ title, fillings }: FillingSectionProps) => {
     const dispatch = useDispatch();
     const activeFilling = useSelector((s: RootState) => s.cakeConstructor.filling);
+
+    const adapted = adaptFillings(fillings);
 
     return (
         <FillingControls
             title={title}
-            fillings={fillings}
+            fillings={adapted}
             activeFillingId={activeFilling?.id ?? null}
             setActiveFilling={(filling) => dispatch(setFilling(filling))}
         />
     );
 };
 
-
-
-// ─────────────────────────────────────────────
-// Обёртка для цвета
+// ─── Цвета ───
 export const ColorsControls = ({ items, title, isColor }: SelectionProps) => {
     const dispatch = useDispatch();
     const activeColor = useSelector((s: RootState) => s.cakeConstructor.colorsTemplate);
@@ -64,11 +83,20 @@ export const ColorsControls = ({ items, title, isColor }: SelectionProps) => {
     );
 };
 
-// ─────────────────────────────────────────────
-// Обёртка для основы капкейка
-export const CupcakeBaseControls = ({ items, title }: SelectionProps) => {
+// ─── Основа капкейка ───
+function adaptToItemType(items: any[]): ItemType[] {
+    return items.map(item => ({
+        ...item,
+        description: item.description || '',
+        image: resolveImageUrl(item.image),
+    }));
+}
+
+export const CupcakeBaseControls = ({ title }: { title: string }) => {
     const dispatch = useDispatch();
     const activeBase = useSelector((s: RootState) => s.cakeConstructor.cupcakeBase);
+    const { data: serverItems = [] } = useGetCupcakeBasesQuery();
+    const items = adaptToItemType(serverItems);
 
     return (
         <SelectionControls
@@ -80,11 +108,11 @@ export const CupcakeBaseControls = ({ items, title }: SelectionProps) => {
     );
 };
 
-// ─────────────────────────────────────────────
-// Обёртка для начинки капкейка
-export const CupcakeFillingControls = ({ items, title }: SelectionProps) => {
+export const CupcakeFillingControls = ({ title }: { title: string }) => {
     const dispatch = useDispatch();
     const activeFilling = useSelector((s: RootState) => s.cakeConstructor.cupcakeFilling);
+    const { data: serverItems = [] } = useGetCupcakeFillingsQuery();
+    const items = adaptToItemType(serverItems);
 
     return (
         <SelectionControls
@@ -96,11 +124,9 @@ export const CupcakeFillingControls = ({ items, title }: SelectionProps) => {
     );
 };
 
-// ─────────────────────────────────────────────
-// Обёртка для референсов
+// ─── Референсы ───
 export const ReferenceSection = () => {
     const dispatch = useDispatch();
-
     const comment = useSelector((s: RootState) => s.cakeConstructor.orderComment);
     const images = useSelector((s: RootState) => s.cakeConstructor.referenceImages);
 
@@ -128,9 +154,8 @@ export const ReferenceSection = () => {
     );
 };
 
-// ─────────────────────────────────────────────
-// Экспорт маппинга компонентов
-export const controlDessertComponents: Record<ControlType, React.FC<any>> = {
+// ─── Маппинг ───
+export const controlDessertComponents: Record<string, React.FC<any>> = {
     portions: PortionsControls,
     filling: FillingSection,
     reference: ReferenceSection,

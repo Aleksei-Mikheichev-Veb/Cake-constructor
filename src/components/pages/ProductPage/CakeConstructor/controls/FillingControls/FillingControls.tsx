@@ -1,22 +1,22 @@
-import React, {FC, useRef, useState} from 'react';
-import {Navigation, Pagination, Scrollbar, A11y} from 'swiper/modules';
-import {Swiper, SwiperSlide} from 'swiper/react';
+import React, { FC, useRef, useState } from 'react';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import styles from './FillingControls.module.scss'
 import 'swiper/css/navigation';
 import FillingSlide from "./FillingSlide/FillingSlide";
-import {useDispatch } from 'react-redux';
-import {FillingType} from "../../../../../../data/cakes/biscuit/fillings";
+import { useDispatch } from 'react-redux';
 import ArrowIcon from "../../../../../UI/icons/ArrowIcon";
+import { FillingType } from '../../../../../../types/FillingType';
 
 type FillingControlsProps = {
     title: string;
     fillings: FillingType[];
     activeFillingId: string | null;
-    setActiveFilling: (filling:FillingType) => void;
+    setActiveFilling: (filling: FillingType) => void;
 }
 
-const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillingId,setActiveFilling}) => {
+const FillingControls: FC<FillingControlsProps> = ({ title, fillings, activeFillingId, setActiveFilling }) => {
 
     const dispatch = useDispatch();
 
@@ -32,10 +32,10 @@ const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillin
             <h2 className={styles.filling_title}>{title}</h2>
             <div className={styles.swiper_box}>
                 <button ref={prevRef} className={`${styles.swiper_button} ${styles.prev}`}>
-                    <ArrowIcon direction={'left'}/>
+                    <ArrowIcon direction={'left'} />
                 </button>
                 <button ref={nextRef} className={`${styles.swiper_button} ${styles.next}`}>
-                    <ArrowIcon direction={'right'}/>
+                    <ArrowIcon direction={'right'} />
                 </button>
 
                 <Swiper
@@ -86,7 +86,7 @@ const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillin
                         setIsBeginning(swiper.isBeginning);
                         setIsEnd(swiper.isEnd);
                     }}
-                    pagination={{clickable: true}}
+                    pagination={{ clickable: true }}
                     className={styles.swiper}
                 >
                     {fillings.map(filling => (
@@ -94,7 +94,7 @@ const FillingControls: FC<FillingControlsProps> = ({title,fillings ,activeFillin
                             <FillingSlide
                                 filling={filling}
                                 activeFillingId={activeFillingId}
-                                handleFillingClick={setActiveFilling}/>
+                                handleFillingClick={setActiveFilling} />
                         </SwiperSlide>
                     ))}
                 </Swiper>

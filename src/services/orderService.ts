@@ -1,20 +1,8 @@
 import { RootState } from '../redux/store';
 import { mainDecorAdapter, additionalDecorAdapter } from '../redux/cakeConstructorSlice';
+import { OrderResponse } from '../types/order';
 
-import { templates } from '../data/templates';
-import { smudges } from '../data/smudges';
-import { colors } from '../data/cakes/biscuit/colors';
-import { colorsMousse } from '../data/cakes/mousse/colorsMousse';
-import { gloss } from '../data/cakes/mousse/gloss';
-import { shapeBento } from '../data/cakes/bento/shapeBento';
-import { shapeMousse } from '../data/cakes/mousse/shapeMousse';
-import { shapeTiered } from '../data/cakes/tiered/shapeTiered';
-import { topColors } from '../data/cupcakes/topColors';
-import { cupcakeBases } from '../data/cupcakes/cupcakeBases';
-import { cupcakeFillings } from '../data/cupcakes/cupcakeFillings';
-import { OrderResponse, OrderStylingGroup } from '../types/order';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
 const { selectAll: selectAllMain } = mainDecorAdapter.getSelectors(
     (state: RootState) => state.cakeConstructor.mainDecorations
@@ -23,27 +11,48 @@ const { selectAll: selectAllAdditional } = additionalDecorAdapter.getSelectors(
     (state: RootState) => state.cakeConstructor.additionalDecorations
 );
 
-function resolveName(items: { id: string; name: string }[], id: string | null): string | null {
+// ─── Тип для справочника { id, name } ───
+type LookupItem = { id: string; name: string };
+
+function resolveName(items: LookupItem[], id: string | null): string | null {
     if (!id) return null;
     return items.find((item) => item.id === id)?.name || id;
 }
 
-function resolveColorName(subcategory: string | null, colorId: string | null): string | null {
-    if (!colorId) return null;
-    const colorArrays: Record<string, { id: string; name: string }[]> = {
-        biscuit: colors, kids: colors, tiered: colors, bento: colors, mousse: colorsMousse,
+// ─── Загрузка справочников с API ───
+async function fetchLookups(subcategory: string | null, dessertType: string | null) {
+    const fetchJson = async (url: string): Promise<any[]> => {
+        try {
+            const res = await fetch(`${API_URL}${url}`);
+            if (!res.ok) return [];
+            return res.json();
+        } catch {
+            return [];
+        }
     };
-    const arr = colorArrays[subcategory || ''] || colors;
-    return resolveName(arr, colorId);
-}
 
-function resolveShapeName(subcategory: string | null, shapeId: string | null): string | null {
-    if (!shapeId) return null;
-    const shapeArrays: Record<string, { id: string; name: string }[]> = {
-        bento: shapeBento, mousse: shapeMousse, tiered: shapeTiered,
+    // Загружаем всё параллельно
+    const [templates, smudges, cakeColors, mousseColors, glossOptions,
+        bentoShapes, mousseShapes, tieredShapes, topColors,
+        cupcakeBases, cupcakeFillings] = await Promise.all([
+            fetchJson('/templates'),
+            fetchJson('/smudges'),
+            fetchJson('/colors?target=CAKE'),
+            fetchJson('/colors?target=MOUSSE'),
+            fetchJson('/gloss'),
+            fetchJson('/shapes?subcategoryId=bento'),
+            fetchJson('/shapes?subcategoryId=mousse'),
+            fetchJson('/shapes?subcategoryId=tiered'),
+            fetchJson('/top-colors'),
+            fetchJson('/cupcake-bases'),
+            fetchJson('/cupcake-fillings'),
+        ]);
+
+    return {
+        templates, smudges, cakeColors, mousseColors, glossOptions,
+        bentoShapes, mousseShapes, tieredShapes, topColors,
+        cupcakeBases, cupcakeFillings,
     };
-    const arr = shapeArrays[subcategory || ''];
-    return arr ? resolveName(arr, shapeId) : shapeId;
 }
 
 export interface ClientInfo {
@@ -56,8 +65,32 @@ export interface ClientInfo {
 /**
  * Собирает JSON-данные заказа из Redux-стора.
  */
-function collectOrderData(state: RootState, clientInfo: ClientInfo, totalPrice: number) {
+function collectOrderData(
+    state: RootState,
+    clientInfo: ClientInfo,
+    totalPrice: number,
+    lookups: Awaited<ReturnType<typeof fetchLookups>>
+) {
     const c = state.cakeConstructor;
+
+    // Резолвинг цвета по подкатегории
+    const resolveColorName = (colorId: string | null): string | null => {
+        if (!colorId) return null;
+        const colorArr = c.subcategory === 'mousse' ? lookups.mousseColors : lookups.cakeColors;
+        return resolveName(colorArr, colorId);
+    };
+
+    // Резолвинг формы по подкатегории
+    const resolveShapeName = (shapeId: string | null): string | null => {
+        if (!shapeId) return null;
+        const shapeArrays: Record<string, LookupItem[]> = {
+            bento: lookups.bentoShapes,
+            mousse: lookups.mousseShapes,
+            tiered: lookups.tieredShapes,
+        };
+        const arr = shapeArrays[c.subcategory || ''];
+        return arr ? resolveName(arr, shapeId) : shapeId;
+    };
 
     let servingLabel: string | null = null;
     if (c.numberOfServing && c.subcategory !== 'tiered') {
@@ -67,7 +100,7 @@ function collectOrderData(state: RootState, clientInfo: ClientInfo, totalPrice: 
 
     let quantityLabel: string | null = null;
     if (c.quantity) {
-        quantityLabel = `${c.quantity.quantity} шт, ${c.quantity.weight}`;
+        quantityLabel = `${(c.quantity as any).quantity} шт, ${(c.quantity as any).weight}`;
     }
 
     const mainDecorations = selectAllMain(state).map((d) => ({
@@ -92,7 +125,7 @@ function collectOrderData(state: RootState, clientInfo: ClientInfo, totalPrice: 
     let stylingGroups = null;
     if (c.stylingConfig && c.stylingConfig.length > 0) {
         stylingGroups = c.stylingConfig.map((group) => ({
-            topColor: resolveName(topColors, group.topColor),
+            topColor: resolveName(lookups.topColors, group.topColor),
             decorations: group.decorations.ids.map((id) => {
                 const deco = group.decorations.entities[id as string];
                 return deco?.name || String(id);
@@ -106,12 +139,12 @@ function collectOrderData(state: RootState, clientInfo: ClientInfo, totalPrice: 
         servingLabel,
         quantityLabel,
         filling: c.filling?.name || null,
-        template: resolveName(templates, c.template),
-        colorsTemplate: resolveColorName(c.subcategory, c.colorsTemplate),
+        template: resolveName(lookups.templates, c.template),
+        colorsTemplate: resolveColorName(c.colorsTemplate),
         colors: c.colors,
-        smudges: resolveName(smudges, c.smudges),
-        shape: resolveShapeName(c.subcategory, c.shape),
-        gloss: resolveName(gloss, c.gloss),
+        smudges: resolveName(lookups.smudges, c.smudges),
+        shape: resolveShapeName(c.shape),
+        gloss: resolveName(lookups.glossOptions, c.gloss),
         mainDecorations,
         additionalDecorations,
         creamText: c.creamText,
@@ -119,8 +152,8 @@ function collectOrderData(state: RootState, clientInfo: ClientInfo, totalPrice: 
         chocolateText: c.chocolateText,
         hasPhotoPrint: !!c.imagePreview,
         tiers,
-        cupcakeBase: resolveName(cupcakeBases, c.cupcakeBase),
-        cupcakeFilling: resolveName(cupcakeFillings, c.cupcakeFilling),
+        cupcakeBase: resolveName(lookups.cupcakeBases, c.cupcakeBase),
+        cupcakeFilling: resolveName(lookups.cupcakeFillings, c.cupcakeFilling),
         stylingGroups,
         totalPrice,
         orderComment: c.orderComment,
@@ -136,12 +169,10 @@ function collectOrderData(state: RootState, clientInfo: ClientInfo, totalPrice: 
 function collectFiles(state: RootState): { referenceFiles: File[]; photoPrintBlob: string | null } {
     const c = state.cakeConstructor;
 
-    // Референс-фото (File объекты)
     const referenceFiles = c.referenceImages
         .map((img) => img.file)
         .filter((f): f is File => !!f);
 
-    // Фотопечать (base64 dataURL или null)
     const photoPrintBlob = c.imagePreview;
 
     return { referenceFiles, photoPrintBlob };
@@ -170,28 +201,30 @@ export async function submitOrder(
     clientInfo: ClientInfo,
     totalPrice: number
 ): Promise<OrderResponse> {
-    const orderData = collectOrderData(state, clientInfo, totalPrice);
+    // Загружаем справочники для резолвинга имён
+    const lookups = await fetchLookups(
+        state.cakeConstructor.subcategory,
+        state.cakeConstructor.dessertType
+    );
+
+    const orderData = collectOrderData(state, clientInfo, totalPrice, lookups);
     const { referenceFiles, photoPrintBlob } = collectFiles(state);
 
     const formData = new FormData();
-
-    // JSON-данные заказа как строка
     formData.append('orderData', JSON.stringify(orderData));
 
-    // Референс-фото
     referenceFiles.forEach((file, i) => {
         formData.append('references', file, `reference_${i + 1}.${file.name.split('.').pop()}`);
     });
 
-    // Фотопечать (из base64 в File)
     if (photoPrintBlob) {
         const photoPrintFile = dataURLtoFile(photoPrintBlob, 'photoprint.png');
         formData.append('photoprint', photoPrintFile);
     }
 
-    const response = await fetch(`${API_URL}/api/orders`, {
+    const response = await fetch(`${API_URL}/orders`, {
         method: 'POST',
-        body: formData, // НЕ ставим Content-Type — браузер сам поставит multipart/form-data с boundary
+        body: formData,
     });
 
     if (!response.ok) {

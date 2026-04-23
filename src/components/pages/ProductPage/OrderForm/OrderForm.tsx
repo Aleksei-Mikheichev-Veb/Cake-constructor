@@ -1,13 +1,15 @@
 import React, { FC, useState, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { selectDessertPriceRange } from '../../../../redux/selectors/selectDessertPriceRange';
 import { resetCakeConstructor } from '../../../../redux/cakeConstructorSlice';
 import { submitOrder, ClientInfo } from '../../../../services/orderService';
 import styles from './OrderForm.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface OrderFormProps {
     onClose: () => void;
+    onSuccess?: () => void;
 }
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
@@ -51,7 +53,7 @@ function getTodayDate(): string {
     return today.toISOString().split('T')[0];
 }
 
-const OrderForm: FC<OrderFormProps> = ({ onClose }) => {
+const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
     const dispatch = useDispatch();
 
     const [clientInfo, setClientInfo] = useState<ClientInfo>({
@@ -66,7 +68,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose }) => {
     const [vkRedirect, setVkRedirect] = useState<string | null>(null);
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-    const state = useSelector((s: RootState) => s);
+    const state = useSelector((s: RootState) => s, shallowEqual);
     const { min, max, isRange } = useSelector(selectDessertPriceRange);
 
     const phoneRef = useRef<HTMLInputElement>(null);
@@ -104,9 +106,32 @@ const OrderForm: FC<OrderFormProps> = ({ onClose }) => {
         return Object.keys(errors).length === 0;
     };
 
+    // const handleSubmit = async () => {
+    //     if (!validate()) return;
+
+    //     setStatus('sending');
+    //     setErrorMessage('');
+
+    //     try {
+    //         const priceToSend = isRange ? max : min;
+    //         const result = await submitOrder(state, clientInfo, priceToSend);
+
+    //         if (result.success) {
+    //             setStatus('success');
+    //             setVkRedirect(result.vkRedirect);
+    //         } else {
+    //             setStatus('error');
+    //             setErrorMessage(result.message || 'Не удалось отправить заказ');
+    //         }
+    //     } catch (err) {
+    //         setStatus('error');
+    //         setErrorMessage(
+    //             err instanceof Error ? err.message : 'Ошибка соединения с сервером'
+    //         );
+    //     }
+    // };
     const handleSubmit = async () => {
         if (!validate()) return;
-
         setStatus('sending');
         setErrorMessage('');
 
@@ -117,24 +142,24 @@ const OrderForm: FC<OrderFormProps> = ({ onClose }) => {
             if (result.success) {
                 setStatus('success');
                 setVkRedirect(result.vkRedirect);
+                onSuccess?.();  // ← говорим родителю что успех
             } else {
                 setStatus('error');
                 setErrorMessage(result.message || 'Не удалось отправить заказ');
             }
         } catch (err) {
             setStatus('error');
-            setErrorMessage(
-                err instanceof Error ? err.message : 'Ошибка соединения с сервером'
-            );
+            setErrorMessage(err instanceof Error ? err.message : 'Ошибка соединения с сервером');
         }
     };
-
-    const handleClose = () => {
-        if (status === 'success') {
-            dispatch(resetCakeConstructor());
-        }
-        onClose();
-    };
+    // const navigate = useNavigate();
+    // const handleClose = () => {
+    //     if (status === 'success') {
+    //         dispatch(resetCakeConstructor());
+    //     }
+    //     navigate('/constructor')
+    //     onClose();
+    // };
 
     // === Экран успешной отправки ===
     if (status === 'success') {
@@ -158,7 +183,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose }) => {
                         </a>
                     )}
 
-                    <button className={styles.closeButton} onClick={handleClose}>
+                    <button className={styles.closeButton} onClick={onClose}>
                         Закрыть
                     </button>
                 </div>

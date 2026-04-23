@@ -1,12 +1,26 @@
-import { configureStore } from "@reduxjs/toolkit";
-import cakeReducer from './cakeConstructorSlice'
+
+import { configureStore } from '@reduxjs/toolkit';
+import cakeConstructorReducer from './cakeConstructorSlice';
+import { constructorApi } from '../api/constructorApi';
 
 export const store = configureStore({
     reducer: {
-        cakeConstructor: cakeReducer
-    }
-})
+        cakeConstructor: cakeConstructorReducer,
+        // RTK Query автоматически добавляет свой reducer
+        [constructorApi.reducerPath]: constructorApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [
+                    'cakeConstructor/addReferenceImage',
+                    // RTK Query внутренние экшены
+                    constructorApi.reducerPath + '/executeMutation/fulfilled',
+                ],
+                ignoredPaths: ['cakeConstructor.referenceImages'],
+            },
+        }).concat(constructorApi.middleware),
+});
 
-export type AppStore = typeof store
-export type RootState = ReturnType<AppStore['getState']>
-export type AppDispatch = AppStore['dispatch']
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

@@ -4,8 +4,8 @@ import Template from "../TemplateControls/Template/Template";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../../../../../../redux/store";
 import InputColor from "../../../../../UI/inputs/InputColor/InputColor";
-import { ItemType } from "../../../../../../data/templates";
 import { clearChocolateText, setColors } from "../../../../../../redux/cakeConstructorSlice";
+import { ItemType } from '../../../../../../types/ItemType';
 
 type SelectionControlsProps = {
     title: string;
@@ -17,13 +17,13 @@ type SelectionControlsProps = {
 };
 
 const SelectionControls: FC<SelectionControlsProps> = ({
-                                                           title,
-                                                           items,
-                                                           setSelectedItem,
-                                                           activeItemId,
-                                                           isColorSelected = false,
-                                                           isTemplate,
-                                                       }) => {
+    title,
+    items,
+    setSelectedItem,
+    activeItemId,
+    isColorSelected = false,
+    isTemplate,
+}) => {
     const [countColorsSelected, setCountColorsSelected] = useState(0);
     const colors = useSelector((state: RootState) => state.cakeConstructor.colors);
     const dispatch = useDispatch();

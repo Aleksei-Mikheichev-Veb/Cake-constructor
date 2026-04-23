@@ -1,12 +1,11 @@
-import React from 'react';
-import {categories} from "../../../data/categories";
+import { useNavigate } from "react-router-dom";
 import CardCategory from "./CardCategory/CardCategory";
-import {useNavigate} from "react-router-dom";
-import globalStyles from './../../../styles/global.module.scss'
-
+import globalStyles from './../../../styles/global.module.scss';
+import { useGetCategoriesQuery } from '../../../api/constructorApi';
 
 const ConstructorPage = () => {
     const navigate = useNavigate();
+    const { data: categories = [], isLoading, isError } = useGetCategoriesQuery();
 
     const handleClickCategory = (id: string) => {
         if (id === 'cakes') {
@@ -15,6 +14,10 @@ const ConstructorPage = () => {
             navigate(`/constructor/${id}`);           // трайфлы и капкейки → сразу в ProductPage
         }
     };
+
+    if (isLoading) return <div className={globalStyles.container}>Загрузка...</div>;
+    if (isError) return <div className={globalStyles.container}>Ошибка загрузки категорий</div>;
+
     return (
         <div className={globalStyles.container}>
             <h1>Конструктор десертов</h1>
@@ -23,10 +26,10 @@ const ConstructorPage = () => {
                     <CardCategory
                         handleClickCategory={handleClickCategory}
                         title={elem.name}
-                        image={elem.image}
+                        image={elem.image || ''}
                         id={elem.id}
-                        tooltip={elem.tooltip}
-                        key={elem.name}/>
+                        tooltip={elem.tooltip || ''}
+                        key={elem.id} />
                 ))}
             </main>
         </div>
