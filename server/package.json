@@ -1,0 +1,45 @@
+{
+    "name": "cake-constructor-server",
+    "version": "2.0.0",
+    "description": "Объединённый бэкенд: CRUD + приём заказов",
+    "main": "dist/src/index.js",
+    "scripts": {
+        "dev": "nodemon --exec \"ts-node --project tsconfig.json\" index.ts",
+        "build": "prisma generate && tsc",
+        "start": "node dist/index.js",
+        "db:migrate": "prisma migrate dev",
+        "db:deploy": "prisma migrate deploy",
+        "db:seed": "prisma db seed",
+        "db:studio": "prisma studio",
+        "migrate:images": "ts-node scripts/migrate-images.ts"
+    },
+    "prisma": {
+        "seed": "ts-node prisma/seed.ts"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.19.3",
+        "axios": "^1.14.0",
+        "bcrypt": "^5.1.1",
+        "canvas": "^3.2.3",
+        "cloudinary": "^2.5.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.0",
+        "express": "^4.21.0",
+        "form-data": "^4.0.5",
+        "jsonwebtoken": "^9.0.2",
+        "multer": "^1.4.5-lts.1",
+        "pg": "^8.20.0"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
+        "@types/cors": "^2.8.17",
+        "@types/express": "^4.17.25",
+        "@types/jsonwebtoken": "^9.0.7",
+        "@types/multer": "^1.4.12",
+        "@types/node": "^22.0.0",
+        "nodemon": "^3.1.0",
+        "prisma": "^6.19.3",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.6.0"
+    }
+}

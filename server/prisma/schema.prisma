@@ -1,0 +1,337 @@
+// ============================================================
+// Prisma Schema — Конструктор тортов (Prisma 6)
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================================
+// ПОЛЬЗОВАТЕЛИ АДМИНКИ
+// ============================================================
+
+model AdminUser {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  name      String
+  role      AdminRole @default(EDITOR)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum AdminRole {
+  OWNER
+  EDITOR
+}
+
+// ============================================================
+// КАТЕГОРИИ
+// ============================================================
+
+model Category {
+  id               String        @id
+  name             String
+  description      String?
+  image            String?
+  imageName        String?
+  tooltip          String?
+  hasSubcategories Boolean       @default(false)
+  isActive         Boolean       @default(true)
+  sortOrder        Int           @default(0)
+
+  subcategories       Subcategory[]
+  priceConfig         PriceConfig?
+  servingOptions      ServingOption[]
+  constructorControls ConstructorControl[]
+}
+
+
+// ============================================================
+// ПОДКАТЕГОРИИ
+// ============================================================
+
+model Subcategory {
+  id          String  @id
+  name        String
+  description String?
+  image       String?
+  imageName   String?
+  tooltip     String?     
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+
+  priceConfig         PriceConfig?
+  servingOptions      ServingOption[]
+  fillings            SubcategoryFilling[]
+  shapes              SubcategoryShape[]
+  constructorControls ConstructorControl[]
+}
+
+// ============================================================
+// НАЧИНКИ
+// ============================================================
+
+model Filling {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  image       String?
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  subcategories SubcategoryFilling[]
+}
+
+model SubcategoryFilling {
+  subcategoryId String
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  fillingId     String
+  filling       Filling     @relation(fields: [fillingId], references: [id], onDelete: Cascade)
+  sortOrder     Int         @default(0)
+
+  @@id([subcategoryId, fillingId])
+}
+
+// ============================================================
+// ДЕКОРАЦИИ
+// ============================================================
+
+model Decoration {
+  id          String          @id @default(cuid())
+  name        String
+  description String
+  image       String
+  price       Float
+  group       DecorationGroup
+  byThePiece  Boolean         @default(false)
+  minCount    Int?
+  isActive    Boolean         @default(true)
+  sortOrder   Int             @default(0)
+}
+
+enum DecorationGroup {
+  MAIN
+  ADDITIONAL
+  ALL
+  SMALL
+}
+
+// ============================================================
+// ВАРИАНТЫ ПОРЦИЙ / ВЕСА
+// ============================================================
+
+model ServingOption {
+  id            String       @id @default(cuid())
+  categoryId    String?
+  category      Category?    @relation(fields: [categoryId], references: [id])
+  subcategoryId String?
+  subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
+  portions      Int?
+  weightMin     Float?
+  weightMax     Float?
+  diameter      Float?
+  height        Float?
+  quantity      Int?
+  label         String?
+  sortOrder     Int          @default(0)
+  isActive      Boolean      @default(true)
+}
+
+// ============================================================
+// ШАБЛОНЫ ОФОРМЛЕНИЯ
+// ============================================================
+
+model Template {
+  id                     String  @id @default(cuid())
+  name                   String
+  description            String
+  image                  String
+  colorOptions           Int?
+  showColorCountSelector Boolean @default(false)
+  isActive               Boolean @default(true)
+  sortOrder              Int     @default(0)
+}
+
+// ============================================================
+// ФОРМЫ ТОРТА
+// ============================================================
+
+model Shape {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  image       String
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  subcategories SubcategoryShape[]
+}
+
+model SubcategoryShape {
+  subcategoryId String
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  shapeId       String
+  shape         Shape       @relation(fields: [shapeId], references: [id], onDelete: Cascade)
+  sortOrder     Int         @default(0)
+
+  @@id([subcategoryId, shapeId])
+}
+
+// ============================================================
+// ЦВЕТА
+// ============================================================
+
+model ColorOption {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  image       String
+  target      ColorTarget
+  isActive    Boolean     @default(true)
+  sortOrder   Int         @default(0)
+}
+
+enum ColorTarget {
+  CAKE
+  MOUSSE
+}
+
+// ============================================================
+// ПОДТЁКИ
+// ============================================================
+
+model Smudge {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  image       String
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+}
+
+// ============================================================
+// ГЛЯНЕЦ / ПОКРЫТИЕ
+// ============================================================
+
+model GlossOption {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  image       String
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+}
+
+// ============================================================
+// ЦЕНОВОЙ КОНФИГ
+// ============================================================
+
+model PriceConfig {
+  id                    String       @id @default(cuid())
+  categoryId            String?      @unique
+  category              Category?    @relation(fields: [categoryId], references: [id])
+  subcategoryId         String?      @unique
+  subcategory           Subcategory? @relation(fields: [subcategoryId], references: [id])
+  pricePerKg            Float?
+  fixedPrices           Json?
+  fixedPricesByQuantity Json?
+  photoPrintPrice       Float        @default(650)
+  chocolateLetterPrice  Float        @default(150)
+  chocolateNumberPrice  Float        @default(200)
+  updatedAt             DateTime     @updatedAt
+}
+
+// ============================================================
+// КОНТРОЛЫ КОНСТРУКТОРА
+// ============================================================
+
+model ConstructorControl {
+  id            String       @id @default(cuid())
+  categoryId    String?
+  category      Category?    @relation(fields: [categoryId], references: [id])
+  subcategoryId String?
+  subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
+  controlType   String
+  title         String?
+  sortOrder     Int          @default(0)
+  isActive      Boolean      @default(true)
+  settings      Json?
+
+  @@unique([categoryId, controlType])
+  @@unique([subcategoryId, controlType])
+}
+
+
+// ============================================================
+// ЗАКАЗЫ
+// ============================================================
+
+model Order {
+  id            String      @id @default(cuid())
+  status        OrderStatus @default(NEW)
+  totalPrice    Float
+  customerName  String
+  customerPhone String
+  customerEmail String?
+  comment       String?
+  orderSnapshot Json
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  IN_PROGRESS
+  READY
+  DELIVERED
+  CANCELLED
+}
+
+// ============================================================
+// НАСТРОЙКИ САЙТА
+// ============================================================
+
+model SiteSetting {
+  key         String   @id
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+model CupcakeBase {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  image       String?
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+}
+
+model CupcakeFilling {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  image       String?
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+}
+
+model TopColor {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  image       String?
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+}
+

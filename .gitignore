@@ -1,24 +1,43 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Dependencies
+node_modules/
+**/node_modules/
 
-# testing
-/coverage
+# Build outputs
+build/
+dist/
+**/build/
+**/dist/
 
-# production
-/build
-
-# env files (НЕ коммитим — могут содержать секреты)
+# Env files — никогда не коммитим
 .env
 .env.local
 .env.*.local
 .env.development
 .env.production
 .env.test
+**/.env
+**/.env.local
+**/.env.*.local
+**/.env.development
+**/.env.production
+**/.env.test
 
-# misc
-.DS_Store
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+/.pnp
+.pnp.js
+/coverage
