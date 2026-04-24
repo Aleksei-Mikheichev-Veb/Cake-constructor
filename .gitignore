@@ -41,3 +41,11 @@ Thumbs.db
 /.pnp
 .pnp.js
 /coverage
+
+# Database dumps and SQL scripts
+*.sql
+**/*.sql
+!**/prisma/migrations/**/*.sql
+
+# Image sources for migration (already in Cloudinary)
+server/scripts/public/

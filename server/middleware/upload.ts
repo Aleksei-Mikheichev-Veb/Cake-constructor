@@ -9,7 +9,7 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import { uploadToCloud, CloudFolder } from '../services/storage';
-import { requireAuth } from '../middleware/auth'; // твой существующий JWT middleware
+import { authMiddleware } from '../middleware/auth'; // твой существующий JWT middleware
 
 const router = Router();
 
@@ -28,7 +28,7 @@ const ALLOWED_FOLDERS: CloudFolder[] = [
     'cupcake-bases', 'cupcake-fillings', 'top-colors',
 ];
 
-router.post('/', requireAuth, upload.single('file'), async (req: Request, res: Response) => {
+router.post('/', authMiddleware, upload.single('file'), async (req: Request, res: Response) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'Файл не прикреплён' });
