@@ -1,15 +1,14 @@
 // ============================================================
-// server/src/routes/upload.ts
+// server/middleware/upload.ts
 // ------------------------------------------------------------
 // Используется админкой. POST /api/upload?folder=decorations
 // возвращает { url, publicId } — админка кладёт url в соответствующее
 // поле сущности (Decoration.image, Template.image и т.д.)
 // ============================================================
-
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import { uploadToCloud, CloudFolder } from '../services/storage';
-import { authMiddleware } from '../middleware/auth'; // твой существующий JWT middleware
+import { authMiddleware } from '../middleware/auth';
 
 const router = Router();
 
@@ -35,6 +34,7 @@ router.post('/', authMiddleware, upload.single('file'), async (req: Request, res
         }
 
         const folder = req.query.folder as CloudFolder;
+
         if (!ALLOWED_FOLDERS.includes(folder)) {
             return res.status(400).json({
                 error: `Неизвестная папка. Допустимые: ${ALLOWED_FOLDERS.join(', ')}`,
