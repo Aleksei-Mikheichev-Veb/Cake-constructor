@@ -106,38 +106,13 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
         return Object.keys(errors).length === 0;
     };
 
-    // const handleSubmit = async () => {
-    //     if (!validate()) return;
-
-    //     setStatus('sending');
-    //     setErrorMessage('');
-
-    //     try {
-    //         const priceToSend = isRange ? max : min;
-    //         const result = await submitOrder(state, clientInfo, priceToSend);
-
-    //         if (result.success) {
-    //             setStatus('success');
-    //             setVkRedirect(result.vkRedirect);
-    //         } else {
-    //             setStatus('error');
-    //             setErrorMessage(result.message || 'Не удалось отправить заказ');
-    //         }
-    //     } catch (err) {
-    //         setStatus('error');
-    //         setErrorMessage(
-    //             err instanceof Error ? err.message : 'Ошибка соединения с сервером'
-    //         );
-    //     }
-    // };
     const handleSubmit = async () => {
         if (!validate()) return;
         setStatus('sending');
         setErrorMessage('');
 
         try {
-            const priceToSend = isRange ? max : min;
-            const result = await submitOrder(state, clientInfo, priceToSend);
+            const result = await submitOrder(state, clientInfo, { min, max, isRange });
 
             if (result.success) {
                 setStatus('success');
@@ -152,14 +127,6 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
             setErrorMessage(err instanceof Error ? err.message : 'Ошибка соединения с сервером');
         }
     };
-    // const navigate = useNavigate();
-    // const handleClose = () => {
-    //     if (status === 'success') {
-    //         dispatch(resetCakeConstructor());
-    //     }
-    //     navigate('/constructor')
-    //     onClose();
-    // };
 
     // === Экран успешной отправки ===
     if (status === 'success') {

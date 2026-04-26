@@ -68,6 +68,7 @@ export interface OrderData {
     // Цена
     totalPrice: number;
 
+
     // Комментарий и референсы
     orderComment?: string;
     hasReferenceImages: boolean;

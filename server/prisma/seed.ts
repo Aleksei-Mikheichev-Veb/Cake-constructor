@@ -324,15 +324,15 @@ async function main() {
 
     // ─── 9. ЦВЕТА ───
     const colors = [
-        { id: 'cake_color1', name: 'Один цвет', description: 'Торт покрыт одним цветом', image: '/images/color/biscuit/oneColor.webp', target: 'CAKE' as const, sortOrder: 0 },
-        { id: 'cake_color2', name: '2-3 цвета', description: 'Комбинация 2-3 цветов', image: '/images/color/biscuit/multiColor.jpg', target: 'CAKE' as const, sortOrder: 1 },
-        { id: 'cake_space', name: 'Стиль космоса', description: 'Галактический стиль', image: '/images/color/biscuit/space2.jpg', target: 'CAKE' as const, sortOrder: 2 },
-        { id: 'cake_color4', name: 'С мазками', description: 'Основной цвет с мазками второго', image: '/images/color/biscuit/brushstrokeEffect.jpg', target: 'CAKE' as const, sortOrder: 3 },
-        { id: 'cake_color5', name: 'С бортиком', description: 'Основной цвет с бортиком', image: '/images/color/biscuit/cakeRim.jpg', target: 'CAKE' as const, sortOrder: 4 },
-        { id: 'mousse_color1', name: 'Один цвет', description: 'Торт покрыт одним цветом', image: '/images/color/mousse/mousse.webp', target: 'MOUSSE' as const, sortOrder: 0 },
-        { id: 'mousse_color2', name: '2-3 цвета', description: 'Комбинация 2-3 цветов', image: '/images/color/mousse/twoColors.jpg', target: 'MOUSSE' as const, sortOrder: 1 },
-        { id: 'mousse_space', name: 'Стиль космоса', description: 'Галактический стиль', image: '/images/color/mousse/space.webp', target: 'MOUSSE' as const, sortOrder: 2 },
-        { id: 'mousse_color4', name: 'Авторские решения', description: 'Нестандартные оттенки и контрасты', image: '/images/color/mousse/notStandart.webp', target: 'MOUSSE' as const, sortOrder: 3 },
+        { id: 'cake_color1', name: 'Один цвет', description: 'Торт покрыт одним цветом', image: '/images/color/biscuit/oneColor.webp', target: 'CAKE' as const, colorOptions: 1, sortOrder: 0 },
+        { id: 'cake_color2', name: '2-3 цвета', description: 'Комбинация 2-3 цветов', image: '/images/color/biscuit/multiColor.jpg', target: 'CAKE' as const, showColorCountSelector: true, sortOrder: 1 },
+        { id: 'cake_space', name: 'Стиль космоса', description: 'Галактический стиль', image: '/images/color/biscuit/space2.jpg', target: 'CAKE' as const, colorOptions: 0, sortOrder: 2 },
+        { id: 'cake_color4', name: 'С мазками', description: 'Основной цвет с мазками второго', image: '/images/color/biscuit/brushstrokeEffect.jpg', target: 'CAKE' as const, colorOptions: 2, sortOrder: 3 },
+        { id: 'cake_color5', name: 'С бортиком', description: 'Основной цвет с бортиком', image: '/images/color/biscuit/cakeRim.jpg', target: 'CAKE' as const, colorOptions: 2, sortOrder: 4 },
+        { id: 'mousse_color1', name: 'Один цвет', description: 'Торт покрыт одним цветом', image: '/images/color/mousse/mousse.webp', target: 'MOUSSE' as const, colorOptions: 1, sortOrder: 0 },
+        { id: 'mousse_color2', name: '2-3 цвета', description: 'Комбинация 2-3 цветов', image: '/images/color/mousse/twoColors.jpg', target: 'MOUSSE' as const, showColorCountSelector: true, sortOrder: 1 },
+        { id: 'mousse_space', name: 'Стиль космоса', description: 'Галактический стиль', image: '/images/color/mousse/space.webp', target: 'MOUSSE' as const, colorOptions: 0, sortOrder: 2 },
+        { id: 'mousse_color4', name: 'Авторские решения', description: 'Нестандартные оттенки и контрасты', image: '/images/color/mousse/notStandart.webp', target: 'MOUSSE' as const, showColorCountSelector: true, sortOrder: 3 },
     ];
     for (const c of colors) { await prisma.colorOption.upsert({ where: { id: c.id }, update: c, create: c }); }
     console.log('✅ Цвета созданы');

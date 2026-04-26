@@ -192,13 +192,17 @@ model SubcategoryShape {
 // ============================================================
 
 model ColorOption {
-  id          String      @id @default(cuid())
-  name        String
-  description String
-  image       String
-  target      ColorTarget
-  isActive    Boolean     @default(true)
-  sortOrder   Int         @default(0)
+  id                       String      @id @default(cuid())
+  name                     String
+  description              String
+  image                    String
+  target                   ColorTarget
+  // Если нужно ровно столько цветов — записываем число
+  colorOptions             Int?
+  // Если пользователь сам выбирает 2 или 3 цвета — ставим true
+  showColorCountSelector   Boolean?
+  isActive                 Boolean     @default(true)
+  sortOrder                Int         @default(0)
 }
 
 enum ColorTarget {

@@ -75,7 +75,7 @@ const SelectionControls: FC<SelectionControlsProps> = ({
                 ))}
             </div>
 
-            {isColorSelected && activeItemId !== 'space' && activeItemId && selectedItem && (
+            {isColorSelected && activeItemId && selectedItem && selectedItem.colorOptions !== 0 && (
                 <div className={styles.colorPicker}>
                     <label>Выберите цвет(а):</label>
 

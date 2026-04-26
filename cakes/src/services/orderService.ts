@@ -65,10 +65,12 @@ export interface ClientInfo {
 /**
  * Собирает JSON-данные заказа из Redux-стора.
  */
+type PriceInput = { min: number; max: number; isRange: boolean };
+
 function collectOrderData(
     state: RootState,
     clientInfo: ClientInfo,
-    totalPrice: number,
+    price: PriceInput,
     lookups: Awaited<ReturnType<typeof fetchLookups>>
 ) {
     const c = state.cakeConstructor;
@@ -155,7 +157,10 @@ function collectOrderData(
         cupcakeBase: resolveName(lookups.cupcakeBases, c.cupcakeBase),
         cupcakeFilling: resolveName(lookups.cupcakeFillings, c.cupcakeFilling),
         stylingGroups,
-        totalPrice,
+        totalPrice: price.max,
+        priceMin: price.min,
+        priceMax: price.max,
+        isRange: price.isRange,
         orderComment: c.orderComment,
         hasReferenceImages: c.referenceImages.length > 0,
         referenceImageCount: c.referenceImages.length,
@@ -199,7 +204,7 @@ function dataURLtoFile(dataURL: string, filename: string): File {
 export async function submitOrder(
     state: RootState,
     clientInfo: ClientInfo,
-    totalPrice: number
+    price: PriceInput
 ): Promise<OrderResponse> {
     // Загружаем справочники для резолвинга имён
     const lookups = await fetchLookups(
@@ -207,7 +212,7 @@ export async function submitOrder(
         state.cakeConstructor.dessertType
     );
 
-    const orderData = collectOrderData(state, clientInfo, totalPrice, lookups);
+    const orderData = collectOrderData(state, clientInfo, price, lookups);
     const { referenceFiles, photoPrintBlob } = collectFiles(state);
 
     const formData = new FormData();
