@@ -147,6 +147,22 @@ export interface SiteSettings {
     tieredMinPortions: string;
     tieredMaxPortions: string;
     tieredMaxLayers: string;
+    // Брендинг
+    siteName: string;
+    heroTitle: string;
+    heroSubtitle: string;
+    heroTagline: string;
+    chefName: string;
+    chefDescription1: string;
+    chefDescription2: string;
+    chefDescription3: string;
+    phone: string;
+    email: string;
+    address: string;
+    vkUrl: string;
+    tgUrl: string;
+    okUrl: string;
+    footerTagline: string;
     [key: string]: string;
 }
 

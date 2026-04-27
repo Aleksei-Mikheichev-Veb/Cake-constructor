@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './Navbar.module.scss';
+import { useGetSettingsQuery } from '../../../api/constructorApi';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+    const { data: settings } = useGetSettingsQuery();
     const toggleMenu = () => setIsMenuOpen((prev) => !prev);
     const closeMenu = () => setIsMenuOpen(false);
 
@@ -12,7 +13,7 @@ const Navbar = () => {
         <nav className={styles.navbar}>
             <div className={styles.navbar_inner}>
                 <NavLink to="/home" className={styles.navbar_logo} onClick={closeMenu}>
-                    Eugenie Cake
+                    {settings?.siteName || 'Cake Constructor'}
                 </NavLink>
 
                 <button

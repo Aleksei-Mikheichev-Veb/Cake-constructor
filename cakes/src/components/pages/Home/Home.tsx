@@ -3,17 +3,24 @@ import { Link } from 'react-router-dom';
 import styles from './Home.module.scss';
 import Chef from '../../../assets/images/chef.jpg';
 import img from '../../../assets/images/table2.webp';
+import { useGetSettingsQuery } from '../../../api/constructorApi';
 
 const Home = () => {
+    const { data: settings, isLoading } = useGetSettingsQuery();
+
+    if (isLoading || !settings) {
+        return <div>Загрузка...</div>;
+    }
+
     return (
         <div className={styles.home}>
             {/* ═══════ HERO ═══════ */}
             <section className={styles.hero} style={{ backgroundImage: `url(${img})` }}>
                 <div className={styles.hero_overlay} />
                 <div className={styles.hero_content}>
-                    <h1 className={styles.hero_title}>Эжени</h1>
-                    <p className={styles.hero_subtitle}>домашняя кондитерская</p>
-                    <p className={styles.hero_tagline}>сделано с любовью</p>
+                    <h1 className={styles.hero_title}>{settings.heroTitle}</h1>
+                    <p className={styles.hero_subtitle}>{settings.heroSubtitle}</p>
+                    <p className={styles.hero_tagline}>{settings.heroTagline}</p>
                     <Link to="/constructor" className={styles.hero_btn}>
                         Собрать торт
                     </Link>
@@ -71,22 +78,12 @@ const Home = () => {
                     <div className={styles.about_layout}>
                         <div className={styles.about_text}>
                             <h2 className={styles.section_title}>Обо мне</h2>
-                            <p>
-                                Меня зовут Евгения, я профессиональный кондитер с опытом более 7 лет.
-                                Каждый мой десерт — это история, рассказанная на языке вкуса и красоты.
-                            </p>
-                            <p>
-                                Я использую только натуральные ингредиенты высочайшего качества и уделяю
-                                особое внимание деталям, чтобы каждый торт стал настоящим украшением
-                                вашего праздника.
-                            </p>
-                            <p>
-                                Моя философия проста — создавать не просто десерты, а впечатления,
-                                которые останутся с вами на долгие годы.
-                            </p>
+                            <p>{settings.chefDescription1}</p>
+                            <p>{settings.chefDescription2}</p>
+                            <p>{settings.chefDescription3}</p>
                         </div>
                         <div className={styles.about_imageBox}>
-                            <img src={Chef} alt="Кондитер Евгения" className={styles.about_image} />
+                            <img src={Chef} alt={`Кондитер ${settings.chefName}`} className={styles.about_image} />
                         </div>
                     </div>
                 </div>
