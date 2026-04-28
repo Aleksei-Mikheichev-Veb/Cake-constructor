@@ -18,12 +18,28 @@ function adaptServings(serverServings: any[]): NumberOfServingType[] {
         quantity: extractQuantity(s),
         weightMin: s.weightMin ?? 0,
         weightMax: s.weightMax ?? 0,
-        weight: s.label || '',
+        weight: extractWeight(s),
         height: s.height ?? undefined,
         diameter: s.diameter ?? undefined,
     }));
 }
 
+// Возвращает только вес из label (без порций/штук).
+// '8-9 порций, 1.6-1.8 кг'  → '1.6-1.8 кг'
+// '6 шт, 200 гр'             → '200 гр'
+// '0.5 кг'                   → '0.5 кг'
+// '≈ 1 кг'                   → '≈ 1 кг'
+function extractWeight(s: any): string {
+    const label: string = s.label || '';
+
+    // Если в label есть запятая — берём то, что ПОСЛЕ неё (это часть про вес)
+    if (label.includes(',')) {
+        return label.split(',').slice(1).join(',').trim();
+    }
+
+    // Если запятой нет — label целиком и есть вес ('0.5 кг', '≈ 1 кг')
+    return label.trim();
+}
 // Для разных форматов label возвращает число (или диапазон)
 // для отображения в кнопке:
 //   '8-9 порций, 1.6-1.8 кг'  →  '8-9'      (бисквитные)
