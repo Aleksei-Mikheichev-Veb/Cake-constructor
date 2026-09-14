@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import {
-  Table, Button, Space, Tag, Modal, Form, Input, Switch,
+  Table, Button, Space, Tag, Modal, Form, Input, Switch, Select,
   Upload, message, Popconfirm, Image,
 } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons';
@@ -14,6 +14,7 @@ import {
   useUpdateFillingMutation,
   useDeleteFillingMutation,
   useUploadImageMutation,
+  useGetCategoryTreeQuery,
   Filling,
 } from '../../api/adminApi';
 
@@ -25,6 +26,11 @@ const Fillings: React.FC = () => {
   const [updateFilling] = useUpdateFillingMutation();
   const [deleteFilling] = useDeleteFillingMutation();
   const [uploadImage] = useUploadImageMutation();
+  const { data: categoryTree = [] } = useGetCategoryTreeQuery();
+
+  // Только категории с подкатегориями — начинка привязывается к виду торта,
+  // а не к категории целиком (у капкейков/зефира своя начинка, без подкатегорий)
+  const subcategoryGroups = categoryTree.filter((c) => c.subcategories.length > 0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<Filling | null>(null);
@@ -50,15 +56,14 @@ const Fillings: React.FC = () => {
     form.setFieldsValue({
       ...record,
       description: descStr,
+      subcategoryIds: record.subcategories?.map((s) => s.subcategoryId) || [],
     });
     setIsModalOpen(true);
   };
 
   const handleUpload = async (file: File) => {
-    const formData = new FormData();
-    formData.append('image', file);
     try {
-      const result = await uploadImage(formData).unwrap();
+      const result = await uploadImage({ file, folder: 'fillings' }).unwrap();
       setUploadedImageUrl(result.url);
       form.setFieldValue('image', result.url);
       message.success('Картинка загружена');
@@ -128,6 +133,18 @@ const Fillings: React.FC = () => {
       },
     },
     {
+      title: 'Виды тортов',
+      dataIndex: 'subcategories',
+      render: (subs: { subcategoryId: string }[] | undefined) => {
+        if (!subs?.length) return <Tag color="red">не выбрано</Tag>;
+        const allSubs = subcategoryGroups.flatMap((c) => c.subcategories);
+        return subs.map((s) => {
+          const name = allSubs.find((x) => x.id === s.subcategoryId)?.name || s.subcategoryId;
+          return <Tag key={s.subcategoryId}>{name}</Tag>;
+        });
+      },
+    },
+    {
       title: 'Активна',
       dataIndex: 'isActive',
       width: 100,
@@ -185,6 +202,25 @@ const Fillings: React.FC = () => {
             help="Например: Шоколадный бисквит, Ганаш, Малиновое кремю"
           >
             <Input.TextArea rows={3} />
+          </Form.Item>
+
+          <Form.Item
+            label="Виды тортов"
+            name="subcategoryIds"
+            rules={[{ required: true, message: 'Выберите хотя бы один вид торта' }]}
+            help="К каким видам торта относится эта начинка — только они покажут её в конструкторе"
+          >
+            <Select mode="multiple" placeholder="Выберите виды тортов" allowClear>
+              {subcategoryGroups.map((cat) => (
+                <Select.OptGroup key={cat.id} label={cat.name}>
+                  {cat.subcategories.map((sub) => (
+                    <Select.Option key={sub.id} value={sub.id}>
+                      {sub.name}
+                    </Select.Option>
+                  ))}
+                </Select.OptGroup>
+              ))}
+            </Select>
           </Form.Item>
 
           <Form.Item label="Картинка" name="image">

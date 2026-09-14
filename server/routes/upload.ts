@@ -25,7 +25,7 @@ const upload = multer({
 const ALLOWED_FOLDERS: CloudFolder[] = [
     'decorations', 'templates', 'categories', 'subcategories',
     'fillings', 'shapes', 'smudges', 'gloss', 'colors',
-    'cupcake-bases', 'cupcake-fillings', 'top-colors',
+    'cupcake-bases', 'cupcake-fillings', 'top-colors', 'branding',
 ];
 
 router.post('/', authMiddleware, upload.single('file'), async (req: Request, res: Response) => {

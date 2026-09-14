@@ -15,6 +15,10 @@ import AdminLayout from './layouts/AdminLayout';
 import { adminApi } from './api/adminApi';
 import { setUser, logout } from './redux/authSlice';
 import type { AppDispatch, RootState } from './redux/store';
+import Feedback from './pages/Feedback/Feedback';
+import Cupcakes from './pages/Cupcakes/Cupcakes';
+import TopColors from './pages/TopColors/TopColors';
+import Settings from './pages/Settings/Settings';
 
 const App: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -43,7 +47,11 @@ const App: React.FC = () => {
             >
                 <Route path="/decorations" element={<Decorations />} />
                 <Route path="/fillings" element={<Fillings />} />
+                <Route path="/cupcakes" element={<Cupcakes />} />
+                <Route path="/top-colors" element={<TopColors />} />
                 <Route path="/prices" element={<Prices />} />
+                <Route path="/feedback" element={<Feedback />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/" element={<Navigate to="/decorations" replace />} />
             </Route>
 

@@ -51,6 +51,33 @@ export interface Filling {
   image: string | null;
   isActive: boolean;
   sortOrder: number;
+  subcategories?: { subcategoryId: string }[];
+}
+
+// ─── Категории/подкатегории (для выбора видов тортов у начинки) ───
+
+export interface CategoryTreeNode {
+  id: string;
+  name: string;
+  subcategories: { id: string; name: string }[];
+}
+
+// ─── Капкейки (основа/начинка) и кремовые шапки ───
+// Три модели с одинаковой формой — используются и для капкейков, и (TopColor) для трайфлов
+
+export interface SimpleCatalogItem {
+  id: string;
+  name: string;
+  description: string | null;
+  image: string | null;
+  isActive: boolean;
+  sortOrder: number;
+}
+
+// ─── Настройки сайта / брендинг ───
+
+export interface SiteSettingsMap {
+  [key: string]: string;
 }
 
 export interface PriceConfig {
@@ -82,7 +109,10 @@ export const adminApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Decorations', 'Fillings', 'PriceConfigs', 'Auth'],
+  tagTypes: [
+    'Decorations', 'Fillings', 'PriceConfigs', 'Auth', 'CategoryTree',
+    'CupcakeBases', 'CupcakeFillings', 'TopColors', 'Settings',
+  ],
   endpoints: (builder) => ({
 
     // ─── Авторизация ───
@@ -146,7 +176,7 @@ export const adminApi = createApi({
       invalidatesTags: ['Fillings'],
     }),
 
-    updateFilling: builder.mutation<Filling, { id: string; data: Partial<Filling> }>({
+    updateFilling: builder.mutation<Filling, { id: string; data: Partial<Filling> & { subcategoryIds?: string[] } }>({
       query: ({ id, data }) => ({
         url: `/fillings/${id}`,
         method: 'PUT',
@@ -161,6 +191,76 @@ export const adminApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: ['Fillings'],
+    }),
+
+    // ─── Дерево категорий (для выбора видов тортов у начинки) ───
+    getCategoryTree: builder.query<CategoryTreeNode[], void>({
+      query: () => '/categories',
+      providesTags: ['CategoryTree'],
+    }),
+
+    // ─── Основы капкейков ───
+    getCupcakeBases: builder.query<SimpleCatalogItem[], void>({
+      query: () => '/cupcake-bases',
+      providesTags: ['CupcakeBases'],
+    }),
+    createCupcakeBase: builder.mutation<SimpleCatalogItem, Partial<SimpleCatalogItem>>({
+      query: (body) => ({ url: '/cupcake-bases', method: 'POST', body }),
+      invalidatesTags: ['CupcakeBases'],
+    }),
+    updateCupcakeBase: builder.mutation<SimpleCatalogItem, { id: string; data: Partial<SimpleCatalogItem> }>({
+      query: ({ id, data }) => ({ url: `/cupcake-bases/${id}`, method: 'PUT', body: data }),
+      invalidatesTags: ['CupcakeBases'],
+    }),
+    deleteCupcakeBase: builder.mutation<void, string>({
+      query: (id) => ({ url: `/cupcake-bases/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['CupcakeBases'],
+    }),
+
+    // ─── Начинки капкейков ───
+    getCupcakeFillings: builder.query<SimpleCatalogItem[], void>({
+      query: () => '/cupcake-fillings',
+      providesTags: ['CupcakeFillings'],
+    }),
+    createCupcakeFilling: builder.mutation<SimpleCatalogItem, Partial<SimpleCatalogItem>>({
+      query: (body) => ({ url: '/cupcake-fillings', method: 'POST', body }),
+      invalidatesTags: ['CupcakeFillings'],
+    }),
+    updateCupcakeFilling: builder.mutation<SimpleCatalogItem, { id: string; data: Partial<SimpleCatalogItem> }>({
+      query: ({ id, data }) => ({ url: `/cupcake-fillings/${id}`, method: 'PUT', body: data }),
+      invalidatesTags: ['CupcakeFillings'],
+    }),
+    deleteCupcakeFilling: builder.mutation<void, string>({
+      query: (id) => ({ url: `/cupcake-fillings/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['CupcakeFillings'],
+    }),
+
+    // ─── Кремовые шапки (капкейки + трайфлы) ───
+    getTopColors: builder.query<SimpleCatalogItem[], void>({
+      query: () => '/top-colors',
+      providesTags: ['TopColors'],
+    }),
+    createTopColor: builder.mutation<SimpleCatalogItem, Partial<SimpleCatalogItem>>({
+      query: (body) => ({ url: '/top-colors', method: 'POST', body }),
+      invalidatesTags: ['TopColors'],
+    }),
+    updateTopColor: builder.mutation<SimpleCatalogItem, { id: string; data: Partial<SimpleCatalogItem> }>({
+      query: ({ id, data }) => ({ url: `/top-colors/${id}`, method: 'PUT', body: data }),
+      invalidatesTags: ['TopColors'],
+    }),
+    deleteTopColor: builder.mutation<void, string>({
+      query: (id) => ({ url: `/top-colors/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['TopColors'],
+    }),
+
+    // ─── Настройки сайта / брендинг ───
+    getSiteSettings: builder.query<SiteSettingsMap, void>({
+      query: () => '/settings',
+      providesTags: ['Settings'],
+    }),
+    updateSiteSetting: builder.mutation<void, { key: string; value: string }>({
+      query: ({ key, value }) => ({ url: `/settings/${key}`, method: 'PUT', body: { value } }),
+      invalidatesTags: ['Settings'],
     }),
 
     // ─── Ценовые конфиги ───
@@ -179,12 +279,18 @@ export const adminApi = createApi({
     }),
 
     // ─── Загрузка файлов ───
-    uploadImage: builder.mutation<{ url: string }, FormData>({
-      query: (formData) => ({
-        url: '/upload',
-        method: 'POST',
-        body: formData,
-      }),
+    // Бэкенд (multer) ждёт поле формы "file" и папку в query-строке —
+    // folder ограничен списком ALLOWED_FOLDERS на сервере (routes/upload.ts).
+    uploadImage: builder.mutation<{ url: string }, { file: File; folder: string }>({
+      query: ({ file, folder }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return {
+          url: `/upload?folder=${encodeURIComponent(folder)}`,
+          method: 'POST',
+          body: formData,
+        };
+      },
     }),
   }),
 });
@@ -203,4 +309,19 @@ export const {
   useGetPriceConfigsQuery,
   useUpdatePriceConfigMutation,
   useUploadImageMutation,
+  useGetCategoryTreeQuery,
+  useGetCupcakeBasesQuery,
+  useCreateCupcakeBaseMutation,
+  useUpdateCupcakeBaseMutation,
+  useDeleteCupcakeBaseMutation,
+  useGetCupcakeFillingsQuery,
+  useCreateCupcakeFillingMutation,
+  useUpdateCupcakeFillingMutation,
+  useDeleteCupcakeFillingMutation,
+  useGetTopColorsQuery,
+  useCreateTopColorMutation,
+  useUpdateTopColorMutation,
+  useDeleteTopColorMutation,
+  useGetSiteSettingsQuery,
+  useUpdateSiteSettingMutation,
 } = adminApi;

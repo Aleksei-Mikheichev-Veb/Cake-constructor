@@ -60,10 +60,8 @@ const Decorations: React.FC = () => {
   };
 
   const handleUpload = async (file: File) => {
-    const formData = new FormData();
-    formData.append('image', file);
     try {
-      const result = await uploadImage(formData).unwrap();
+      const result = await uploadImage({ file, folder: 'decorations' }).unwrap();
       setUploadedImageUrl(result.url);
       form.setFieldValue('image', result.url);
       message.success('Картинка загружена');

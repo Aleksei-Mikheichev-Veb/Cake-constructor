@@ -30,7 +30,8 @@ export type CloudFolder =
     | 'top-colors'
     | 'references'
     | 'photoprint'
-    | 'color-previews';
+    | 'color-previews'
+    | 'branding';
 
 export type UploadResult = {
     url: string;       // публичный https-URL, кладём в БД

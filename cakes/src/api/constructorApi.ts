@@ -153,6 +153,7 @@ export interface SiteSettings {
     heroSubtitle: string;
     heroTagline: string;
     chefName: string;
+    chefPhoto: string;
     chefDescription1: string;
     chefDescription2: string;
     chefDescription3: string;

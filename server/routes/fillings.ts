@@ -25,10 +25,12 @@ router.get('/', async (req: Request, res: Response) => {
       // Возвращаем только объекты начинок (без обёртки связи)
       res.json(links.map(l => l.filling));
     } else {
-      // Все начинки (для админки)
+      // Все начинки (для админки) — вместе с привязками к подкатегориям,
+      // чтобы в форме редактирования можно было показать текущий выбор
       const fillings = await prisma.filling.findMany({
         where: { isActive: true },
         orderBy: { sortOrder: 'asc' },
+        include: { subcategories: true },
       });
       res.json(fillings);
     }
@@ -66,15 +68,37 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
 // PUT /api/fillings/:id
 router.put('/:id', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {
-    const filling = await prisma.filling.update({
-      where: { id: req.params.id },
-      data: {
-        name: req.body.name,
-        description: req.body.description,
-        image: req.body.image,
-        isActive: req.body.isActive,
-      },
+    const { subcategoryIds } = req.body;
+
+    const filling = await prisma.$transaction(async (tx) => {
+      const updated = await tx.filling.update({
+        where: { id: req.params.id },
+        data: {
+          name: req.body.name,
+          description: req.body.description,
+          image: req.body.image,
+          isActive: req.body.isActive,
+        },
+      });
+
+      // Если пришёл список подкатегорий — полностью пересобираем привязки
+      // (проще, чем считать diff, а начинок с сотнями привязок не бывает)
+      if (subcategoryIds) {
+        await tx.subcategoryFilling.deleteMany({ where: { fillingId: req.params.id } });
+        if (subcategoryIds.length) {
+          await tx.subcategoryFilling.createMany({
+            data: subcategoryIds.map((subId: string, i: number) => ({
+              fillingId: req.params.id,
+              subcategoryId: subId,
+              sortOrder: i,
+            })),
+          });
+        }
+      }
+
+      return updated;
     });
+
     res.json(filling);
   } catch (error) {
     res.status(500).json({ error: 'Ошибка обновления начинки' });

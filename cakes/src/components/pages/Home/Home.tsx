@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Home.module.scss';
-import Chef from '../../../assets/images/chef.jpg';
+import DefaultChef from '../../../assets/images/chef.jpg';
 import img from '../../../assets/images/table2.webp';
 import { useGetSettingsQuery } from '../../../api/constructorApi';
+import { resolveImageUrl } from '../../../utils/imageUrl';
 
 const Home = () => {
     const { data: settings, isLoading } = useGetSettingsQuery();
@@ -83,7 +84,11 @@ const Home = () => {
                             <p>{settings.chefDescription3}</p>
                         </div>
                         <div className={styles.about_imageBox}>
-                            <img src={Chef} alt={`Кондитер ${settings.chefName}`} className={styles.about_image} />
+                            <img
+                                src={settings.chefPhoto ? resolveImageUrl(settings.chefPhoto) : DefaultChef}
+                                alt={`Кондитер ${settings.chefName}`}
+                                className={styles.about_image}
+                            />
                         </div>
                     </div>
                 </div>
