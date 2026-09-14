@@ -13,25 +13,18 @@ interface OrderFormProps {
 }
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
+type FeedbackStatus = 'idle' | 'sending' | 'done' | 'skipped';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
 // === Маска телефона ===
 function formatPhone(value: string): string {
-    // Оставляем только цифры
     const digits = value.replace(/\D/g, '');
-
-    // Убираем лидирующую 8 или 7, нормализуем к 7
     let normalized = digits;
-    if (normalized.startsWith('8') && normalized.length > 1) {
-        normalized = '7' + normalized.slice(1);
-    }
-    if (!normalized.startsWith('7') && normalized.length > 0) {
-        normalized = '7' + normalized;
-    }
-
-    // Форматируем
+    if (normalized.startsWith('8') && normalized.length > 1) normalized = '7' + normalized.slice(1);
+    if (!normalized.startsWith('7') && normalized.length > 0) normalized = '7' + normalized;
     let result = '+7';
-    const rest = normalized.slice(1); // без первой 7
-
+    const rest = normalized.slice(1);
     if (rest.length > 0) result += ' (' + rest.slice(0, 3);
     if (rest.length >= 3) result += ') ';
     if (rest.length > 3) result += rest.slice(3, 6);
@@ -39,19 +32,38 @@ function formatPhone(value: string): string {
     if (rest.length > 6) result += rest.slice(6, 8);
     if (rest.length >= 8) result += '-';
     if (rest.length > 8) result += rest.slice(8, 10);
-
     return result;
 }
 
 function isPhoneComplete(value: string): boolean {
-    const digits = value.replace(/\D/g, '');
-    return digits.length === 11;
+    return value.replace(/\D/g, '').length === 11;
 }
 
 function getTodayDate(): string {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
+    return new Date().toISOString().split('T')[0];
 }
+
+// === Компонент звёздочек ===
+const StarRating: FC<{ value: number; onChange: (v: number) => void }> = ({ value, onChange }) => {
+    const [hovered, setHovered] = useState(0);
+    return (
+        <div className={styles.stars}>
+            {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                    key={star}
+                    type="button"
+                    className={`${styles.star} ${star <= (hovered || value) ? styles.starActive : ''}`}
+                    onMouseEnter={() => setHovered(star)}
+                    onMouseLeave={() => setHovered(0)}
+                    onClick={() => onChange(star)}
+                    aria-label={`${star} звезд`}
+                >
+                    ★
+                </button>
+            ))}
+        </div>
+    );
+};
 
 const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
     const dispatch = useDispatch();
@@ -67,25 +79,26 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [vkRedirect, setVkRedirect] = useState<string | null>(null);
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+    const [orderId, setOrderId] = useState<string | null>(null);
+
+    // Состояние отзыва
+    const [feedbackRating, setFeedbackRating] = useState(0);
+    const [feedbackComment, setFeedbackComment] = useState('');
+    const [feedbackStatus, setFeedbackStatus] = useState<FeedbackStatus>('idle');
 
     const state = useSelector((s: RootState) => s, shallowEqual);
     const { min, max, isRange } = useSelector(selectDessertPriceRange);
-
     const phoneRef = useRef<HTMLInputElement>(null);
 
     const handleNameChange = (value: string) => {
         setClientInfo((prev) => ({ ...prev, clientName: value }));
-        if (value.trim()) {
-            setFieldErrors((prev) => ({ ...prev, clientName: '' }));
-        }
+        if (value.trim()) setFieldErrors((prev) => ({ ...prev, clientName: '' }));
     };
 
     const handlePhoneChange = (value: string) => {
         const formatted = formatPhone(value);
         setClientInfo((prev) => ({ ...prev, clientPhone: formatted }));
-        if (isPhoneComplete(formatted)) {
-            setFieldErrors((prev) => ({ ...prev, clientPhone: '' }));
-        }
+        if (isPhoneComplete(formatted)) setFieldErrors((prev) => ({ ...prev, clientPhone: '' }));
     };
 
     const handleChange = (field: keyof ClientInfo, value: string) => {
@@ -94,14 +107,8 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
 
     const validate = (): boolean => {
         const errors: Record<string, string> = {};
-
-        if (!clientInfo.clientName.trim()) {
-            errors.clientName = 'Введите ваше имя';
-        }
-        if (!isPhoneComplete(clientInfo.clientPhone)) {
-            errors.clientPhone = 'Введите полный номер телефона';
-        }
-
+        if (!clientInfo.clientName.trim()) errors.clientName = 'Введите ваше имя';
+        if (!isPhoneComplete(clientInfo.clientPhone)) errors.clientPhone = 'Введите полный номер телефона';
         setFieldErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -116,8 +123,9 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
 
             if (result.success) {
                 setStatus('success');
-                setVkRedirect(result.vkRedirect);
-                onSuccess?.();  // ← говорим родителю что успех
+                setVkRedirect(result.vkRedirect ?? null);
+                setOrderId(result.orderId ?? null);
+                onSuccess?.();
             } else {
                 setStatus('error');
                 setErrorMessage(result.message || 'Не удалось отправить заказ');
@@ -128,8 +136,33 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
         }
     };
 
+    const handleFeedbackSubmit = async () => {
+        if (!feedbackRating) return; // без оценки не отправляем
+        setFeedbackStatus('sending');
+        try {
+            await fetch(`${API_URL}/feedback`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orderId,
+                    rating: feedbackRating,
+                    comment: feedbackComment.trim() || null,
+                }),
+            });
+        } catch {
+            // тихо игнорируем — отзыв не критичен
+        }
+        setFeedbackStatus('done');
+    };
+
+    const handleFeedbackSkip = () => {
+        setFeedbackStatus('skipped');
+    };
+
     // === Экран успешной отправки ===
     if (status === 'success') {
+        const feedbackDone = feedbackStatus === 'done' || feedbackStatus === 'skipped';
+
         return (
             <div className={styles.orderForm}>
                 <div className={styles.successBlock}>
@@ -149,6 +182,41 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
                             💬 Написать кондитеру в ВК
                         </a>
                     )}
+
+                    {/* Блок отзыва */}
+                    {!feedbackDone ? (
+                        <div className={styles.feedbackBlock}>
+                            <p className={styles.feedbackQuestion}>
+                                Насколько удобно было оформить заказ?
+                            </p>
+                            <StarRating value={feedbackRating} onChange={setFeedbackRating} />
+                            <textarea
+                                className={styles.feedbackTextarea}
+                                placeholder="Комментарий (необязательно)"
+                                value={feedbackComment}
+                                onChange={(e) => setFeedbackComment(e.target.value)}
+                                rows={2}
+                            />
+                            <div className={styles.feedbackActions}>
+                                <button
+                                    className={styles.feedbackSkip}
+                                    onClick={handleFeedbackSkip}
+                                    disabled={feedbackStatus === 'sending'}
+                                >
+                                    Пропустить
+                                </button>
+                                <button
+                                    className={styles.feedbackSubmit}
+                                    onClick={handleFeedbackSubmit}
+                                    disabled={!feedbackRating || feedbackStatus === 'sending'}
+                                >
+                                    {feedbackStatus === 'sending' ? 'Отправка...' : 'Отправить отзыв'}
+                                </button>
+                            </div>
+                        </div>
+                    ) : feedbackStatus === 'done' ? (
+                        <p className={styles.feedbackThanks}>Спасибо за отзыв! 🙏</p>
+                    ) : null}
 
                     <button className={styles.closeButton} onClick={onClose}>
                         Закрыть
@@ -226,9 +294,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
                 />
             </div>
 
-            {errorMessage && (
-                <div className={styles.error}>{errorMessage}</div>
-            )}
+            {errorMessage && <div className={styles.error}>{errorMessage}</div>}
 
             <div className={styles.actions}>
                 <button
