@@ -21,9 +21,13 @@ const ChocolateTextInputs = () => {
     const chocolateText = useSelector((s: RootState) => s.cakeConstructor.chocolateText);
     const mainDecors = useSelector((s: RootState) => s.cakeConstructor.mainDecorations.entities);
     const additionalDecors = useSelector((s: RootState) => s.cakeConstructor.additionalDecorations.entities);
+    const template = useSelector((s: RootState) => s.cakeConstructor.template);
 
+    // Шаблон «Полукруг с надписями» сам по себе подразумевает шоколадную надпись —
+    // поле должно появляться сразу, а не только после выбора декорации «шоколадные буквы»
     const hasLetters = hasDecoWithSuffix(mainDecors, LETTERS_SUFFIXES)
-        || hasDecoWithSuffix(additionalDecors, LETTERS_SUFFIXES);
+        || hasDecoWithSuffix(additionalDecors, LETTERS_SUFFIXES)
+        || template === 'semicircleWithText';
 
     const hasNumbers = hasDecoWithSuffix(mainDecors, NUMBERS_SUFFIXES)
         || hasDecoWithSuffix(additionalDecors, NUMBERS_SUFFIXES);
