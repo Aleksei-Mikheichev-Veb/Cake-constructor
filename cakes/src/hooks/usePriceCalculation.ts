@@ -21,6 +21,11 @@ interface PriceRange {
     max: number;
     currency: string;
     isRange: boolean;
+    // Разбивка по шоколадному тексту — сумма за все введённые буквы/цифры,
+    // а не цена одной штуки. Нужна для сообщения кондитеру, чтобы не путать
+    // с ценой самой декорации-маркера «Шоколадные буквы/цифры».
+    chocolateLettersPrice: number;
+    chocolateNumbersPrice: number;
 }
 
 /**
@@ -43,7 +48,7 @@ export function usePriceCalculation(priceKey: string | null): PriceRange & { isL
 
     const result = useMemo<PriceRange>(() => {
         if (!config) {
-            return { min: 0, max: 0, currency: '₽', isRange: false };
+            return { min: 0, max: 0, currency: '₽', isRange: false, chocolateLettersPrice: 0, chocolateNumbersPrice: 0 };
         }
 
         let basePriceMin = 0;
@@ -75,14 +80,16 @@ export function usePriceCalculation(priceKey: string | null): PriceRange & { isL
             basePriceMax = basePriceMin;
         }
 
-        // Декорации (исключаем шоколадные буквы/цифры — они считаются отдельно)
+        // Декорации (исключаем шоколадные буквы/цифры — они считаются отдельно
+        // по количеству введённых символов, а не как обычная декорация).
+        // Сравниваем по окончанию id, а не точным строкам — id приходят с
+        // разными префиксами (add_/all_) в зависимости от группы декораций,
+        // и точное сравнение раньше пропускало часть вариантов (например,
+        // 'add_choco_numbers' не совпадало с 'add_choco_num').
+        const CHOCO_LETTER_SUFFIXES = ['choco_letters', 'choco_let'];
+        const CHOCO_NUMBER_SUFFIXES = ['choco_numbers', 'choco_num'];
         const isChocolateDeco = (d: any) =>
-            d?.id === 'chocolate_letters' ||
-            d?.id === 'chocolate_numbers' ||
-            d?.id === 'add_choco_letters' ||
-            d?.id === 'add_choco_num' ||
-            d?.id === 'all_choco_let' ||
-            d?.id === 'all_choco_num';
+            !!d?.id && [...CHOCO_LETTER_SUFFIXES, ...CHOCO_NUMBER_SUFFIXES].some((s) => d.id.endsWith(s));
 
         const decorsPrice =
             mainDecors.reduce((sum, d) => {
@@ -97,17 +104,13 @@ export function usePriceCalculation(priceKey: string | null): PriceRange & { isL
         // Фотопечать — цена из конфига сервера
         const photoPrice = imagePreview ? (config.photoPrintPrice || 650) : 0;
 
-        // Шоколадные надписи — цены из конфига сервера
-        const chocolatePrice = (() => {
-            if (!chocolateText) return 0;
-            const letters = chocolateText.letters?.replace(/\s+/g, '') || '';
-            const numbers = chocolateText.numbers?.replace(/\s+/g, '') || '';
-            const letterPrice = config.chocolateLetterPrice || 150;
-            const numberPrice = config.chocolateNumberPrice || 200;
-            return (letters.length * letterPrice) + (numbers.length * numberPrice);
-        })();
+        // Шоколадные надписи — цены из конфига сервера, отдельно по буквам и цифрам
+        const letters = chocolateText?.letters?.replace(/\s+/g, '') || '';
+        const numbers = chocolateText?.numbers?.replace(/\s+/g, '') || '';
+        const chocolateLettersPrice = letters.length * (config.chocolateLetterPrice || 150);
+        const chocolateNumbersPrice = numbers.length * (config.chocolateNumberPrice || 200);
 
-        const extras = decorsPrice + photoPrice + chocolatePrice;
+        const extras = decorsPrice + photoPrice + chocolateLettersPrice + chocolateNumbersPrice;
         const totalMin = Math.round(basePriceMin + extras);
         const totalMax = Math.round(basePriceMax + extras);
 
@@ -116,6 +119,8 @@ export function usePriceCalculation(priceKey: string | null): PriceRange & { isL
             max: totalMax,
             currency: '₽',
             isRange: totalMin !== totalMax,
+            chocolateLettersPrice,
+            chocolateNumbersPrice,
         };
     }, [config, serving, quantity, tiers, mainDecors, addDecors, imagePreview, chocolateText, priceKey]);
 

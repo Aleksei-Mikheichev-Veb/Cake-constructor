@@ -24,7 +24,7 @@ const TotalPrice = () => {
     }
 
     const navigate = useNavigate();
-    const { min, max, isRange, currency, isLoading } = usePriceCalculation(priceKey);
+    const { min, max, isRange, currency, isLoading, chocolateLettersPrice, chocolateNumbersPrice } = usePriceCalculation(priceKey);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [orderSubmitted, setOrderSubmitted] = useState(false);
 
@@ -59,6 +59,7 @@ const TotalPrice = () => {
                 <OrderForm
                     onClose={handleClose}
                     onSuccess={() => setOrderSubmitted(true)}
+                    price={{ min, max, isRange, chocolateLettersPrice, chocolateNumbersPrice }}
                 />
             </ModalUniversal>
         </>

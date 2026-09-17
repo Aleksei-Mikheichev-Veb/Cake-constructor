@@ -15,6 +15,11 @@ export interface OrderTiers {
 export interface OrderChocolateText {
     letters?: string;
     numbers?: string;
+    // Сумма за все введённые буквы/цифры целиком (не цена одной штуки) —
+    // считается на клиенте из живого PriceConfig, чтобы в сообщении
+    // кондитеру была реальная стоимость, а не цена декорации-маркера.
+    lettersPrice?: number;
+    numbersPrice?: number;
 }
 
 export interface OrderStylingGroup {

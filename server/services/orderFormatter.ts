@@ -100,7 +100,13 @@ export function formatOrder(order: OrderData, format: 'vk' | 'tg' = 'vk'): strin
     }
 
     // === Декорации (торты) ===
-    const allDecorations = [...order.mainDecorations, ...order.additionalDecorations];
+    // Шоколадные буквы/цифры сюда не попадают: это декорации-маркеры с
+    // фиксированной ценой "за выбор" (не за штуку текста), их реальная
+    // стоимость посчитана отдельно и показана ниже, в блоке "Шоколадный текст".
+    const CHOCO_SUFFIXES = ['choco_letters', 'choco_let', 'choco_numbers', 'choco_num'];
+    const isChocolateMarker = (d: { id: string }) => CHOCO_SUFFIXES.some((s) => d.id.endsWith(s));
+    const allDecorations = [...order.mainDecorations, ...order.additionalDecorations]
+        .filter((d) => !isChocolateMarker(d));
     if (allDecorations.length > 0) {
         parts.push('');
         parts.push(`🌸 ${b('Декорации:')}`);
@@ -136,10 +142,14 @@ export function formatOrder(order: OrderData, format: 'vk' | 'tg' = 'vk'): strin
 
     if (order.chocolateText) {
         if (order.chocolateText.letters) {
-            parts.push(`🍫 ${b('Шоколадные буквы:')} ${order.chocolateText.letters}`);
+            const price = order.chocolateText.lettersPrice;
+            const priceStr = price != null ? ` (+${price.toLocaleString('ru-RU')} ₽)` : '';
+            parts.push(`🍫 ${b('Шоколадные буквы:')} ${order.chocolateText.letters}${priceStr}`);
         }
         if (order.chocolateText.numbers) {
-            parts.push(`🍫 ${b('Шоколадные цифры:')} ${order.chocolateText.numbers}`);
+            const price = order.chocolateText.numbersPrice;
+            const priceStr = price != null ? ` (+${price.toLocaleString('ru-RU')} ₽)` : '';
+            parts.push(`🍫 ${b('Шоколадные цифры:')} ${order.chocolateText.numbers}${priceStr}`);
         }
     }
 

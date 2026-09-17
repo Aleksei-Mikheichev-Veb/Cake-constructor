@@ -1,15 +1,25 @@
 import React, { FC, useState, useRef } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { RootState } from '../../../../redux/store';
-import { selectDessertPriceRange } from '../../../../redux/selectors/selectDessertPriceRange';
 import { resetCakeConstructor } from '../../../../redux/cakeConstructorSlice';
 import { submitOrder, ClientInfo } from '../../../../services/orderService';
 import styles from './OrderForm.module.scss';
 import { useNavigate } from 'react-router-dom';
 
+interface OrderPrice {
+    min: number;
+    max: number;
+    isRange: boolean;
+    chocolateLettersPrice: number;
+    chocolateNumbersPrice: number;
+}
+
 interface OrderFormProps {
     onClose: () => void;
     onSuccess?: () => void;
+    // Считается один раз в TotalPrice (usePriceCalculation, живой конфиг с сервера)
+    // и передаётся сюда, чтобы цена в липучке и в модалке заказа никогда не расходилась
+    price: OrderPrice;
 }
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
@@ -65,7 +75,7 @@ const StarRating: FC<{ value: number; onChange: (v: number) => void }> = ({ valu
     );
 };
 
-const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
+const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
     const dispatch = useDispatch();
 
     const [clientInfo, setClientInfo] = useState<ClientInfo>({
@@ -87,7 +97,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
     const [feedbackStatus, setFeedbackStatus] = useState<FeedbackStatus>('idle');
 
     const state = useSelector((s: RootState) => s, shallowEqual);
-    const { min, max, isRange } = useSelector(selectDessertPriceRange);
+    const { min, max, isRange } = price;
     const phoneRef = useRef<HTMLInputElement>(null);
 
     const handleNameChange = (value: string) => {
@@ -119,7 +129,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess }) => {
         setErrorMessage('');
 
         try {
-            const result = await submitOrder(state, clientInfo, { min, max, isRange });
+            const result = await submitOrder(state, clientInfo, price);
 
             if (result.success) {
                 setStatus('success');

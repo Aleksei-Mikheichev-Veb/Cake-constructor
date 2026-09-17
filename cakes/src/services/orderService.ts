@@ -65,7 +65,15 @@ export interface ClientInfo {
 /**
  * Собирает JSON-данные заказа из Redux-стора.
  */
-type PriceInput = { min: number; max: number; isRange: boolean };
+type PriceInput = {
+    min: number;
+    max: number;
+    isRange: boolean;
+    // Сумма за все введённые буквы/цифры (не цена одной штуки) — идёт в
+    // сообщение кондитеру вместо цены декорации-маркера "Шоколадные буквы/цифры"
+    chocolateLettersPrice: number;
+    chocolateNumbersPrice: number;
+};
 
 function collectOrderData(
     state: RootState,
@@ -151,7 +159,11 @@ function collectOrderData(
         additionalDecorations,
         creamText: c.creamText,
         creamTextColor: c.creamTextColor,
-        chocolateText: c.chocolateText,
+        chocolateText: c.chocolateText ? {
+            ...c.chocolateText,
+            lettersPrice: price.chocolateLettersPrice,
+            numbersPrice: price.chocolateNumbersPrice,
+        } : c.chocolateText,
         hasPhotoPrint: !!c.imagePreview,
         tiers,
         cupcakeBase: resolveName(lookups.cupcakeBases, c.cupcakeBase),
