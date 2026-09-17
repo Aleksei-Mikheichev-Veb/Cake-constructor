@@ -8,13 +8,19 @@ interface VkSendResult {
     error?: string;
 }
 
+const VK_TIMEOUT_MS = 15_000;
+
 /**
  * Отправить текстовое сообщение пользователю ВК.
+ * Одна попытка повтора при сетевой ошибке (таймаут/обрыв) — VK у нас иногда
+ * подвисает на секунды без ответа, а это самое важное уведомление кондитеру,
+ * терять его из-за разовой сетевой заминки нежелательно.
  */
 export async function sendVkMessage(
     userId: number,
     message: string,
-    token: string
+    token: string,
+    attempt: number = 1
 ): Promise<VkSendResult> {
     const randomId = Math.floor(Math.random() * 2_000_000_000);
 
@@ -27,6 +33,7 @@ export async function sendVkMessage(
                 v: VK_API_VERSION,
                 access_token: token,
             },
+            timeout: VK_TIMEOUT_MS,
         });
 
         if (data.error) {
@@ -39,6 +46,10 @@ export async function sendVkMessage(
     } catch (err) {
         const errMsg = err instanceof Error ? err.message : 'Unknown error';
         console.error('[VK] Сетевая ошибка:', errMsg);
+        if (attempt < 2) {
+            console.log('[VK] Повторная попытка отправки сообщения...');
+            return sendVkMessage(userId, message, token, attempt + 1);
+        }
         return { success: false, error: errMsg };
     }
 }
@@ -63,6 +74,7 @@ export async function sendVkPhoto(
                     v: VK_API_VERSION,
                     access_token: token,
                 },
+                timeout: VK_TIMEOUT_MS,
             }
         );
 
@@ -81,6 +93,7 @@ export async function sendVkPhoto(
 
         const { data: uploadResult } = await axios.post(uploadUrl, formData, {
             headers: formData.getHeaders(),
+            timeout: VK_TIMEOUT_MS,
         });
 
         if (!uploadResult.photo || uploadResult.photo === '[]') {
@@ -99,6 +112,7 @@ export async function sendVkPhoto(
                     v: VK_API_VERSION,
                     access_token: token,
                 },
+                timeout: VK_TIMEOUT_MS,
             }
         );
 
@@ -122,6 +136,7 @@ export async function sendVkPhoto(
                 v: VK_API_VERSION,
                 access_token: token,
             },
+            timeout: VK_TIMEOUT_MS,
         });
 
         if (sendData.error) {
