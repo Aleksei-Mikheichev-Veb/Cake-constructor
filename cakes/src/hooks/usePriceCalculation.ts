@@ -104,11 +104,21 @@ export function usePriceCalculation(priceKey: string | null): PriceRange & { isL
         // Фотопечать — цена из конфига сервера
         const photoPrice = imagePreview ? (config.photoPrintPrice || 650) : 0;
 
-        // Шоколадные надписи — цены из конфига сервера, отдельно по буквам и цифрам
+        // Шоколадные надписи — цена за символ берётся с карточки самой декорации
+        // «Шоколадные буквы/цифры» (кондитер настраивает её на странице «Декорации»),
+        // а НЕ из отдельного поля в «Ценах» — иначе на витрине висит одна цифра
+        // (например 30 ₽), а по факту прибавляется другая (150 ₽) из PriceConfig.
+        // На PriceConfig остаёмся только как на подстраховку для случая, когда
+        // поле ввода показано без выбора самой декорации (шаблон с надписями).
+        const findChocoPricePerChar = (suffixes: string[]): number | undefined =>
+            [...mainDecors, ...addDecors].find((d) => d?.id && suffixes.some((s) => d.id.endsWith(s)))?.price;
+
         const letters = chocolateText?.letters?.replace(/\s+/g, '') || '';
         const numbers = chocolateText?.numbers?.replace(/\s+/g, '') || '';
-        const chocolateLettersPrice = letters.length * (config.chocolateLetterPrice || 150);
-        const chocolateNumbersPrice = numbers.length * (config.chocolateNumberPrice || 200);
+        const letterPricePerChar = findChocoPricePerChar(CHOCO_LETTER_SUFFIXES) ?? config.chocolateLetterPrice ?? 150;
+        const numberPricePerChar = findChocoPricePerChar(CHOCO_NUMBER_SUFFIXES) ?? config.chocolateNumberPrice ?? 200;
+        const chocolateLettersPrice = letters.length * letterPricePerChar;
+        const chocolateNumbersPrice = numbers.length * numberPricePerChar;
 
         const extras = decorsPrice + photoPrice + chocolateLettersPrice + chocolateNumbersPrice;
         const totalMin = Math.round(basePriceMin + extras);
