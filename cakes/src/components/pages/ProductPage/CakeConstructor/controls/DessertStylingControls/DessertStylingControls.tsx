@@ -52,7 +52,9 @@ const createEmptyGroups = (count: number) =>
 
 const DessertStylingControls = () => {
     const dispatch = useDispatch();
-    const quantity = useSelector((state: RootState) => Number(state.cakeConstructor.quantity) || 6);
+    // state.cakeConstructor.quantity — объект { id, quantity, weight } (см. NumberOfServingDessertType),
+    // не число. Number(объект) даёт NaN, поэтому раньше здесь всегда подставлялся дефолт 6.
+    const quantity = useSelector((state: RootState) => Number(state.cakeConstructor.quantity?.id) || 6);
     const stylingConfig = useSelector((s: RootState) => s.cakeConstructor.stylingConfig);
 
 
@@ -141,7 +143,12 @@ const DessertStylingControls = () => {
 
             <div className={styles.groupsContainer}>
                 {stylingConfig.map((group, index) => {
-                    const groupSize = Math.ceil(quantity / groupsCount);
+                    // Делим с остатком: первые (quantity % groupsCount) групп получают
+                    // на 1 шт больше, а не одинаковый Math.ceil для всех — иначе
+                    // 9 шт на 2 группы показывало бы 5+5=10 вместо 5+4=9.
+                    const base = Math.floor(quantity / groupsCount);
+                    const remainder = quantity % groupsCount;
+                    const groupSize = base + (index < remainder ? 1 : 0);
 
                     return (
                         <div key={`${selectedOption}-${index}`} className={styles.groupCard}>
