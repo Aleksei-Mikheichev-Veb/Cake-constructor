@@ -56,7 +56,9 @@ export async function notifyChannels(
             results.vk = result.success;
 
             if (colorPreviewBuf) {
-                await sendVkPhoto(config.vk.confectionerId, colorPreviewBuf, '🎨 Выбранные цвета', config.vk.communityToken);
+                // Файл реально PNG (см. colorPreview.ts) — VK не смог декодировать его
+                // с именем photo.jpg (дефолт sendVkPhoto), из-за чего апload молча падал.
+                await sendVkPhoto(config.vk.confectionerId, colorPreviewBuf, '🎨 Выбранные цвета', config.vk.communityToken, 'colors.png');
             }
             for (const buf of photoPrintBufs) {
                 await sendVkPhoto(config.vk.confectionerId, buf, '🖼 Фотопечать', config.vk.communityToken);

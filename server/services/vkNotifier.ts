@@ -50,7 +50,8 @@ export async function sendVkPhoto(
     userId: number,
     photo: Buffer,
     caption: string,
-    token: string
+    token: string,
+    filename: string = 'photo.jpg'
 ): Promise<VkSendResult> {
     try {
         // 1. Получаем upload URL
@@ -75,7 +76,7 @@ export async function sendVkPhoto(
         // 2. Загружаем файл
         const formData = new FormData();
         formData.append('photo', photo, {
-            filename: 'photo.jpg',
+            filename,
         });
 
         const { data: uploadResult } = await axios.post(uploadUrl, formData, {
