@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import CakeConstructor from './CakeConstructor/CakeConstructor';
 import DessertConstructor from './DessertConstructor/DessertConstructor';
+import ComingSoon from '../ComingSoon/ComingSoon';
 
 import styles from './ProductPage.module.scss';
 import globalStyles from '../../../styles/global.module.scss';
@@ -48,6 +49,12 @@ const ProductPage = () => {
         if (!categories || !category) return null;
         return categories.find(c => c.id === category) || null;
     }, [categories, category]);
+
+    // Зефир пока не собран как конструктор (нет ни контролов, ни цен под него) —
+    // показываем заглушку вместо попытки отрендерить пустой DessertConstructor
+    if (category === 'marshmallow') {
+        return <ComingSoon />;
+    }
 
     if (isLoading) {
         return <div>Загрузка...</div>;

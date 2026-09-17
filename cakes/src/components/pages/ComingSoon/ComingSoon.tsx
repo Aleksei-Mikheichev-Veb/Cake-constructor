@@ -6,6 +6,7 @@ const pageNames: Record<string, string> = {
     '/gallery': 'Галерея',
     '/masterclass': 'Мастер-классы',
     '/fillings': 'Начинки',
+    '/constructor/marshmallow': 'Зефир',
 };
 
 const ComingSoon = () => {
