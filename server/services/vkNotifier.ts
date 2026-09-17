@@ -55,14 +55,34 @@ export async function sendVkMessage(
 }
 
 /**
- * Отправить фото пользователю ВК.
+ * Отправить фото пользователю ВК. Один повтор при неудаче (пустой ответ
+ * от upload-сервера, ошибка сохранения и т.п.) — при заказе с несколькими
+ * фото VK иногда молча роняет отдельную загрузку без внятной причины,
+ * и один retry в большинстве случаев её вытаскивает.
  */
 export async function sendVkPhoto(
     userId: number,
     photo: Buffer,
     caption: string,
     token: string,
-    filename: string = 'photo.jpg'
+    filename: string = 'photo.jpg',
+    attempt: number = 1
+): Promise<VkSendResult> {
+    const result = await attemptSendVkPhoto(userId, photo, caption, token, filename);
+    if (!result.success && attempt < 2) {
+        console.log('[VK Photo] Повторная попытка отправки фото...');
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return sendVkPhoto(userId, photo, caption, token, filename, attempt + 1);
+    }
+    return result;
+}
+
+async function attemptSendVkPhoto(
+    userId: number,
+    photo: Buffer,
+    caption: string,
+    token: string,
+    filename: string
 ): Promise<VkSendResult> {
     try {
         // 1. Получаем upload URL

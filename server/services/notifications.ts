@@ -23,6 +23,10 @@ export type NotifyAssets = {
  * VK и TG API принимают файлы, а не URL (вернее, принимают,
  * но с ограничениями по домену/размеру), проще скачать.
  */
+function delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function fetchBuffer(url: string): Promise<Buffer> {
     const response = await axios.get<ArrayBuffer>(url, {
         responseType: 'arraybuffer',
@@ -55,15 +59,23 @@ export async function notifyChannels(
             );
             results.vk = result.success;
 
+            // Пауза между фото для VK обязательна: каждое фото — это 3 отдельных
+            // запроса к VK (upload-сервер → загрузка → сохранение → отправка), и при
+            // заказе с несколькими картинками подряд VK начинает молча ронять часть
+            // загрузок (флуд-контроль). Telegram такой проблемы не имеет — там паузы нет.
+            const VK_PHOTO_DELAY_MS = 900;
+
             if (colorPreviewBuf) {
                 // Файл реально PNG (см. colorPreview.ts) — VK не смог декодировать его
                 // с именем photo.jpg (дефолт sendVkPhoto), из-за чего апload молча падал.
                 await sendVkPhoto(config.vk.confectionerId, colorPreviewBuf, '🎨 Выбранные цвета', config.vk.communityToken, 'colors.png');
             }
             for (const buf of photoPrintBufs) {
+                await delay(VK_PHOTO_DELAY_MS);
                 await sendVkPhoto(config.vk.confectionerId, buf, '🖼 Фотопечать', config.vk.communityToken);
             }
             for (const buf of referenceBufs) {
+                await delay(VK_PHOTO_DELAY_MS);
                 await sendVkPhoto(config.vk.confectionerId, buf, '📎 Референс', config.vk.communityToken);
             }
         } catch (err) {
