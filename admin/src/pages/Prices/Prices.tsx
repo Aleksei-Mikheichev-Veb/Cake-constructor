@@ -91,11 +91,14 @@ const Prices: React.FC = () => {
     {
       title: 'Фотопечать',
       dataIndex: 'photoPrintPrice',
-      render: (v: number) => `${v} ₽`,
+      // Фотопечать и шоколадные буквы/цифры — только в конструкторе тортов
+      // (subcategoryId). У капкейков/трайфлов (categoryId) такого шага нет вообще.
+      render: (v: number, r: PriceConfig) => (r.subcategoryId ? `${v} ₽` : '—'),
     },
     {
       title: 'Буква / Цифра',
-      render: (_: any, r: PriceConfig) => `${r.chocolateLetterPrice} / ${r.chocolateNumberPrice} ₽`,
+      render: (_: any, r: PriceConfig) =>
+        r.subcategoryId ? `${r.chocolateLetterPrice} / ${r.chocolateNumberPrice} ₽` : '—',
     },
     {
       title: 'Действия',
@@ -168,17 +171,22 @@ const Prices: React.FC = () => {
             )}
           </Card>
 
-          <Card size="small" title="Дополнительные услуги">
-            <Form.Item label="Фотопечать (₽)" name="photoPrintPrice">
-              <InputNumber min={0} style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item label="Шоколадная буква (₽)" name="chocolateLetterPrice">
-              <InputNumber min={0} style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item label="Шоколадная цифра (₽)" name="chocolateNumberPrice">
-              <InputNumber min={0} style={{ width: '100%' }} />
-            </Form.Item>
-          </Card>
+          {/* Только для тортов — у капкейков и трайфлов в конструкторе нет
+              ни фотопечати, ни шоколадных надписей, показывать цены на них
+              было бы обманом */}
+          {editing?.subcategoryId && (
+            <Card size="small" title="Дополнительные услуги">
+              <Form.Item label="Фотопечать (₽)" name="photoPrintPrice">
+                <InputNumber min={0} style={{ width: '100%' }} />
+              </Form.Item>
+              <Form.Item label="Шоколадная буква (₽)" name="chocolateLetterPrice">
+                <InputNumber min={0} style={{ width: '100%' }} />
+              </Form.Item>
+              <Form.Item label="Шоколадная цифра (₽)" name="chocolateNumberPrice">
+                <InputNumber min={0} style={{ width: '100%' }} />
+              </Form.Item>
+            </Card>
+          )}
         </Form>
       </Modal>
     </div>
