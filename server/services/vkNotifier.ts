@@ -69,9 +69,9 @@ export async function sendVkPhoto(
     attempt: number = 1
 ): Promise<VkSendResult> {
     const result = await attemptSendVkPhoto(userId, photo, caption, token, filename);
-    if (!result.success && attempt < 2) {
-        console.log('[VK Photo] Повторная попытка отправки фото...');
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (!result.success && attempt < 3) {
+        console.log(`[VK Photo] Повторная попытка отправки фото (${attempt + 1})...`);
+        await new Promise((resolve) => setTimeout(resolve, 1500));
         return sendVkPhoto(userId, photo, caption, token, filename, attempt + 1);
     }
     return result;

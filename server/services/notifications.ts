@@ -66,6 +66,11 @@ export async function notifyChannels(
             const VK_PHOTO_DELAY_MS = 900;
 
             if (colorPreviewBuf) {
+                // Пауза нужна и здесь: сразу перед этим ушёл messages.send с текстом
+                // заказа, и без паузы фото цветов стабильно проваливалось — те же
+                // лимиты VK, что и между фото ниже, действуют и на первый запрос
+                // после текстового сообщения.
+                await delay(VK_PHOTO_DELAY_MS);
                 // Файл реально PNG (см. colorPreview.ts) — VK не смог декодировать его
                 // с именем photo.jpg (дефолт sendVkPhoto), из-за чего апload молча падал.
                 await sendVkPhoto(config.vk.confectionerId, colorPreviewBuf, '🎨 Выбранные цвета', config.vk.communityToken, 'colors.png');
