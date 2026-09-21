@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { useLoginMutation } from '../../api/adminApi';
+import { useLoginMutation, adminApi } from '../../api/adminApi';
 import { setCredentials } from '../../redux/authSlice';
 
 const { Title } = Typography;
@@ -20,6 +20,11 @@ const Login: React.FC = () => {
   const onFinish = async (values: { email: string; password: string }) => {
     try {
       const result = await login(values).unwrap();
+      // Сбрасываем весь кэш RTK Query — иначе если в этой же вкладке до этого
+      // был залогинен другой пользователь (например, на общем компьютере),
+      // getMe (и другие запросы) могут отдать закэшированный ответ от старой
+      // сессии вместо свежего запроса под новым логином.
+      dispatch(adminApi.util.resetApiState());
       dispatch(setCredentials({ token: result.token, user: result.user }));
       message.success('Вход выполнен');
       navigate('/decorations');

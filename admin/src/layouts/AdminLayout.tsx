@@ -18,6 +18,7 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 import { logout } from '../redux/authSlice';
+import { adminApi } from '../api/adminApi';
 import type { RootState } from '../redux/store';
 
 const { Header, Sider, Content } = Layout;
@@ -39,6 +40,7 @@ const AdminLayout: React.FC = () => {
     const user = useSelector((state: RootState) => state.auth.user);
 
     const handleLogout = () => {
+        dispatch(adminApi.util.resetApiState());
         dispatch(logout());
         navigate('/login');
     };
