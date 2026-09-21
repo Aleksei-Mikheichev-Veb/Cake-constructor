@@ -296,12 +296,13 @@ model Order {
 
 // ============================================================
 model OrderFeedback {
-  id        String   @id @default(cuid())
-  orderId   String   @unique
-  order     Order    @relation(fields: [orderId], references: [id])
-  rating    Int      // 1–5
-  comment   String?
-  createdAt DateTime @default(now())
+  id              String   @id @default(cuid())
+  orderId         String   @unique
+  order           Order    @relation(fields: [orderId], references: [id])
+  rating          Int      // 1–5
+  comment         String?
+  wouldOrderAgain Boolean? // "Хотели бы заказать так снова — через конструктор?"
+  createdAt       DateTime @default(now())
 }
 enum OrderStatus {
   NEW

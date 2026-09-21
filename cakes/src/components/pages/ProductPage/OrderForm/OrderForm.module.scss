@@ -261,6 +261,34 @@
     color: #f5c518;
 }
 
+// === Да/нет вопрос ===
+.yesNoRow {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.yesNoButton {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+        border-color: #bbb;
+    }
+}
+
+.yesNoButtonActive {
+    background: var(--accent, #b07d62);
+    border-color: var(--accent, #b07d62);
+    color: #fff;
+}
+
 // === Textarea ===
 .feedbackTextarea {
     width: 100%;

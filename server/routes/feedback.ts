@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
 
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const { orderId, rating, comment } = req.body;
+        const { orderId, rating, comment, wouldOrderAgain } = req.body;
 
         // Валидация
         if (!orderId || typeof orderId !== 'string') {
@@ -23,6 +23,9 @@ router.post('/', async (req: Request, res: Response) => {
         }
         if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {
             return res.status(400).json({ success: false, message: 'rating должен быть от 1 до 5' });
+        }
+        if (wouldOrderAgain !== undefined && wouldOrderAgain !== null && typeof wouldOrderAgain !== 'boolean') {
+            return res.status(400).json({ success: false, message: 'wouldOrderAgain должен быть true/false' });
         }
 
         // Проверяем что заказ существует
@@ -34,8 +37,8 @@ router.post('/', async (req: Request, res: Response) => {
         // Сохраняем — upsert на случай повторной попытки
         const feedback = await prisma.orderFeedback.upsert({
             where: { orderId },
-            update: { rating, comment: comment ?? null },
-            create: { orderId, rating, comment: comment ?? null },
+            update: { rating, comment: comment ?? null, wouldOrderAgain: wouldOrderAgain ?? null },
+            create: { orderId, rating, comment: comment ?? null, wouldOrderAgain: wouldOrderAgain ?? null },
         });
 
         console.log(`⭐ Отзыв для заказа ${orderId}: ${rating}/5`);

@@ -93,6 +93,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
 
     // Состояние отзыва
     const [feedbackRating, setFeedbackRating] = useState(0);
+    const [wouldOrderAgain, setWouldOrderAgain] = useState<boolean | null>(null);
     const [feedbackComment, setFeedbackComment] = useState('');
     const [feedbackStatus, setFeedbackStatus] = useState<FeedbackStatus>('idle');
 
@@ -147,7 +148,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
     };
 
     const handleFeedbackSubmit = async () => {
-        if (!feedbackRating) return; // без оценки не отправляем
+        if (!feedbackRating || wouldOrderAgain === null) return; // без обоих ответов не отправляем
         setFeedbackStatus('sending');
         try {
             await fetch(`${API_URL}/feedback`, {
@@ -157,6 +158,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
                     orderId,
                     rating: feedbackRating,
                     comment: feedbackComment.trim() || null,
+                    wouldOrderAgain,
                 }),
             });
         } catch {
@@ -200,6 +202,27 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
                                 Насколько удобно было оформить заказ?
                             </p>
                             <StarRating value={feedbackRating} onChange={setFeedbackRating} />
+
+                            <p className={styles.feedbackQuestion}>
+                                Хотели бы заказать так снова — через конструктор?
+                            </p>
+                            <div className={styles.yesNoRow}>
+                                <button
+                                    type="button"
+                                    className={`${styles.yesNoButton} ${wouldOrderAgain === true ? styles.yesNoButtonActive : ''}`}
+                                    onClick={() => setWouldOrderAgain(true)}
+                                >
+                                    Да 👍
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`${styles.yesNoButton} ${wouldOrderAgain === false ? styles.yesNoButtonActive : ''}`}
+                                    onClick={() => setWouldOrderAgain(false)}
+                                >
+                                    Нет 👎
+                                </button>
+                            </div>
+
                             <textarea
                                 className={styles.feedbackTextarea}
                                 placeholder="Комментарий (необязательно)"
@@ -218,7 +241,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
                                 <button
                                     className={styles.feedbackSubmit}
                                     onClick={handleFeedbackSubmit}
-                                    disabled={!feedbackRating || feedbackStatus === 'sending'}
+                                    disabled={!feedbackRating || wouldOrderAgain === null || feedbackStatus === 'sending'}
                                 >
                                     {feedbackStatus === 'sending' ? 'Отправка...' : 'Отправить отзыв'}
                                 </button>

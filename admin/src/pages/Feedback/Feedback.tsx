@@ -13,6 +13,7 @@ interface FeedbackItem {
     orderId: string;
     rating: number;
     comment: string | null;
+    wouldOrderAgain: boolean | null;
     createdAt: string;
     order: {
         customerName: string;
@@ -60,6 +61,10 @@ export default function Feedback() {
         ? (items.reduce((s, i) => s + i.rating, 0) / total).toFixed(1)
         : '—';
     const withComment = items.filter((i) => i.comment).length;
+    const answeredAgain = items.filter((i) => i.wouldOrderAgain !== null);
+    const wouldAgainPct = answeredAgain.length > 0
+        ? Math.round(answeredAgain.filter((i) => i.wouldOrderAgain).length / answeredAgain.length * 100)
+        : null;
     const dist = [5, 4, 3, 2, 1].map((star) => ({
         star,
         count: items.filter((i) => i.rating === star).length,
@@ -74,6 +79,13 @@ export default function Feedback() {
                 <StatCard label="Всего отзывов" value={String(total)} />
                 <StatCard label="Средний рейтинг" value={`${avg} / 5`} highlight />
                 <StatCard label="С комментарием" value={`${withComment} (${total ? Math.round(withComment / total * 100) : 0}%)`} />
+                {wouldAgainPct !== null && (
+                    <StatCard
+                        label="Заказали бы через конструктор снова"
+                        value={`${wouldAgainPct}% (${answeredAgain.length})`}
+                        highlight
+                    />
+                )}
             </div>
 
             {/* Распределение по звёздам */}
@@ -109,6 +121,7 @@ export default function Feedback() {
                             <th style={th}>Дата</th>
                             <th style={th}>Клиент</th>
                             <th style={th}>Оценка</th>
+                            <th style={th}>Снова через конструктор?</th>
                             <th style={th}>Комментарий</th>
                             <th style={th}>Сумма заказа</th>
                         </tr>
@@ -122,6 +135,11 @@ export default function Feedback() {
                                     <div style={{ color: '#999', fontSize: 12 }}>{item.order.customerPhone}</div>
                                 </td>
                                 <td style={td}><Stars value={item.rating} /></td>
+                                <td style={td}>
+                                    {item.wouldOrderAgain === true && <span style={{ color: '#2e7d32' }}>Да 👍</span>}
+                                    {item.wouldOrderAgain === false && <span style={{ color: '#c62828' }}>Нет 👎</span>}
+                                    {item.wouldOrderAgain === null && <span style={{ color: '#ccc' }}>—</span>}
+                                </td>
                                 <td style={td}>{item.comment || <span style={{ color: '#ccc' }}>—</span>}</td>
                                 <td style={td}>{item.order.totalPrice.toLocaleString('ru-RU')} ₽</td>
                             </tr>
