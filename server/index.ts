@@ -31,13 +31,18 @@ import topColorsRouter from './routes/topColors';
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
 
+// CLIENT_URL/ADMIN_URL могут содержать несколько адресов через запятую —
+// например, когда у витрины есть и кастомный домен, и служебный *.vercel.app.
+const splitOrigins = (value: string | undefined): string[] =>
+    (value || '').split(',').map((s) => s.trim()).filter(Boolean);
+
 const allowedOrigins = [
-    process.env.CLIENT_URL,
-    process.env.ADMIN_URL,
+    ...splitOrigins(process.env.CLIENT_URL),
+    ...splitOrigins(process.env.ADMIN_URL),
     ...(process.env.NODE_ENV !== 'production'
         ? ['http://localhost:3000', 'http://localhost:3001']
         : []),
-].filter(Boolean) as string[];
+];
 
 app.use(cors({
     origin: (origin, cb) => {
