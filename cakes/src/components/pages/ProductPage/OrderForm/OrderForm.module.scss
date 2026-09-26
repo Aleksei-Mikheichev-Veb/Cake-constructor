@@ -179,15 +179,19 @@
 }
 
 .vkButton {
-    display: inline-block;
-    padding: 12px 28px;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 14px 24px;
     background: #0077ff;
     color: white;
+    text-align: center;
     text-decoration: none;
     border-radius: 12px;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     margin-bottom: 12px;
+    box-shadow: 0 4px 14px rgba(0, 119, 255, 0.35);
     transition: all 0.2s;
 
     &:hover {
@@ -263,7 +267,7 @@
 
 // === Превью сообщения кондитеру (только демо) ===
 .previewBlock {
-    margin-top: 16px;
+    margin: 16px 0 24px;
     padding: 14px;
     background: #fbf7f4;
     border: 1px solid #ead9cc;

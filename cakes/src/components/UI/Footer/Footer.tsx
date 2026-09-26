@@ -2,6 +2,11 @@ import React from 'react';
 import styles from './Footer.module.scss';
 import { useGetSettingsQuery } from '../../../api/constructorApi';
 
+// Демо-призыв «хотите такой же — пишите мне». Показывается только если
+// на сборке задан REACT_APP_DEMO_CTA_URL (на боевых витринах его нет).
+const DEMO_CTA_URL = process.env.REACT_APP_DEMO_CTA_URL;
+const DEMO_CTA_LABEL = process.env.REACT_APP_DEMO_CTA_LABEL || 'Написать мне';
+
 const Footer = () => {
     const { data: settings } = useGetSettingsQuery();
 
@@ -61,6 +66,23 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
+
+                {DEMO_CTA_URL && (
+                    <div className={styles.footer_demo}>
+                        <p className={styles.footer_demoText}>
+                            Это демо-версия конструктора тортов. Хотите такой же сайт для своей
+                            кондитерской? Напишите мне — подключу вас.
+                        </p>
+                        <a
+                            href={DEMO_CTA_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.footer_demoButton}
+                        >
+                            {DEMO_CTA_LABEL}
+                        </a>
+                    </div>
+                )}
 
                 <div className={styles.footer_divider} />
 
