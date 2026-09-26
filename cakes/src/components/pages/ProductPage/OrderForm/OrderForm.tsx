@@ -3,6 +3,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { resetCakeConstructor } from '../../../../redux/cakeConstructorSlice';
 import { submitOrder, ClientInfo } from '../../../../services/orderService';
+import { OrderPreview } from '../../../../types/order';
 import styles from './OrderForm.module.scss';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +27,10 @@ type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 type FeedbackStatus = 'idle' | 'sending' | 'done' | 'skipped';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
+
+// Включается только на демо-витрине: после заказа показываем то самое
+// сообщение, которое получит кондитер. На боевых витринах переменная не задана.
+const SHOW_ORDER_PREVIEW = process.env.REACT_APP_SHOW_ORDER_PREVIEW === 'true';
 
 // === Маска телефона ===
 function formatPhone(value: string): string {
@@ -90,6 +95,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
     const [vkRedirect, setVkRedirect] = useState<string | null>(null);
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
     const [orderId, setOrderId] = useState<string | null>(null);
+    const [preview, setPreview] = useState<OrderPreview | null>(null);
 
     // Состояние отзыва
     const [feedbackRating, setFeedbackRating] = useState(0);
@@ -136,6 +142,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
                 setStatus('success');
                 setVkRedirect(result.vkRedirect ?? null);
                 setOrderId(result.orderId ?? null);
+                setPreview(result.preview ?? null);
                 onSuccess?.();
             } else {
                 setStatus('error');
@@ -183,6 +190,27 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
                     <p className={styles.successText}>
                         Кондитер получил ваш заказ и скоро свяжется с вами.
                     </p>
+
+                    {SHOW_ORDER_PREVIEW && preview && (
+                        <div className={styles.previewBlock}>
+                            <p className={styles.previewTitle}>Так этот заказ выглядит у кондитера</p>
+                            <p className={styles.previewNote}>
+                                Это демо. В реальном магазине такое сообщение приходит кондитеру в ВК
+                                {preview.images.length > 0 ? ' вместе с фотографиями ниже' : ''}.
+                            </p>
+                            <pre className={styles.previewText}>{preview.text}</pre>
+                            {preview.images.length > 0 && (
+                                <div className={styles.previewImages}>
+                                    {preview.images.map((img, i) => (
+                                        <a key={i} href={img.url} target="_blank" rel="noopener noreferrer" className={styles.previewImageLink}>
+                                            <img src={img.url} alt={img.label} className={styles.previewImage} />
+                                            <span>{img.label}</span>
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     {vkRedirect && (
                         <a

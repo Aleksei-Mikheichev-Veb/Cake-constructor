@@ -86,4 +86,10 @@ export interface OrderResponse {
     orderId: string;
     vkRedirect: string | null;
     message?: string;
+    preview?: OrderPreview;
+}
+
+export interface OrderPreview {
+    text: string;
+    images: Array<{ label: string; url: string }>;
 }

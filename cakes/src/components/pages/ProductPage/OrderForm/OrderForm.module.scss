@@ -261,6 +261,74 @@
     color: #f5c518;
 }
 
+// === Превью сообщения кондитеру (только демо) ===
+.previewBlock {
+    margin-top: 16px;
+    padding: 14px;
+    background: #fbf7f4;
+    border: 1px solid #ead9cc;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.previewTitle {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.previewNote {
+    margin: 0 0 10px;
+    font-size: 12px;
+    color: #888;
+}
+
+.previewText {
+    margin: 0;
+    padding: 10px 12px;
+    max-height: 240px;
+    overflow: auto;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #333;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.previewImages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.previewImageLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 72px;
+    font-size: 10px;
+    color: #777;
+    text-decoration: none;
+    text-align: center;
+}
+
+.previewImage {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e6e6e6;
+}
+
 // === Да/нет вопрос ===
 .yesNoRow {
     display: flex;

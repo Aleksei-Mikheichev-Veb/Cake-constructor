@@ -20,6 +20,7 @@ import { OrderData } from '../types/order';
 import { uploadToCloud } from '../services/storage';
 import { generateColorPreview, ColorGroup } from '../services/colorPreview';
 import { notifyChannels } from '../services/notifications';
+import { formatOrder } from '../services/orderFormatter';
 import { config } from '../config/env';
 
 const router = Router();
@@ -123,6 +124,15 @@ router.post('/', uploadFields, async (req: Request, res: Response) => {
         });
 
         // ─── Ответ клиенту ───
+        // preview — то самое сообщение, которое уходит кондитеру. Отдаём всегда
+        // (это дёшево), а показывать его клиенту или нет решает фронт
+        // (REACT_APP_SHOW_ORDER_PREVIEW, сейчас включено только на демо-витрине).
+        const previewImages = [
+            ...(colorPreviewUrl ? [{ label: 'Выбранные цвета', url: colorPreviewUrl }] : []),
+            ...photoPrintUrls.map((url) => ({ label: 'Фотопечать', url })),
+            ...referenceUrls.map((url) => ({ label: 'Референс', url })),
+        ];
+
         res.json({
             success: true,
             orderId: order.id,
@@ -130,6 +140,10 @@ router.post('/', uploadFields, async (req: Request, res: Response) => {
                 ? `https://vk.com/im?sel=${config.vk.confectionerProfileId}`
                 : null,
             message: 'Заказ принят',
+            preview: {
+                text: `Заказ №${order.id}\n\n` + formatOrder(orderData, 'vk'),
+                images: previewImages,
+            },
         });
     } catch (err) {
         console.error('Ошибка обработки заказа:', err);
