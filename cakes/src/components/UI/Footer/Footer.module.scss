@@ -133,11 +133,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 20px;
 }
 
 .footer_copy {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.35);
+}
+
+.footer_poweredBy {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+        color: #f472b6;
+    }
 }
 
 // =============================================

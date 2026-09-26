@@ -7,6 +7,10 @@ import { useGetSettingsQuery } from '../../../api/constructorApi';
 const DEMO_CTA_URL = process.env.REACT_APP_DEMO_CTA_URL;
 const DEMO_CTA_LABEL = process.env.REACT_APP_DEMO_CTA_LABEL || 'Написать мне';
 
+// Маленькая строка «сайт сделан на DessertMaker» со ссылкой на разработчика —
+// для боевых витрин кондитеров. Включается через REACT_APP_POWERED_BY_URL.
+const POWERED_BY_URL = process.env.REACT_APP_POWERED_BY_URL;
+
 const Footer = () => {
     const { data: settings } = useGetSettingsQuery();
 
@@ -90,6 +94,16 @@ const Footer = () => {
                     <span className={styles.footer_copy}>
                         © {new Date().getFullYear()} {settings.siteName}. Все права защищены.
                     </span>
+                    {POWERED_BY_URL && (
+                        <a
+                            href={POWERED_BY_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.footer_poweredBy}
+                        >
+                            Сайт сделан на DessertMaker
+                        </a>
+                    )}
                 </div>
             </div>
         </footer>
