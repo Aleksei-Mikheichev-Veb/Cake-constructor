@@ -9,15 +9,22 @@ import CakesType from "./components/pages/СonstructorPage/CakesType/CakesType";
 import ProductPage from "./components/pages/ProductPage/ProductPage";
 import {useLocation} from "react-router-dom";
 import ComingSoon from './components/pages/ComingSoon/ComingSoon';
+import { initMetrika, trackPageView } from './analytics/metrika';
 
 function App() {
     function ScrollToTop(){
         const {pathname} = useLocation();
         useEffect(() => {
             window.scrollTo(0,0)
+            trackPageView(pathname)
         },[pathname])
         return null
     }
+
+    useEffect(() => {
+        initMetrika();
+    }, []);
+
   return (
     <div className="App">
         <BrowserRouter>

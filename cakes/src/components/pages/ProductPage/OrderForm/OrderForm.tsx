@@ -4,6 +4,7 @@ import { RootState } from '../../../../redux/store';
 import { resetCakeConstructor } from '../../../../redux/cakeConstructorSlice';
 import { submitOrder, ClientInfo } from '../../../../services/orderService';
 import { OrderPreview } from '../../../../types/order';
+import { trackOrderSubmitted } from '../../../../analytics/metrika';
 import styles from './OrderForm.module.scss';
 import { useNavigate } from 'react-router-dom';
 
@@ -143,6 +144,7 @@ const OrderForm: FC<OrderFormProps> = ({ onClose, onSuccess, price }) => {
                 setVkRedirect(result.vkRedirect ?? null);
                 setOrderId(result.orderId ?? null);
                 setPreview(result.preview ?? null);
+                trackOrderSubmitted();
                 onSuccess?.();
             } else {
                 setStatus('error');
